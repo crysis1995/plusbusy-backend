@@ -1,0 +1,10 @@
+version: "1.0"
+name: "plusbusy-backend"
+services:
+  db:
+    image: postgres:14.4
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=admin
+    expose:
+      - 5432:5432
