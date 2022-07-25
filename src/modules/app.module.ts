@@ -18,9 +18,11 @@ import { VehicleMileage } from './vehicle-mileage/vehicle-mileage.entity';
 import { SeederModule } from '../common/seeder/seeder.module';
 import { Driver } from './driver/driver.entity';
 import { DriverPeriodicInspection } from './driver-periodic-inspection/driver-periodic-inspection.entity';
+import {ConfigModule} from "@nestjs/config";
 
 @Module({
     imports: [
+        ConfigModule.forRoot({isGlobal:true}),
         TypeOrmModule.forRoot({
             type: 'sqlite',
             database: 'db.sqlite',
