@@ -1,0 +1,14 @@
+GET http://localhost:3000/vehicle
+Accept: application/json
+
+###
+
+GET http://localhost:3000/vehicle/1
+Accept: application/json
+
+###
+
+GET http://localhost:3000/vehicle/5/exist
+Accept: application/json
+
+###
