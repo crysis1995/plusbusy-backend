@@ -15,9 +15,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Vehicle } from './vehicle/vehicle.entity';
 import { VehiclePeriodicInspection } from './vehicle-periodic-inspection/vehicle-periodic-inspection.entity';
 import { VehicleMileage } from './vehicle-mileage/vehicle-mileage.entity';
+import {ConfigModule} from "@nestjs/config";
 
 @Module({
     imports: [
+        ConfigModule.forRoot({isGlobal:true}),
         TypeOrmModule.forRoot({
             type: 'sqlite',
             database: 'db.sqlite',
@@ -46,8 +48,4 @@ import { VehicleMileage } from './vehicle-mileage/vehicle-mileage.entity';
     ],
     providers: [AppService]
 })
-export class AppModule {
-    constructor(private appService: AppService) {
-        this.appService.databaseInit();
-    }
-}
+export class AppModule {}
