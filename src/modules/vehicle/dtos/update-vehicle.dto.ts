@@ -1,9 +1,9 @@
-import { BuilderTemplate } from '../../../shared/shared.types';
+import { BuilderTemplate } from "../../../shared/shared.types";
 
 export class UpdateVehicleDto {
-    ShortName: string = undefined;
-    Plates: string = undefined;
-    SeatsCount: number = undefined;
+    ShortName: string | undefined;
+    Plates: string | undefined;
+    SeatsCount: number | undefined;
 }
 
 export class UpdateVehicleDtoBuilder extends BuilderTemplate<UpdateVehicleDto> {

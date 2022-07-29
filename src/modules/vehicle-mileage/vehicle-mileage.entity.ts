@@ -1,6 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-import { Vehicle } from '../vehicle/vehicle.entity';
-import { BuilderTemplate } from '../../shared/shared.types';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { Vehicle } from "../vehicle/vehicle.entity";
+import { BuilderTemplate } from "../../shared/shared.types";
 
 @Entity()
 export class VehicleMileage {
@@ -16,6 +16,12 @@ export class VehicleMileage {
 
     @PrimaryColumn()
     Date: Date;
+
+    @CreateDateColumn()
+    CreatedAt: Date;
+
+    @UpdateDateColumn()
+    UpdatedAt: Date;
 }
 
 export class VehicleMileageBuilder extends BuilderTemplate<VehicleMileage> {

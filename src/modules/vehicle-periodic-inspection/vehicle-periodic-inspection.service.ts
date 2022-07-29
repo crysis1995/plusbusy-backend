@@ -1,9 +1,10 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable, Logger } from '@nestjs/common';
 import { VehicleService } from '../vehicle/vehicle.service';
 import { Repository } from 'typeorm';
 import { VehiclePeriodicInspection } from './vehicle-periodic-inspection.entity';
 import { CreateVehiclePeriodicInspectionDto } from './dtos/create-vehicle-periodic-inspection.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { VehiclePeriodicInspectionKey } from './dtos/vehicle-periodic-inspection.key';
 
 @Injectable()
 export class VehiclePeriodicInspectionService {
@@ -15,41 +16,25 @@ export class VehiclePeriodicInspectionService {
         private vehicleService: VehicleService
     ) {}
 
-    async exist(
-        VehicleId: VehiclePeriodicInspection['VehicleId'],
-        FromDate: VehiclePeriodicInspection['FromDate'],
-        ToDate: VehiclePeriodicInspection['ToDate'],
-        InspectionType: VehiclePeriodicInspection['InspectionType']
-    ) {
-        return (
-            (await this.getById(
-                VehicleId,
-                FromDate,
-                ToDate,
-                InspectionType
-            )) !== null
-        );
+    async exist(key: VehiclePeriodicInspectionKey) {
+        return (await this.getById(key)) !== null;
     }
 
-    async getById(
-        VehicleId: VehiclePeriodicInspection['VehicleId'],
-        FromDate: VehiclePeriodicInspection['FromDate'],
-        ToDate: VehiclePeriodicInspection['ToDate'],
-        InspectionType: VehiclePeriodicInspection['InspectionType']
-    ) {
-        return await this.vehiclePeriodicInspectionRepository.findOneBy({
-            VehicleId,
-            FromDate,
-            ToDate,
-            InspectionType
-        });
+    async getById(key: VehiclePeriodicInspectionKey) {
+        return this.vehiclePeriodicInspectionRepository.findOneBy(key);
     }
 
     async getNewest(
         VehicleId: VehiclePeriodicInspection['VehicleId'],
-        InspectionType: VehiclePeriodicInspection['InspectionType']
+        InspectionType: VehiclePeriodicInspection['InspectionType'],
+        all: boolean = false
     ) {
-        return await this.vehiclePeriodicInspectionRepository.findOne({
+        if (all)
+            return this.vehiclePeriodicInspectionRepository.find({
+                where: { VehicleId, InspectionType },
+                order: { FromDate: 'DESC' }
+            });
+        return this.vehiclePeriodicInspectionRepository.findOne({
             where: { VehicleId, InspectionType },
             order: { FromDate: 'DESC' }
         });
@@ -58,10 +43,16 @@ export class VehiclePeriodicInspectionService {
     async getAll() {
         return await this.vehiclePeriodicInspectionRepository.find({});
     }
+    async getAllOfVehicle(VehicleId: VehiclePeriodicInspection['VehicleId']) {
+        return await this.vehiclePeriodicInspectionRepository.find({
+            where: { VehicleId },
+            order: { FromDate: 'DESC' }
+        });
+    }
 
     async create(dto: CreateVehiclePeriodicInspectionDto) {
         // await this.vehiclePeriodicInspectionRepository.insert()
     }
 
-    async delete() {}
+    async delete(key: VehiclePeriodicInspectionKey) {}
 }

@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { BuilderTemplate } from '../../shared/shared.types';
 
 @Entity()
@@ -23,6 +23,12 @@ export class Driver {
 
     @Column()
     IsEmailConfirmed: boolean;
+
+    @CreateDateColumn()
+    CreatedAt: Date;
+
+    @UpdateDateColumn()
+    UpdatedAt: Date;
 }
 
 export class DriverBuilder extends BuilderTemplate<Driver> {

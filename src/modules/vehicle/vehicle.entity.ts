@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { BuilderTemplate } from '../../shared/shared.types';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BuilderTemplate } from "../../shared/shared.types";
+import { VehicleValidator } from "./vehicle.validator";
 
 @Entity()
 export class Vehicle {
@@ -14,11 +15,19 @@ export class Vehicle {
 
     @Column()
     SeatsCount: number;
+
+    @CreateDateColumn()
+    CreatedAt: Date;
+
+    @UpdateDateColumn()
+    UpdatedAt: Date;
 }
 
 export class VehicleBuilder extends BuilderTemplate<Vehicle> {
+    private validator: VehicleValidator;
     constructor() {
         super(new Vehicle());
+        this.validator = new VehicleValidator(this.value);
     }
 
     setId(Id: number) {
@@ -39,5 +48,10 @@ export class VehicleBuilder extends BuilderTemplate<Vehicle> {
     setSeatsCount(SeatsCount: number) {
         this.value.SeatsCount = SeatsCount;
         return this;
+    }
+
+    override build(): Vehicle {
+        this.validator.validate();
+        return super.build();
     }
 }

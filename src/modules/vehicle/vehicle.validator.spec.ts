@@ -1,7 +1,7 @@
-import { VehicleValidator } from './vehicle.validator';
-import { VehicleShortNameTooLongException } from './exceptions/vehicle-short-name-too-long.exception';
-import { VehicleSeatsCountTooLowException } from './exceptions/vehicle-seats-count-too-low.exception';
-import { VehicleSeatsCountTooHighException } from './exceptions/vehicle-seats-count-too-high.exception';
+import { VehicleValidator } from "./vehicle.validator";
+import { VehicleShortNameTooLongException } from "./exceptions/vehicle-short-name-too-long.exception";
+import { VehicleSeatsCountTooLowException } from "./exceptions/vehicle-seats-count-too-low.exception";
+import { VehicleSeatsCountTooHighException } from "./exceptions/vehicle-seats-count-too-high.exception";
 
 describe('Unit Test - Vehicle Validator', () => {
     let vehicleValidator: VehicleValidator = null;
@@ -12,19 +12,15 @@ describe('Unit Test - Vehicle Validator', () => {
 
     describe('Test ShortName property', () => {
         it('should throw an VehicleShortNameTooLongException error', function () {
-            const result = () =>
-                vehicleValidator.validateShortName(
-                    'very very very very very long name'
-                );
+            const result = () => vehicleValidator.validateShortName('very very very very very long name');
 
             expect(result).toThrow(VehicleShortNameTooLongException);
             expect(result).toThrowError(
-                `Short name is too long. Max is ${VehicleValidator.MAX_VEHICLE_SHORT_NAME_LENGTH}`
+                `Short name is too long. Max is ${VehicleValidator.VEHICLE_SHORT_NAME_MAX_LENGTH}`
             );
         });
         it('should not throw an VehicleShortNameTooLongException error', function () {
-            const result = () =>
-                vehicleValidator.validateShortName('short name');
+            const result = () => vehicleValidator.validateShortName('short name');
 
             expect(result).not.toThrow();
         });
@@ -32,8 +28,7 @@ describe('Unit Test - Vehicle Validator', () => {
 
     describe('Test Plates property', () => {
         it('should not throw an VehicleShortNameTooLongException error', function () {
-            const result = () =>
-                vehicleValidator.validatePlates('TKI 33123f123');
+            const result = () => vehicleValidator.validatePlates('TKI 33123f123');
 
             expect(result).not.toThrow();
         });
@@ -44,9 +39,7 @@ describe('Unit Test - Vehicle Validator', () => {
             const result = () => vehicleValidator.validateSeatsCount(1);
 
             expect(result).toThrow(VehicleSeatsCountTooLowException);
-            expect(result).toThrowError(
-                `Seats count is too low. Min is ${VehicleValidator.MIN_VEHICLE_SEATS_COUNT}`
-            );
+            expect(result).toThrowError(`Seats count is too low. Min is ${VehicleValidator.VEHICLE_SEATS_MIN_COUNT}`);
         });
         it('should not throw an VehicleSeatsCountTooLowException error', function () {
             const result = () => vehicleValidator.validateSeatsCount(20);
@@ -58,9 +51,7 @@ describe('Unit Test - Vehicle Validator', () => {
             const result = () => vehicleValidator.validateSeatsCount(71);
 
             expect(result).toThrow(VehicleSeatsCountTooHighException);
-            expect(result).toThrowError(
-                `Seats count is too high. Max is ${VehicleValidator.MAX_VEHICLE_SEATS_COUNT}`
-            );
+            expect(result).toThrowError(`Seats count is too high. Max is ${VehicleValidator.VEHICLE_SEATS_MAX_COUNT}`);
         });
         it('should not throw an VehicleSeatsCountTooHighException error', function () {
             const result = () => vehicleValidator.validateSeatsCount(20);

@@ -2,10 +2,10 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Vehicle, VehicleBuilder } from './vehicle.entity';
 import { Repository } from 'typeorm';
 import { CreateVehicleDto } from './dtos/create-vehicle.dto';
-import { VehicleValidator } from './vehicle.validator';
 import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
 import { generateObjectWithoutUndefinedValues } from '../../shared/shared.functions';
 import { InjectRepository } from '@nestjs/typeorm';
+import { VehicleValidator } from './vehicle.validator';
 
 @Injectable()
 export class VehicleService {
@@ -31,8 +31,8 @@ export class VehicleService {
     }
 
     async createVehicle(createVehicleDto: CreateVehicleDto) {
-        const validator = new VehicleValidator(null);
-        validator.checkIfValid(createVehicleDto);
+        const validator = new VehicleValidator(createVehicleDto).validate();
+        if (!validator.IsValid) return validator.errors;
 
         const vehicle = new VehicleBuilder()
             .setShortName(createVehicleDto.ShortName)
@@ -40,18 +40,15 @@ export class VehicleService {
             .setSeatsCount(createVehicleDto.SeatsCount)
             .build();
 
-        const response = await this.vehicleRepository.insert(vehicle);
-
-        return response.identifiers;
+        await this.vehicleRepository.insert(vehicle);
+        return vehicle;
     }
 
     async updateVehicle(VehicleId: number, updateVehicleDto: UpdateVehicleDto) {
-        const validator = new VehicleValidator(null);
-        validator.checkIfValid(updateVehicleDto);
+        const validator = new VehicleValidator(updateVehicleDto).validate();
+        if (!validator.IsValid) return validator.errors;
 
-        const valueToUpdate =
-            generateObjectWithoutUndefinedValues(updateVehicleDto);
-
+        const valueToUpdate = generateObjectWithoutUndefinedValues(updateVehicleDto);
         await this.vehicleRepository.update({ Id: VehicleId }, valueToUpdate);
     }
 

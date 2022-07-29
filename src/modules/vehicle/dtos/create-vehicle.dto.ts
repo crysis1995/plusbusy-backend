@@ -1,4 +1,6 @@
-import { BuilderTemplate } from '../../../shared/shared.types';
+import { BuilderTemplate } from "../../../shared/shared.types";
+import { Validator } from "../../../shared/shared.validator";
+import { Vehicle } from "../vehicle.entity";
 
 export class CreateVehicleDto {
     ShortName: string;
@@ -26,3 +28,5 @@ export class CreateVehicleDtoBuilder extends BuilderTemplate<CreateVehicleDto> {
         return this;
     }
 }
+
+export class CreateVehicleDtoValidator extends Validator<Vehicle> {}

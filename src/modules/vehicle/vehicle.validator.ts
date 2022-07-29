@@ -1,57 +1,88 @@
 import { Validator } from '../../shared/shared.validator';
 import { Vehicle } from './vehicle.entity';
-import { ThrowException } from '../../shared/shared.exception';
+import { CustomException, ThrowException } from '../../shared/shared.exception';
 import { VehicleShortNameTooLongException } from './exceptions/vehicle-short-name-too-long.exception';
 import { VehicleSeatsCountTooLowException } from './exceptions/vehicle-seats-count-too-low.exception';
 import { VehicleSeatsCountTooHighException } from './exceptions/vehicle-seats-count-too-high.exception';
+import { VehicleShortNameTooShortException } from './exceptions/vehicle-short-name-too-short.exception';
 import { CreateVehicleDto } from './dtos/create-vehicle.dto';
 import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
 
-export class VehicleValidator extends Validator<Vehicle> {
-    static MAX_VEHICLE_SHORT_NAME_LENGTH = 20;
-    static MIN_VEHICLE_SEATS_COUNT = 2;
-    static MAX_VEHICLE_SEATS_COUNT = 70;
-
-    constructor(value?: Vehicle, throwError: boolean = true) {
-        super(value, throwError);
-    }
+export class GeneralVehicleValidator {
+    static VEHICLE_SHORT_NAME_MAX_LENGTH = 20;
+    static VEHICLE_SHORT_NAME_MIN_LENGTH = 2;
+    static VEHICLE_SEATS_MIN_COUNT = 2;
+    static VEHICLE_SEATS_MAX_COUNT = 70;
 
     @ThrowException(VehicleShortNameTooLongException)
-    private validateShortName(value: Vehicle['ShortName']) {
-        return value.length < VehicleValidator.MAX_VEHICLE_SHORT_NAME_LENGTH;
+    static validateShortNameMaxLength(value: string): CustomException<Vehicle> | boolean {
+        return value.length < GeneralVehicleValidator.VEHICLE_SHORT_NAME_MAX_LENGTH;
     }
 
-    private validatePlates(value: Vehicle['Plates']) {
+    @ThrowException(VehicleShortNameTooShortException)
+    static validateShortNameMinLength(value: string): CustomException<Vehicle> | boolean {
+        return value.length > GeneralVehicleValidator.VEHICLE_SHORT_NAME_MIN_LENGTH;
+    }
+
+    static validatePlates(): CustomException<Vehicle> | boolean {
         return true;
     }
 
-    private validateSeatsCount(value: Vehicle['SeatsCount']) {
-        return (
-            this.validateMinSeatsCount(value) &&
-            this.validateMaxSeatsCount(value)
-        );
-    }
-
     @ThrowException(VehicleSeatsCountTooLowException)
-    private validateMinSeatsCount(value: Vehicle['SeatsCount']) {
-        return VehicleValidator.MIN_VEHICLE_SEATS_COUNT < value;
+    static validateMinSeatsCount(value: number): CustomException<Vehicle> | boolean {
+        return GeneralVehicleValidator.VEHICLE_SEATS_MIN_COUNT < value;
     }
     @ThrowException(VehicleSeatsCountTooHighException)
-    private validateMaxSeatsCount(value: Vehicle['SeatsCount']) {
-        return value < VehicleValidator.MAX_VEHICLE_SEATS_COUNT;
+    static validateMaxSeatsCount(value: number): CustomException<Vehicle> | boolean {
+        return value < GeneralVehicleValidator.VEHICLE_SEATS_MAX_COUNT;
     }
+}
 
-    checkIfValid(object: CreateVehicleDto | UpdateVehicleDto) {
-        if (object.ShortName !== undefined) {
-            this.validateShortName(object.ShortName);
+export class VehicleStrategyValidator extends Validator<Vehicle> {
+    validate() {
+        return super.validate(
+            GeneralVehicleValidator.validateShortNameMaxLength(this.value.ShortName),
+            GeneralVehicleValidator.validateShortNameMinLength(this.value.ShortName),
+            GeneralVehicleValidator.validatePlates(),
+            GeneralVehicleValidator.validateMinSeatsCount(this.value.SeatsCount),
+            GeneralVehicleValidator.validateMaxSeatsCount(this.value.SeatsCount)
+        );
+    }
+}
+export class CreateVehicleDtoStrategyValidator extends Validator<CreateVehicleDto> {
+    validate() {
+        return super.validate(
+            GeneralVehicleValidator.validateShortNameMaxLength(this.value.ShortName),
+            GeneralVehicleValidator.validateShortNameMinLength(this.value.ShortName),
+            GeneralVehicleValidator.validatePlates(),
+            GeneralVehicleValidator.validateMinSeatsCount(this.value.SeatsCount),
+            GeneralVehicleValidator.validateMaxSeatsCount(this.value.SeatsCount)
+        );
+    }
+}
+export class UpdateVehicleDtoStrategyValidator extends Validator<UpdateVehicleDto> {
+    validate() {
+        const validators = [];
+        switch (true) {
+            case this.value.ShortName !== undefined:
+                validators.push(GeneralVehicleValidator.validateShortNameMaxLength(this.value.ShortName));
+                validators.push(GeneralVehicleValidator.validateShortNameMinLength(this.value.ShortName));
+            case this.value.SeatsCount !== undefined:
+                validators.push(GeneralVehicleValidator.validateMinSeatsCount(this.value.SeatsCount));
+                validators.push(GeneralVehicleValidator.validateMaxSeatsCount(this.value.SeatsCount));
+            case this.value.Plates !== undefined:
+                validators.push(GeneralVehicleValidator.validatePlates());
         }
+        return super.validate(validators);
+    }
+}
 
-        if (object.Plates !== undefined) {
-            this.validatePlates(object.Plates);
-        }
-
-        if (object.SeatsCount !== undefined) {
-            this.validateSeatsCount(object.SeatsCount);
-        }
+export class VehicleValidator extends Validator<Vehicle | CreateVehicleDto | UpdateVehicleDto> {
+    validate() {
+        if (this.value instanceof Vehicle)
+            return new VehicleStrategyValidator(this.value).validate();
+        else if (this.value instanceof CreateVehicleDto)
+            return new CreateVehicleDtoStrategyValidator(this.value).validate();
+        else return new UpdateVehicleDtoStrategyValidator(this.value).validate();
     }
 }

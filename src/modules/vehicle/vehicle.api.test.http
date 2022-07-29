@@ -11,4 +11,15 @@ Accept: application/json
 GET http://localhost:3000/vehicle/5/exist
 Accept: application/json
 
+
+###
+POST http://localhost:3000/vehicle
+Content-Type: application/json
+
+{
+  "ShortName": "a",
+  "Plates": "ASD43123",
+  "SeatsCount": 77
+}
+
 ###

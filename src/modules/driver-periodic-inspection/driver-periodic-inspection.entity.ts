@@ -1,5 +1,5 @@
 import { DriverPeriodicInspectionDocumentTypeEnum } from './DriverPeriodicInspectionDocumentType.enum';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { Driver } from '../driver/driver.entity';
 import { BuilderTemplate } from '../../shared/shared.types';
 
@@ -18,8 +18,14 @@ export class DriverPeriodicInspection {
     @PrimaryColumn()
     ToDate: Date;
 
-    @Column({ type: 'varchar', primary: true })
+    @Column({ type: 'enum', enum: DriverPeriodicInspectionDocumentTypeEnum, primary: true })
     DocumentType: DriverPeriodicInspectionDocumentTypeEnum;
+
+    @CreateDateColumn()
+    CreatedAt: Date;
+
+    @UpdateDateColumn()
+    UpdatedAt: Date;
 }
 
 export class DriverPeriodicInspectionBuilder extends BuilderTemplate<DriverPeriodicInspection> {

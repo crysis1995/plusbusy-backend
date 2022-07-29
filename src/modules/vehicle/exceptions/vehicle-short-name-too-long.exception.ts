@@ -1,12 +1,12 @@
-import { CustomException } from '../../../shared/shared.exception';
-import { Vehicle } from '../vehicle.entity';
-import { VehicleValidator } from '../vehicle.validator';
+import { CustomException } from "../../../shared/shared.exception";
+import { Vehicle } from "../vehicle.entity";
+import { GeneralVehicleValidator, VehicleValidator } from "../vehicle.validator";
+import { HttpStatus } from "@nestjs/common";
 
 export class VehicleShortNameTooLongException extends CustomException<Vehicle> {
     constructor(vehicle?: Vehicle) {
         super(vehicle);
     }
-    override getMessage(): string {
-        return `Short name is too long. Max is ${VehicleValidator.MAX_VEHICLE_SHORT_NAME_LENGTH}`;
-    }
+    custom_status = HttpStatus.BAD_REQUEST;
+    custom_message = `Short name is too long. Max is ${GeneralVehicleValidator.VEHICLE_SHORT_NAME_MAX_LENGTH}`;
 }

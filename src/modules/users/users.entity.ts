@@ -1,5 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { BuilderTemplate } from '../shared.types';
+import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { BuilderTemplate } from "../../shared/shared.types";
 
 @Entity()
 export class Users {
@@ -16,10 +16,16 @@ export class Users {
     Password: string;
 
     @Column({ unique: true, nullable: true })
-    Nick: string;
+    Nick?: string;
+
+    @CreateDateColumn()
+    CreatedAt: Date;
+
+    @UpdateDateColumn()
+    UpdatedAt: Date;
 }
 
-export class UserBuilder extends BuilderTemplate<Users> {
+export class UsersBuilder extends BuilderTemplate<Users> {
     constructor() {
         super(new Users());
     }

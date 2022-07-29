@@ -1,6 +1,6 @@
-import { MileageTooHighException } from './exceptions/mileage-too-high.exception';
-import { VehicleMileageValidator } from './vehicle-mileage.validator';
-import {VehicleMileage, VehicleMileageBuilder} from './vehicle-mileage.entity';
+import { MileageTooHighException } from "./exceptions/mileage-too-high.exception";
+import { VehicleMileageValidator } from "./vehicle-mileage.validator";
+import { VehicleMileage, VehicleMileageBuilder } from "./vehicle-mileage.entity";
 
 describe('VehicleMileageValidator', () => {
     let vehicleMileage: VehicleMileage = null;
@@ -12,15 +12,11 @@ describe('VehicleMileageValidator', () => {
             .setDate(new Date(2020, 0, 1))
             .build();
 
-        vehicleMileageValidator = new VehicleMileageValidator(
-            vehicleMileage,
-            true
-        );
+        vehicleMileageValidator = new VehicleMileageValidator(vehicleMileage, true);
     });
 
     it('should throw MileageTooHighException error', function () {
-        const validateFunction = () =>
-            vehicleMileageValidator.validateMileage(1);
+        const validateFunction = () => vehicleMileageValidator.validateMileage(1);
 
         expect(validateFunction).toThrow(MileageTooHighException);
         expect(validateFunction).toThrowError(
@@ -29,8 +25,7 @@ describe('VehicleMileageValidator', () => {
     });
 
     it('should not throw MileageTooHighException error', function () {
-        const validateFunction = () =>
-            vehicleMileageValidator.validateMileage(200);
+        const validateFunction = () => vehicleMileageValidator.validateMileage(200);
 
         expect(validateFunction).not.toThrow(MileageTooHighException);
         expect(validateFunction).not.toThrowError(

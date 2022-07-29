@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { BuilderTemplate } from '../../shared/shared.types';
 import { Vehicle } from '../vehicle/vehicle.entity';
 
@@ -19,6 +19,12 @@ export class VehiclePeriodicInspection {
 
     @PrimaryColumn()
     InspectionType: string;
+
+    @CreateDateColumn()
+    CreatedAt: Date;
+
+    @UpdateDateColumn()
+    UpdatedAt: Date;
 }
 
 export class VehiclePeriodicInspectionBuilder extends BuilderTemplate<VehiclePeriodicInspection> {
@@ -41,9 +47,7 @@ export class VehiclePeriodicInspectionBuilder extends BuilderTemplate<VehiclePer
         return this;
     }
 
-    setInspectionType(
-        inspectionType: VehiclePeriodicInspection['InspectionType']
-    ) {
+    setInspectionType(inspectionType: VehiclePeriodicInspection['InspectionType']) {
         this.value.InspectionType = inspectionType;
         return this;
     }
