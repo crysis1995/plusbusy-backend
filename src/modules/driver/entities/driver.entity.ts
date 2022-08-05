@@ -1,5 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { BuilderTemplate } from '../../shared/shared.types';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BuilderTemplate } from "../../../shared/shared.types";
 
 @Entity()
 export class Driver {

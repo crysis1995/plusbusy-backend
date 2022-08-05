@@ -1,12 +1,16 @@
-import { BuilderTemplate } from "../../../shared/shared.types";
-import { Validator } from "../../../shared/shared.validator";
-import { Vehicle } from "../vehicle.entity";
+import { BuilderTemplate } from '../../../shared/shared.types';
+import { Validator } from '../../../shared/shared.validator';
+import { Vehicle } from '../entities/vehicle.entity';
+import { z } from 'nestjs-zod/z';
+import { createZodDto } from 'nestjs-zod';
 
-export class CreateVehicleDto {
-    ShortName: string;
-    Plates: string;
-    SeatsCount: number;
-}
+export const CreateVehicleDtoSchema = z.object({
+    ShortName: z.string(),
+    Plates: z.string(),
+    SeatsCount: z.number().int()
+});
+
+export class CreateVehicleDto extends createZodDto(CreateVehicleDtoSchema) {}
 
 export class CreateVehicleDtoBuilder extends BuilderTemplate<CreateVehicleDto> {
     constructor() {

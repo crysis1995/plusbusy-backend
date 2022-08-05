@@ -1,27 +1,33 @@
-import { Injectable } from "@nestjs/common";
-import { UsersBuilder, Users } from "./users.entity";
-import { CreateUserDto } from "./dtos/create-user.dto";
+import { Injectable } from '@nestjs/common';
+import { Users, UsersBuilder, UserType } from './entities/users.entity';
+import { CreateUserDto, CreateUserSchema } from './dtos/create-user.dto';
+import { EmailSchema, NickSchema, UserByNickOrEmailDto } from './dtos/user-by-nick-or-email.dto';
+import { UserBadDataExceptionException } from './exceptions/user-bad-data.exception.exception';
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class UsersService {
-    private readonly users: Users[] = [
-        new UsersBuilder().setId(1).setEmail('test@asdm.com').setIsEmailConfirmed(true).setNick('crysis95').build(),
-        new UsersBuilder().setId(2).setEmail('magda123@asdm.com').setIsEmailConfirmed(false).setNick('magDAAA').build()
-    ];
+@InjectRepository(Users)
+private usersRepository:Repository<Users>
 
-    async findByEmailOrNick(value: string) {
-        let key: keyof Users = 'Email';
-        if (!value.includes('@')) key = 'Nick';
-        return this.users.find((x) => x[key] === value);
+
+    async findById(Id: UserType['Id']) {
+        return this.usersRepository.findBy({Id});
+    }
+
+    async findByEmailOrNick(value: UserByNickOrEmailDto) {
+        let result: UserType = null;
+        if (EmailSchema.safeParse(value.UserName).success) {
+            result = await this.usersRepository.findOne({where:{Email:value.UserName}});
+        } else if (NickSchema.safeParse(value.UserName).success) {
+            result = await this.usersRepository.findOne({where:{Nick:value.UserName}});
+        }
+        if (result === null) throw new UserBadDataExceptionException(value);
+        return result;
     }
 
     async createUser(dto: CreateUserDto) {
-        if (
-            (dto.Nick !== undefined && (await this.findByEmailOrNick(dto.Nick))) ||
-            (await this.findByEmailOrNick(dto.Email))
-        ) {
-        }
+        const validatedData = CreateUserSchema.parse(dto);
     }
-
-    async deleteUser(userId: Users['Id']) {}
 }

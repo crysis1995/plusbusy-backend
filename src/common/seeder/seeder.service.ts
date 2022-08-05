@@ -1,20 +1,20 @@
 import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Vehicle, VehicleBuilder } from '../../modules/vehicle/vehicle.entity';
+import { Vehicle, VehicleBuilder } from '../../modules/vehicle/entities/vehicle.entity';
 import { Repository } from 'typeorm';
-import { VehicleMileage, VehicleMileageBuilder } from '../../modules/vehicle-mileage/vehicle-mileage.entity';
+import { VehicleMileage, VehicleMileageBuilder } from '../../modules/vehicle-mileage/entities/vehicle-mileage.entity';
 import {
     VehiclePeriodicInspection,
     VehiclePeriodicInspectionBuilder
-} from '../../modules/vehicle-periodic-inspection/vehicle-periodic-inspection.entity';
-import { Driver, DriverBuilder } from '../../modules/driver/driver.entity';
+} from '../../modules/vehicle-periodic-inspection/entities/vehicle-periodic-inspection.entity';
+import { Driver, DriverBuilder } from '../../modules/driver/entities/driver.entity';
 import {
     DriverPeriodicInspection,
     DriverPeriodicInspectionBuilder
-} from '../../modules/driver-periodic-inspection/driver-periodic-inspection.entity';
-import { DriverPeriodicInspectionDocumentTypeEnum } from '../../modules/driver-periodic-inspection/DriverPeriodicInspectionDocumentType.enum';
-import { Company, CompanyBuilder } from '../../modules/company/company.entity';
-import { Users, UsersBuilder } from '../../modules/users/users.entity';
+} from '../../modules/driver-periodic-inspection/entities/driver-periodic-inspection.entity';
+import { DriverPeriodicInspectionDocumentTypeEnum } from '../../modules/driver-periodic-inspection/enums/driver-periodic-inspection-document-type.enum';
+import { Company, CompanyBuilder } from '../../modules/company/entities/company.entity';
+import { Users, UsersBuilder } from '../../modules/users/entities/users.entity';
 
 @Injectable()
 export class SeederService implements OnApplicationBootstrap {
@@ -38,103 +38,97 @@ export class SeederService implements OnApplicationBootstrap {
         this.logger.log('------INIT DATABASE-----');
     }
 
-    normalize<T extends { [key: string]: any }>(array: Array<T>, keyValue: keyof T) {
-        return array.reduce<{ [key: string | number | symbol]: T }>((previousValue, currentValue) => {
-            if (keyValue in currentValue) {
-                const key = currentValue[keyValue];
-                previousValue[key] = currentValue;
-            }
-            return previousValue;
-        }, {});
+    async onApplicationBootstrap() {
+        await this.InitializeUsers();
+        await this.InitializeCompanies();
+        await this.InitializeVehicles();
+        await this.InitializeVehicleMileage();
+        await this.InitializeVehiclePeriodicInspection();
+        await this.InitializeDrivers();
+        await this.InitializeDriverPeriodicInspections();
     }
 
     async InitializeVehicles() {
-        const vehicle1 = new VehicleBuilder()
-            .setId(1)
-            .setPlates('TKI30KU')
-            .setShortName('ZIELONA STRZAŁA')
-            .setSeatsCount(5)
-            .build();
-        const vehicle2 = new VehicleBuilder()
-            .setId(2)
-            .setPlates('TK12312')
-            .setShortName('super fura')
-            .setSeatsCount(30)
-            .build();
-        const vehicle3 = new VehicleBuilder()
-            .setId(3)
-            .setPlates('WS453491')
-            .setShortName('Duży')
-            .setSeatsCount(52)
-            .build();
-        const vehicle4 = new VehicleBuilder()
-            .setId(4)
-            .setPlates('WW4341DF')
-            .setShortName('testiwa')
-            .setSeatsCount(43)
-            .build();
-
-        const vehicles = [vehicle1, vehicle2, vehicle3, vehicle4];
+        const vehicles = [
+            new VehicleBuilder()
+                .setId(1)
+                .setPlates('TKI30KU')
+                .setShortName('ZIELONA STRZAŁA')
+                .setSeatsCount(5)
+                .setCompany('07380314-da25-4720-853b-a93ad39bcecd')
+                .build(),
+            new VehicleBuilder()
+                .setId(2)
+                .setPlates('TK12312')
+                .setShortName('super fura')
+                .setSeatsCount(30)
+                .setCompany('07380314-da25-4720-853b-a93ad39bcecd')
+                .build(),
+            new VehicleBuilder()
+                .setId(3)
+                .setPlates('WS453491')
+                .setShortName('Duży')
+                .setSeatsCount(52)
+                .setCompany('07380314-da25-4720-853b-a93ad39bcecd')
+                .build(),
+            new VehicleBuilder()
+                .setId(4)
+                .setPlates('WW4341DF')
+                .setShortName('testiwa')
+                .setSeatsCount(43)
+                .setCompany('07380314-da25-4720-853b-a93ad39bcecd')
+                .build()
+        ];
         await this.vehicleRepository.save(vehicles);
-        this.logger.log('Initialized vehicles:\t\t\t' + vehicles.length);
-        return this.normalize(vehicles, 'Id');
+        this.logger.log('Initialized vehicles:\t' + vehicles.length);
     }
-    async InitializeVehicleMileage(vehicles: { [key: string]: Vehicle }) {
+    async InitializeVehicleMileage() {
         let mileage = 441233;
 
         const entities = [
+            new VehicleMileageBuilder().setVehicle(1).setDate(new Date('2020-01-01')).setMileageKm(mileage).build(),
             new VehicleMileageBuilder()
-                .setVehicle(vehicles[1])
-                .setDate(new Date('2020-01-01'))
-                .setMileageKm(mileage)
-                .build(),
-            new VehicleMileageBuilder()
-                .setVehicle(vehicles[1])
+                .setVehicle(1)
                 .setDate(new Date('2020-01-02'))
                 .setMileageKm(mileage + 320)
                 .build(),
             new VehicleMileageBuilder()
-                .setVehicle(vehicles[1])
+                .setVehicle(1)
                 .setDate(new Date('2020-01-03'))
                 .setMileageKm(mileage + 432)
                 .build(),
             new VehicleMileageBuilder()
-                .setVehicle(vehicles[1])
+                .setVehicle(1)
                 .setDate(new Date('2020-01-04'))
                 .setMileageKm(mileage + 651)
                 .build(),
-            new VehicleMileageBuilder()
-                .setVehicle(vehicles[2])
-                .setDate(new Date('2020-01-04'))
-                .setMileageKm(651234)
-                .build()
+            new VehicleMileageBuilder().setVehicle(2).setDate(new Date('2020-01-04')).setMileageKm(651234).build()
         ];
         await this.vehicleMileageRepository.save(entities);
         this.logger.log('Initialized VehicleMileage:\t\t' + entities.length);
-        return;
     }
-    async InitializeVehiclePeriodicInspection(vehicles: { [key: string]: Vehicle }) {
+    async InitializeVehiclePeriodicInspection() {
         const entities = [
             new VehiclePeriodicInspectionBuilder()
-                .setVehicle(vehicles[1])
+                .setVehicle(1)
                 .setInspectionType('Jakiśtam')
                 .setFromDate(new Date('2020-01-01'))
                 .setToDate(new Date('2021-01-01'))
                 .build(),
             new VehiclePeriodicInspectionBuilder()
-                .setVehicle(vehicles[1])
+                .setVehicle(1)
                 .setInspectionType('Jakiśtam')
                 .setFromDate(new Date('2020-11-28'))
                 .setToDate(new Date('2021-11-28'))
                 .build(),
             new VehiclePeriodicInspectionBuilder()
-                .setVehicle(vehicles[2])
+                .setVehicle(2)
                 .setInspectionType('Jakiśtam')
                 .setFromDate(new Date('2021-01-01'))
                 .setToDate(new Date('2022-01-01'))
                 .build(),
             new VehiclePeriodicInspectionBuilder()
-                .setVehicle(vehicles[2])
+                .setVehicle(2)
                 .setInspectionType('Jakiśtam')
                 .setFromDate(new Date('2022-11-28'))
                 .setToDate(new Date('2023-11-28'))
@@ -159,7 +153,7 @@ export class SeederService implements OnApplicationBootstrap {
                 .setEmail('admin@gmail.com')
                 .setIsEmailConfirmed(false)
                 .setNick('admin123')
-                .setPassword('asdasdasd')
+                .setPassword('1274DZ')
                 .build()
         ];
 
@@ -182,56 +176,19 @@ export class SeederService implements OnApplicationBootstrap {
         ];
 
         await this.companyRepository.save(companies);
-        this.logger.log('Initialized Companies:\t\t' + companies.length);
+        this.logger.log('Initialized Companies:\t' + companies.length);
     }
 
-    async onApplicationBootstrap() {
-        await this.InitializeUsers();
-        await this.InitializeCompanies();
-
-        const vehicles = await this.InitializeVehicles();
-        await this.InitializeVehicleMileage(vehicles);
-        await this.InitializeVehiclePeriodicInspection(vehicles);
-
-        /*
-         *   DRIVER
-         * */
-
-        const driver1 = new DriverBuilder()
-            .setId(1)
-            .setEmail('krzysztofkaczor92@gmail.com')
-            .setIsEmailConfirmed(true)
-            .setPhone('787652532')
-            .setIsPhoneConfirmed(true)
-            .setName('Krzysztof')
-            .setSurname('Kaczor')
-            .build();
-
-        const driver2 = new DriverBuilder()
-            .setId(2)
-            .setEmail('madzia_galach@gmail.com')
-            .setIsEmailConfirmed(false)
-            .setPhone('45431234512')
-            .setIsPhoneConfirmed(false)
-            .setName('Magdalena')
-            .setSurname('Gałach')
-            .build();
-
-        await this.driverRepository.save([driver1, driver2]);
-
-        /*
-         *   DRIVER PERIODIC INSPECTION
-         *
-         * */
+    private async InitializeDriverPeriodicInspections() {
         const driver1PeriodicInspections = [
             new DriverPeriodicInspectionBuilder()
-                .setDriver(driver1)
+                .setDriver(1)
                 .setFromDate(new Date('2020-01-01'))
                 .setToDate(new Date('2025-01-01'))
                 .setDocumentType(DriverPeriodicInspectionDocumentTypeEnum.DRIVING_LICENSE)
                 .build(),
             new DriverPeriodicInspectionBuilder()
-                .setDriver(driver1)
+                .setDriver(1)
                 .setFromDate(new Date('2022-01-01'))
                 .setToDate(new Date('2026-01-01'))
                 .setDocumentType(DriverPeriodicInspectionDocumentTypeEnum.PERIODIC_INSPECTION)
@@ -239,5 +196,28 @@ export class SeederService implements OnApplicationBootstrap {
         ];
 
         await this.driverPeriodicInspectionRepository.save(driver1PeriodicInspections);
+        this.logger.log('Initialized Driver Periodic Inspections:\t' + driver1PeriodicInspections.length);
+    }
+
+    private async InitializeDrivers() {
+        const entities = [new DriverBuilder()
+            .setId(1)
+            .setEmail('krzysztofkaczor92@gmail.com')
+            .setIsEmailConfirmed(true)
+            .setPhone('787652532')
+            .setIsPhoneConfirmed(true)
+            .setName('Krzysztof')
+            .setSurname('Kaczor')
+            .build(), new DriverBuilder()
+            .setId(2)
+            .setEmail('madzia_galach@gmail.com')
+            .setIsEmailConfirmed(false)
+            .setPhone('45431234512')
+            .setIsPhoneConfirmed(false)
+            .setName('Magdalena')
+            .setSurname('Gałach')
+            .build()];
+        await this.driverRepository.save(entities);
+        this.logger.log('Initialized Drivers:\t' + entities.length)
     }
 }

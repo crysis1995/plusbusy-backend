@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { VehicleMileage, VehicleMileageBuilder } from './vehicle-mileage.entity';
+import { VehicleMileage, VehicleMileageBuilder } from './entities/vehicle-mileage.entity';
 import { VehicleNotFoundException } from '../vehicle/exceptions/vehicle-not-found.exception';
 import { VehicleService } from '../vehicle/vehicle.service';
-import { VehicleMileageValidator } from './vehicle-mileage.validator';
+import { VehicleMileageValidator } from './validators/vehicle-mileage.validator';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { VehicleBuilder } from '../vehicle/vehicle.entity';
 
 @Injectable()
 export class VehicleMileageService {
@@ -30,7 +29,7 @@ export class VehicleMileageService {
 
     public async setVehicleMileage(VehicleId: number, MileageKm: number, Date?: Date) {
         const isVehicleExist = await this.vehicleService.exist(VehicleId);
-        if (!isVehicleExist) throw new VehicleNotFoundException(new VehicleBuilder().setId(VehicleId).build());
+        if (!isVehicleExist) throw new VehicleNotFoundException({ Id: VehicleId });
 
         const vehicleMileage = await this.getNewestVehicleMileage(VehicleId);
         if (vehicleMileage != null) {
@@ -39,7 +38,7 @@ export class VehicleMileageService {
 
         const newMileage = new VehicleMileageBuilder()
             .setMileageKm(MileageKm)
-            .setVehicle(new VehicleBuilder().setId(VehicleId).build())
+            .setVehicle(VehicleId)
             .setDate(Date)
             .build();
         await this.vehicleMileageRepository.insert(newMileage);
@@ -48,6 +47,6 @@ export class VehicleMileageService {
     }
 
     public async deleteVehicleMileage(VehicleId: number, MileageKm: number, Date: Date) {
-        await this.vehicleMileageRepository.delete({VehicleId,MileageKm,Date})
+        await this.vehicleMileageRepository.delete({ VehicleId, MileageKm, Date });
     }
 }

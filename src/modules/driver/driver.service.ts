@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Driver, DriverBuilder } from './driver.entity';
+import { Driver, DriverBuilder } from './entities/driver.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateDriverDto } from './dtos/create-driver.dto';
 import { DriverValidator } from './validators/driver.validator';
@@ -10,7 +10,8 @@ import { generateObjectWithoutUndefinedValues } from '../../shared/shared.functi
 
 @Injectable()
 export class DriverService {
-    constructor(@InjectRepository(Driver) private driverRepository: Repository<Driver>) {}
+    @InjectRepository(Driver)
+    private driverRepository: Repository<Driver>;
 
     getById(Id: Driver['Id']) {
         return this.driverRepository.findOneBy({ Id });
@@ -43,10 +44,10 @@ export class DriverService {
         if (!validator.IsValid) return validator.errors;
 
         /*
-        *   TODO somehow update whole object also with domain
-        *    specific props like when changes email need to confirm it one more time?
-        *
-        * */
+         *   TODO somehow update whole object also with domain
+         *    specific props like when changes email need to confirm it one more time?
+         *
+         * */
 
         const dataToUpdate = generateObjectWithoutUndefinedValues(Dto);
         await this.driverRepository.update({ Id }, dataToUpdate);

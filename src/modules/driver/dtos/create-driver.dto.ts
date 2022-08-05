@@ -1,14 +1,26 @@
-import { BuilderTemplate } from "../../../shared/shared.types";
-import { Driver } from "../driver.entity";
+import { BuilderTemplate } from '../../../shared/shared.types';
+import { z } from 'nestjs-zod/z';
+import { createZodDto } from 'nestjs-zod';
 
-export class CreateDriverDto{
-    Name: string;
-    Surname: string;
-    Phone: string | undefined;
-    Email: string | undefined;
-}
+const CreateDriverDtoWithEmail = z.object({
+    Name: z.string(),
+    Surname: z.string(),
+    Email: z.string(),
+    Phone: z.string().optional()
+});
 
-export class CreateDriverDtoBuilder extends BuilderTemplate<CreateDriverDto>{
+const CreateDriverDtoWithPhone = z.object({
+    Name: z.string(),
+    Surname: z.string(),
+    Email: z.string().optional(),
+    Phone: z.string()
+});
+
+const CreateDriverDtoScheme = CreateDriverDtoWithPhone.merge(CreateDriverDtoWithEmail);
+
+export class CreateDriverDto extends createZodDto(CreateDriverDtoScheme) {}
+
+export class CreateDriverDtoBuilder extends BuilderTemplate<CreateDriverDto> {
     constructor() {
         super(new CreateDriverDto());
     }

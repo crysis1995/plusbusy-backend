@@ -1,7 +1,7 @@
 import { VehicleValidator } from "./vehicle.validator";
-import { VehicleShortNameTooLongException } from "./exceptions/vehicle-short-name-too-long.exception";
-import { VehicleSeatsCountTooLowException } from "./exceptions/vehicle-seats-count-too-low.exception";
-import { VehicleSeatsCountTooHighException } from "./exceptions/vehicle-seats-count-too-high.exception";
+import { VehicleShortNameTooLongException } from "../exceptions/vehicle-short-name-too-long.exception";
+import { VehicleSeatsCountTooLowException } from "../exceptions/vehicle-seats-count-too-low.exception";
+import { VehicleSeatsCountTooHighException } from "../exceptions/vehicle-seats-count-too-high.exception";
 
 describe('Unit Test - Vehicle Validator', () => {
     let vehicleValidator: VehicleValidator = null;

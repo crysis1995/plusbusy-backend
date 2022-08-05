@@ -6,9 +6,9 @@ import {
     ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn
-} from 'typeorm';
-import { Users } from '../users/users.entity';
-import { BuilderTemplate } from '../../shared/shared.types';
+} from "typeorm";
+import { Users } from "../../users/entities/users.entity";
+import { BuilderTemplate } from "../../../shared/shared.types";
 
 @Entity()
 export class Company {

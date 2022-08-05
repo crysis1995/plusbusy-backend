@@ -1,7 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { VehicleService } from '../vehicle/vehicle.service';
 import { Repository } from 'typeorm';
-import { VehiclePeriodicInspection } from './vehicle-periodic-inspection.entity';
+import { VehiclePeriodicInspection } from './entities/vehicle-periodic-inspection.entity';
 import { CreateVehiclePeriodicInspectionDto } from './dtos/create-vehicle-periodic-inspection.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VehiclePeriodicInspectionKey } from './dtos/vehicle-periodic-inspection.key';
@@ -10,11 +10,11 @@ import { VehiclePeriodicInspectionKey } from './dtos/vehicle-periodic-inspection
 export class VehiclePeriodicInspectionService {
     private readonly logger = new Logger(VehiclePeriodicInspectionService.name);
 
-    constructor(
-        @InjectRepository(VehiclePeriodicInspection)
-        private vehiclePeriodicInspectionRepository: Repository<VehiclePeriodicInspection>,
-        private vehicleService: VehicleService
-    ) {}
+    @InjectRepository(VehiclePeriodicInspection)
+    private vehiclePeriodicInspectionRepository: Repository<VehiclePeriodicInspection>;
+
+    @Inject(VehicleService)
+    private vehicleService: VehicleService;
 
     async exist(key: VehiclePeriodicInspectionKey) {
         return (await this.getById(key)) !== null;

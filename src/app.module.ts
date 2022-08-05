@@ -16,6 +16,7 @@ import { SeederModule } from './common/seeder/seeder.module';
 import { ConfigModule } from '@nestjs/config';
 import { getEnvPath } from './common/helper/env.helper';
 import { TypeOrmService } from './shared/type-orm.service';
+import { CompanyModule } from './modules/company/company.module';
 
 const envFilePath = getEnvPath(`${__dirname}/common/envs`);
 
@@ -24,6 +25,7 @@ const envFilePath = getEnvPath(`${__dirname}/common/envs`);
         ConfigModule.forRoot({ envFilePath, isGlobal: true }),
         TypeOrmModule.forRootAsync({ useClass: TypeOrmService }),
         SeederModule,
+        CompanyModule,
         AuthModule,
         UsersModule,
         VehicleModule,

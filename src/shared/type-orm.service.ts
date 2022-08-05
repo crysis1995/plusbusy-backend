@@ -9,7 +9,7 @@ export class TypeOrmService implements TypeOrmOptionsFactory {
 
     createTypeOrmOptions(connectionName?: string): TypeOrmModuleOptions {
         return {
-            type:"postgres",
+            type: 'postgres',
             host: this.config.get<string>('DATABASE_HOST'),
             port: this.config.get<number>('DATABASE_PORT'),
             database: this.config.get<string>('DATABASE_NAME'),
@@ -19,7 +19,7 @@ export class TypeOrmService implements TypeOrmOptionsFactory {
             migrations: ['dist/migrations/*.{ts,js}'],
             migrationsTableName: 'typeorm_migrations',
             logger: 'file',
-            synchronize: true,
-        }
+            synchronize: true
+        };
     }
 }

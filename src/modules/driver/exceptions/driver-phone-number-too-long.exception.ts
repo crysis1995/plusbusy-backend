@@ -1,5 +1,5 @@
 import { CustomException } from "../../../shared/shared.exception";
-import { Driver } from "../driver.entity";
+import { Driver } from "../entities/driver.entity";
 import { HttpStatus } from "@nestjs/common";
 import { GeneralDriverValidator } from "../validators/general-driver.validator";
 

@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { Company } from './company.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Users } from '../users/users.entity';
-import { BuilderTemplate } from "../../shared/shared.types";
+import { Injectable } from "@nestjs/common";
+import { Repository } from "typeorm";
+import { Company } from "./entities/company.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Users } from "../users/entities/users.entity";
 
 @Injectable()
 export class CompanyService {

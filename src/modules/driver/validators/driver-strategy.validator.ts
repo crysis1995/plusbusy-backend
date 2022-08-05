@@ -1,5 +1,5 @@
 import { Validator } from "../../../shared/shared.validator";
-import { Driver } from "../driver.entity";
+import { Driver } from "../entities/driver.entity";
 import { GeneralDriverValidator } from "./general-driver.validator";
 
 export class DriverStrategyValidator extends Validator<Driver> {

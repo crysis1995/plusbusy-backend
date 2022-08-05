@@ -1,12 +1,12 @@
-import { Validator } from '../../shared/shared.validator';
-import { Vehicle } from './vehicle.entity';
-import { CustomException, ThrowException } from '../../shared/shared.exception';
-import { VehicleShortNameTooLongException } from './exceptions/vehicle-short-name-too-long.exception';
-import { VehicleSeatsCountTooLowException } from './exceptions/vehicle-seats-count-too-low.exception';
-import { VehicleSeatsCountTooHighException } from './exceptions/vehicle-seats-count-too-high.exception';
-import { VehicleShortNameTooShortException } from './exceptions/vehicle-short-name-too-short.exception';
-import { CreateVehicleDto } from './dtos/create-vehicle.dto';
-import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
+import { Validator } from "../../../shared/shared.validator";
+import { Vehicle } from "../entities/vehicle.entity";
+import { CustomException, ThrowException } from "../../../shared/shared.exception";
+import { VehicleShortNameTooLongException } from "../exceptions/vehicle-short-name-too-long.exception";
+import { VehicleSeatsCountTooLowException } from "../exceptions/vehicle-seats-count-too-low.exception";
+import { VehicleSeatsCountTooHighException } from "../exceptions/vehicle-seats-count-too-high.exception";
+import { VehicleShortNameTooShortException } from "../exceptions/vehicle-short-name-too-short.exception";
+import { CreateVehicleDto } from "../dtos/create-vehicle.dto";
+import { UpdateVehicleDto } from "../dtos/update-vehicle.dto";
 
 export class GeneralVehicleValidator {
     static VEHICLE_SHORT_NAME_MAX_LENGTH = 20;

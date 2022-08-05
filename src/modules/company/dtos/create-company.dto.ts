@@ -1,9 +1,9 @@
-import { BuilderTemplate } from '../../../shared/shared.types';
+import { z } from "nestjs-zod/z";
+import { createZodDto } from "nestjs-zod";
 
-export class CreateCompanyDto {}
+const CreateCompanySchema = z.object({
+    Name: z.string(),
+    AdminId: z.number().int()
+});
 
-export class CreateCompanyDtoBuilder extends BuilderTemplate<CreateCompanyDto> {
-    constructor() {
-        super(new CreateCompanyDto());
-    }
-}
+export class CreateCompanyDto extends createZodDto(CreateCompanySchema) {}

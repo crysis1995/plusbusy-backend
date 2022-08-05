@@ -1,5 +1,17 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from "typeorm";
-import { BuilderTemplate } from "../../shared/shared.types";
+import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import { BuilderTemplate } from '../../../shared/shared.types';
+import { z } from 'nestjs-zod/z';
+import { Exclude, Expose } from "class-transformer";
+
+export const UserSchema = z.object({
+    Id: z.number().int(),
+    Email: z.string().email(),
+    Password: z.string(),
+    Nick: z.string().optional(),
+    IsEmailConfirmed: z.boolean()
+});
+
+export type UserType = z.infer<typeof UserSchema>;
 
 @Entity()
 export class Users {
@@ -12,6 +24,7 @@ export class Users {
     @Column()
     IsEmailConfirmed: boolean;
 
+    @Exclude()
     @Column()
     Password: string;
 
@@ -30,23 +43,23 @@ export class UsersBuilder extends BuilderTemplate<Users> {
         super(new Users());
     }
 
-    setId(value: Users['Id']) {
+    setId(value: UserType['Id']) {
         this.value.Id = value;
         return this;
     }
-    setEmail(value: Users['Email']) {
+    setEmail(value: UserType['Email']) {
         this.value.Email = value;
         return this;
     }
-    setIsEmailConfirmed(value: Users['IsEmailConfirmed']) {
+    setIsEmailConfirmed(value: UserType['IsEmailConfirmed']) {
         this.value.IsEmailConfirmed = value;
         return this;
     }
-    setPassword(value: Users['Password']) {
+    setPassword(value: UserType['Password']) {
         this.value.Password = value;
         return this;
     }
-    setNick(value: Users['Nick']) {
+    setNick(value: UserType['Nick']) {
         this.value.Nick = value;
         return this;
     }

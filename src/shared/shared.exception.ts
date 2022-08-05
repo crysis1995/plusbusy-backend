@@ -1,4 +1,3 @@
-import { Validator } from './shared.validator';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 /*
@@ -35,9 +34,8 @@ export const ThrowException = <T extends typeof CustomException<any>>(exception:
         const originalMethod = descriptor.value;
 
         descriptor.value = function (...args) {
-            const that: Validator<Object> = this;
-            const result = originalMethod.apply(that, args);
-            if (!result) return new exception(that.value, args);
+            const result = originalMethod.apply(this, args);
+            if (!result) return new exception(this.value, args);
             return result;
         };
     };

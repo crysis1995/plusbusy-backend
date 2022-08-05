@@ -1,5 +1,5 @@
 import { Validator } from "../../../shared/shared.validator";
-import { Driver } from "../driver.entity";
+import { Driver } from "../entities/driver.entity";
 import { CreateDriverDto } from "../dtos/create-driver.dto";
 import { UpdateDriverDto } from "../dtos/update-driver.dto";
 import { DriverStrategyValidator } from "./driver-strategy.validator";

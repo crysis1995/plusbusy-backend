@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
-import { Vehicle } from "../vehicle/vehicle.entity";
-import { BuilderTemplate } from "../../shared/shared.types";
+import { Vehicle } from "../../vehicle/entities/vehicle.entity";
+import { BuilderTemplate } from "../../../shared/shared.types";
 
 @Entity()
 export class VehicleMileage {
@@ -29,8 +29,9 @@ export class VehicleMileageBuilder extends BuilderTemplate<VehicleMileage> {
         super(new VehicleMileage());
     }
 
-    setVehicle(value: VehicleMileage['Vehicle']) {
-        this.value.Vehicle = value;
+    setVehicle(value: VehicleMileage['Vehicle'] | VehicleMileage['VehicleId']) {
+        if (value instanceof Vehicle) this.value.Vehicle = value;
+        else this.value.VehicleId = value;
         return this;
     }
 
