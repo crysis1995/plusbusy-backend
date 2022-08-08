@@ -1,7 +1,13 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    PrimaryColumn,
+    UpdateDateColumn
+} from 'typeorm';
 import { BuilderTemplate } from '../../../shared/shared.types';
 import { z } from 'nestjs-zod/z';
-import { Exclude, Expose } from "class-transformer";
+import { Exclude, Expose } from 'class-transformer';
 
 export const UserSchema = z.object({
     Id: z.number().int(),

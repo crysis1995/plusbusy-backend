@@ -1,11 +1,17 @@
-import { NestFactory, Reflector } from "@nestjs/core";
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import {
+    FastifyAdapter,
+    NestFastifyApplication
+} from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ClassSerializerInterceptor } from "@nestjs/common";
+import { ClassSerializerInterceptor } from '@nestjs/common';
 
 async function bootstrap() {
-    const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
+    const app = await NestFactory.create<NestFastifyApplication>(
+        AppModule,
+        new FastifyAdapter()
+    );
     app.setGlobalPrefix('api');
     const config = new DocumentBuilder()
         .setTitle('Bus Transport')

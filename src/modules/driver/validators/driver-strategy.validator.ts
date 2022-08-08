@@ -1,6 +1,6 @@
-import { Validator } from "../../../shared/shared.validator";
-import { Driver } from "../entities/driver.entity";
-import { GeneralDriverValidator } from "./general-driver.validator";
+import { Validator } from '../../../shared/shared.validator';
+import { Driver } from '../entities/driver.entity';
+import { GeneralDriverValidator } from './general-driver.validator';
 
 export class DriverStrategyValidator extends Validator<Driver> {
     validate() {
@@ -10,8 +10,12 @@ export class DriverStrategyValidator extends Validator<Driver> {
             GeneralDriverValidator.validateNameMinLength(this.value.Name),
             GeneralDriverValidator.validateSurnameMaxLength(this.value.Surname),
             GeneralDriverValidator.validateSurnameMinLength(this.value.Surname),
-            GeneralDriverValidator.validatePhoneNumberMaxLength(this.value.Phone),
-            GeneralDriverValidator.validatePhoneNumberMinLength(this.value.Phone)
+            GeneralDriverValidator.validatePhoneNumberMaxLength(
+                this.value.Phone
+            ),
+            GeneralDriverValidator.validatePhoneNumberMinLength(
+                this.value.Phone
+            )
         );
     }
 }

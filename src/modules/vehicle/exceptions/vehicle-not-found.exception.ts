@@ -1,6 +1,6 @@
-import { HttpStatus } from "@nestjs/common";
-import { CustomException } from "../../../shared/shared.exception";
-import { Vehicle } from "../entities/vehicle.entity";
+import { HttpStatus } from '@nestjs/common';
+import { CustomException } from '../../../shared/shared.exception';
+import { Vehicle } from '../entities/vehicle.entity';
 
 export class VehicleNotFoundException extends CustomException<Vehicle> {
     constructor(vehicle) {

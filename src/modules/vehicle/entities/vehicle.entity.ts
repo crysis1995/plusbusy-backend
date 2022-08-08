@@ -36,7 +36,7 @@ export class Vehicle {
     Company: Company;
 
     @Column({ type: 'uuid' })
-    CompanyId: CompanyType['Id'];
+    CompanyId: Company['Id'];
 }
 
 export class VehicleBuilder extends BuilderTemplate<Vehicle> {

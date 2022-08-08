@@ -7,7 +7,8 @@ import { createZodDto } from 'nestjs-zod';
 export const CreateVehicleDtoSchema = z.object({
     ShortName: z.string(),
     Plates: z.string(),
-    SeatsCount: z.number().int()
+    SeatsCount: z.number().int(),
+    CompanyId: z.string().uuid()
 });
 
 export class CreateVehicleDto extends createZodDto(CreateVehicleDtoSchema) {}
@@ -30,6 +31,10 @@ export class CreateVehicleDtoBuilder extends BuilderTemplate<CreateVehicleDto> {
     setSeatsCount(SeatsCount: number) {
         this.value.SeatsCount = SeatsCount;
         return this;
+    }
+
+    setCompany(value: string) {
+        this.value.CompanyId = value;
     }
 }
 

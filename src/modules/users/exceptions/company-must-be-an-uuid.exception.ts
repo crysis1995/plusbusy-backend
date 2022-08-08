@@ -1,7 +1,7 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { HttpException, HttpStatus } from '@nestjs/common';
 
-export class CompanyMustBeAnUuidException extends HttpException{
+export class CompanyMustBeAnUuidException extends HttpException {
     constructor() {
-        super("Company must be an UUID type", HttpStatus.BAD_REQUEST);
+        super('Company must be an UUID type', HttpStatus.BAD_REQUEST);
     }
 }

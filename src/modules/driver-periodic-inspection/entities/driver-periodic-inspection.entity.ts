@@ -1,7 +1,15 @@
-import { DriverPeriodicInspectionDocumentTypeEnum } from "../enums/driver-periodic-inspection-document-type.enum";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
-import { Driver } from "../../driver/entities/driver.entity";
-import { BuilderTemplate } from "../../../shared/shared.types";
+import { DriverPeriodicInspectionDocumentTypeEnum } from '../enums/driver-periodic-inspection-document-type.enum';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryColumn,
+    UpdateDateColumn
+} from 'typeorm';
+import { Driver } from '../../driver/entities/driver.entity';
+import { BuilderTemplate } from '../../../shared/shared.types';
 
 @Entity()
 export class DriverPeriodicInspection {
@@ -12,13 +20,16 @@ export class DriverPeriodicInspection {
     @PrimaryColumn()
     DriverId: number;
 
-    @PrimaryColumn()
+    @PrimaryColumn('date')
     FromDate: Date;
 
-    @PrimaryColumn()
+    @PrimaryColumn('date')
     ToDate: Date;
 
-    @Column({ type: 'enum', enum: DriverPeriodicInspectionDocumentTypeEnum, primary: true })
+    @PrimaryColumn({
+        type: 'simple-enum',
+        enum: DriverPeriodicInspectionDocumentTypeEnum
+    })
     DocumentType: DriverPeriodicInspectionDocumentTypeEnum;
 
     @CreateDateColumn()
@@ -26,13 +37,20 @@ export class DriverPeriodicInspection {
 
     @UpdateDateColumn()
     UpdatedAt: Date;
+
+    @Column('text', { nullable: true })
+    Note;
 }
 
 export class DriverPeriodicInspectionBuilder extends BuilderTemplate<DriverPeriodicInspection> {
     constructor() {
         super(new DriverPeriodicInspection());
     }
-    setDriver(value: DriverPeriodicInspection['Driver'] | DriverPeriodicInspection['DriverId']) {
+    setDriver(
+        value:
+            | DriverPeriodicInspection['Driver']
+            | DriverPeriodicInspection['DriverId']
+    ) {
         if (value instanceof Driver) this.value.Driver = value;
         else this.value.DriverId = value;
         return this;
@@ -47,6 +65,11 @@ export class DriverPeriodicInspectionBuilder extends BuilderTemplate<DriverPerio
     }
     setDocumentType(value: DriverPeriodicInspection['DocumentType']) {
         this.value.DocumentType = value;
+        return this;
+    }
+
+    setNote(value: DriverPeriodicInspection['Note']) {
+        this.value.Note = value;
         return this;
     }
 }

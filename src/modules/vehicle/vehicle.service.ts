@@ -1,35 +1,63 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Vehicle, VehicleBuilder } from './entities/vehicle.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateVehicleDto } from './dtos/create-vehicle.dto';
 import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VehicleValidator } from './validators/vehicle.validator';
-import { BasicCompanyDto } from '../company/dtos/BasicCompanyDto';
+import { CompanyService } from '../company/company.service';
+import { UserHasNoAccessException } from '../users/exceptions/user-has-no-access.exception';
+import { RequestData } from '../../shared/shared.types';
+import { VehicleId } from './values/vehicle-id.value';
 
 @Injectable()
 export class VehicleService {
     private readonly logger = new Logger(VehicleService.name);
 
+    @Inject(CompanyService)
+    private companyService: CompanyService;
+
     @InjectRepository(Vehicle)
     private vehicleRepository: Repository<Vehicle>;
 
-    async exist(vehicleId: Vehicle['Id'], company: BasicCompanyDto) {
-        return (await this.getVehicleByVehicleId(vehicleId, company)) !== null;
+    async exist(vehicleIdDto: VehicleId, data: RequestData) {
+        return (await this.getVehicleByVehicleId(vehicleIdDto, data)) !== null;
     }
 
-    async getVehicleByVehicleId(vehicleId: Vehicle['Id'], company: BasicCompanyDto) {
-        return await this.vehicleRepository.findOneBy({
-            Id: vehicleId,
-            CompanyId: company.Id
+    async getVehicleByVehicleId(vehicleId: VehicleId, data: RequestData) {
+        const vehicle = await this.vehicleRepository.findOneBy({
+            Id: vehicleId.value
         });
+        if (!data.company) {
+            const companiesID = (
+                await this.companyService.getMyCompanies(data)
+            ).map((x) => x.Id);
+            if (!(vehicle.CompanyId in companiesID))
+                throw new UserHasNoAccessException();
+        } else {
+            if (vehicle.CompanyId !== data.company.CompanyId)
+                throw new UserHasNoAccessException();
+        }
+        return vehicle;
     }
 
-    async getAllVehicles(company: BasicCompanyDto) {
-        return await this.vehicleRepository.find({ where: { CompanyId: company.Id } });
+    async getAllVehicles(data: RequestData) {
+        let CompanyId;
+        if (!data.company) {
+            CompanyId = In(
+                (await this.companyService.getMyCompanies(data)).map(
+                    (x) => x.Id
+                )
+            );
+        } else CompanyId = data.company.CompanyId;
+
+        return await this.vehicleRepository.findBy({ CompanyId });
     }
 
-    async createVehicle(createVehicleDto: CreateVehicleDto, company: BasicCompanyDto) {
+    async createVehicle(createVehicleDto: CreateVehicleDto, data: RequestData) {
+        const hasAccess = this.companyService.ifUserHasAccess(data);
+        if (!hasAccess) throw new UserHasNoAccessException();
+
         const validator = new VehicleValidator(createVehicleDto).validate();
         if (!validator.IsValid) return validator.errors;
 
@@ -37,26 +65,39 @@ export class VehicleService {
             .setShortName(createVehicleDto.ShortName)
             .setPlates(createVehicleDto.Plates)
             .setSeatsCount(createVehicleDto.SeatsCount)
-            .setCompany(company.Id)
+            .setCompany(createVehicleDto.CompanyId)
             .build();
 
         await this.vehicleRepository.insert(vehicle);
         return vehicle;
     }
 
-    async updateVehicle(VehicleId: number, updateVehicleDto: UpdateVehicleDto) {
+    async updateVehicle(
+        vehicleId: VehicleId,
+        updateVehicleDto: UpdateVehicleDto,
+        data: RequestData
+    ) {
+        if (!(await this.companyService.ifUserHasAccess(data)))
+            throw new UserHasNoAccessException();
+
         const validator = new VehicleValidator(updateVehicleDto).validate();
         if (!validator.IsValid) return validator.errors;
 
         const vehicleBuilder = new VehicleBuilder()
             .setPlates(updateVehicleDto.Plates)
             .setShortName(updateVehicleDto.ShortName)
-            .setSeatsCount(updateVehicleDto.SeatsCount);
+            .setSeatsCount(updateVehicleDto.SeatsCount)
+            .setCompany(data.company.CompanyId);
 
-        await this.vehicleRepository.update({ Id: VehicleId }, vehicleBuilder.build());
+        await this.vehicleRepository.update(
+            { Id: vehicleId.value },
+            vehicleBuilder.build()
+        );
     }
 
-    async deleteVehicle(vehicleId: Vehicle['Id']) {
-        await this.vehicleRepository.delete({ Id: vehicleId });
+    async deleteVehicle(vehicleId: VehicleId, data: RequestData) {
+        if (!(await this.companyService.ifUserHasAccess(data)))
+            throw new UserHasNoAccessException();
+        await this.vehicleRepository.delete({ Id: vehicleId.value });
     }
 }

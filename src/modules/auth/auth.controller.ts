@@ -1,8 +1,17 @@
-import { Body, Controller, Inject, Post, Request, UseGuards } from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Inject,
+    Post,
+    Request,
+    UseGuards
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth-guard';
-import { BasicUserDto } from "../users/dtos/basic-user.dto";
+import { BasicUserDto } from '../users/dtos/basic-user.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
     @Inject(AuthService)
@@ -19,8 +28,6 @@ export class AuthController {
         console.log('register');
     }
 
-    @Post("password-reset")
-    async passwordReset(@Body() body:BasicUserDto){
-
-    }
+    @Post('password-reset')
+    async passwordReset(@Body() body: BasicUserDto) {}
 }

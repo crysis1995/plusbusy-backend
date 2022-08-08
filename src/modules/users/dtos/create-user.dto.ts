@@ -1,7 +1,7 @@
-import { BuilderTemplate } from "../../../shared/shared.types";
-import { z } from "nestjs-zod/z";
-import { createZodDto } from "nestjs-zod/dto";
-import { UserType } from "../entities/users.entity";
+import { BuilderTemplate } from '../../../shared/shared.types';
+import { z } from 'nestjs-zod/z';
+import { createZodDto } from 'nestjs-zod/dto';
+import { UserType } from '../entities/users.entity';
 
 export const CreateUserSchema = z.object({
     Email: z.string().email(),

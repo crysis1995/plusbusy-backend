@@ -8,7 +8,10 @@ export const BasicUserDtoScheme = z.object({
 export type BasicUserDtoType = z.infer<typeof BasicUserDtoScheme>;
 
 export class BasicUserDto extends createZodDto(BasicUserDtoScheme) {
-    constructor(UserId: BasicUserDtoType['UserId'], UserEmail: BasicUserDtoType['UserEmail']) {
+    constructor(
+        UserId: BasicUserDtoType['UserId'],
+        UserEmail: BasicUserDtoType['UserEmail']
+    ) {
         super();
         this.UserId = UserId;
         this.UserEmail = UserEmail;

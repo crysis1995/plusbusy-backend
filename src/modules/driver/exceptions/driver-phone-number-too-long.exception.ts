@@ -1,7 +1,7 @@
-import { CustomException } from "../../../shared/shared.exception";
-import { Driver } from "../entities/driver.entity";
-import { HttpStatus } from "@nestjs/common";
-import { GeneralDriverValidator } from "../validators/general-driver.validator";
+import { CustomException } from '../../../shared/shared.exception';
+import { Driver } from '../entities/driver.entity';
+import { HttpStatus } from '@nestjs/common';
+import { GeneralDriverValidator } from '../validators/general-driver.validator';
 
 export class DriverPhoneNumberTooLongException extends CustomException<Driver> {
     constructor(driver: Driver) {

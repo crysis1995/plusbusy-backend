@@ -7,21 +7,27 @@ import { DriverValidator } from './validators/driver.validator';
 import { UpdateDriverDto } from './dtos/update-driver.dto';
 import { DriverNotFoundException } from './exceptions/driver-not-found.exception';
 import { generateObjectWithoutUndefinedValues } from '../../shared/shared.functions';
+import { RequestData } from '../../shared/shared.types';
+import { DriverId } from './values/driver-id.value';
 
 @Injectable()
 export class DriverService {
     @InjectRepository(Driver)
     private driverRepository: Repository<Driver>;
 
-    getById(Id: Driver['Id']) {
-        return this.driverRepository.findOneBy({ Id });
+    async ifDriverExist(driverId: DriverId, data: RequestData) {
+        return (await this.getById(driverId, data)) !== null;
     }
 
-    getAll() {
+    getById(driverId: DriverId, data: RequestData) {
+        return this.driverRepository.findOneBy({ Id: driverId.value });
+    }
+
+    getAll(data: RequestData) {
         return this.driverRepository.find();
     }
 
-    async createDriver(Dto: CreateDriverDto) {
+    async createDriver(Dto: CreateDriverDto, data: RequestData) {
         const validator = new DriverValidator(Dto).validate();
         if (!validator.IsValid) return validator.errors;
 
@@ -36,9 +42,13 @@ export class DriverService {
         return driver;
     }
 
-    async updateDriver(Id: Driver['Id'], Dto: UpdateDriverDto) {
-        const driver = await this.getById(Id);
-        if (driver === null) throw new DriverNotFoundException(Id);
+    async updateDriver(
+        driverId: DriverId,
+        Dto: UpdateDriverDto,
+        data: RequestData
+    ) {
+        const driver = await this.getById(driverId, data);
+        if (!driver) throw new DriverNotFoundException(driverId.value);
 
         const validator = new DriverValidator(Dto).validate();
         if (!validator.IsValid) return validator.errors;
@@ -50,12 +60,15 @@ export class DriverService {
          * */
 
         const dataToUpdate = generateObjectWithoutUndefinedValues(Dto);
-        await this.driverRepository.update({ Id }, dataToUpdate);
+        await this.driverRepository.update(
+            { Id: driverId.value },
+            dataToUpdate
+        );
     }
 
-    async deleteDriver(Id: Driver['Id']) {
-        const driver = await this.getById(Id);
-        if (driver === null) throw new DriverNotFoundException(Id);
-        await this.driverRepository.delete({ Id });
+    async deleteDriver(driverId: DriverId, data: RequestData) {
+        const driver = await this.getById(driverId, data);
+        if (driver === null) throw new DriverNotFoundException(driverId.value);
+        await this.driverRepository.delete({ Id: driverId.value });
     }
 }

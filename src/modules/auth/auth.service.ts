@@ -17,7 +17,10 @@ export class AuthService {
     @Inject(ConfigService)
     private configService: ConfigService;
 
-    async validateUser(UserName: UserType['Email'] | UserType['Nick'], password: UserType['Password']) {
+    async validateUser(
+        UserName: UserType['Email'] | UserType['Nick'],
+        password: UserType['Password']
+    ) {
         const user = await this.usersService.findByEmailOrNick({ UserName });
         if (user && user.Password === password) {
             return new BasicUserDto(user.Id, user.Email);
@@ -29,17 +32,22 @@ export class AuthService {
 
     async loginWithCredentials({ UserId, UserEmail }: BasicUserDto) {
         const payload: CredentialsPayloadType = { UserId, UserEmail };
-        const accessToken = this.jwtService.sign(payload, {
-            expiresIn: this.configService.get<number>('AUTH_EXPIRATION_TIME_IN_SECONDS')
-        });
-        const expiresAt = this.getExpirationTime();
+        const accessToken = this.jwtService.sign(payload);
+        const expiresAt = this.getExpirationTimeMS();
         return {
             accessToken,
             expiresAt
         };
     }
 
-    getExpirationTime() {
-        return Date.now().valueOf() + this.configService.get<number>('AUTH_EXPIRATION_TIME_IN_SECONDS') * 1000;
+    getExpirationTimeMS() {
+        return (
+            Number(Math.round(Date.now().valueOf() / 1000)) +
+            Number(
+                this.configService.get<number>(
+                    'AUTH_EXPIRATION_TIME_IN_SECONDS'
+                )
+            )
+        );
     }
 }

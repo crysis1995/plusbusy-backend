@@ -6,9 +6,9 @@ import {
     ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn
-} from "typeorm";
-import { Users } from "../../users/entities/users.entity";
-import { BuilderTemplate } from "../../../shared/shared.types";
+} from 'typeorm';
+import { Users } from '../../users/entities/users.entity';
+import { BuilderTemplate } from '../../../shared/shared.types';
 
 @Entity()
 export class Company {
@@ -45,9 +45,14 @@ export class CompanyBuilder extends BuilderTemplate<Company> {
         this.value.Name = value;
         return this;
     }
-    setAdmin(value: Company['Admin']) {
-        this.value.AdminId = value.Id;
-        this.value.Admin = value;
+    setAdmin(value: Company['Admin'] | Company['AdminId']) {
+        if (value instanceof Users) {
+            this.value.AdminId = value.Id;
+            this.value.Admin = value;
+        } else {
+            this.value.AdminId = value;
+        }
+
         return this;
     }
 }

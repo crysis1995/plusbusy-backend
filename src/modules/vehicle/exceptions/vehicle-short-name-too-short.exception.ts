@@ -1,7 +1,7 @@
-import { CustomException } from "../../../shared/shared.exception";
-import { Vehicle } from "../entities/vehicle.entity";
-import { GeneralVehicleValidator } from "../validators/vehicle.validator";
-import { HttpStatus } from "@nestjs/common";
+import { CustomException } from '../../../shared/shared.exception';
+import { Vehicle } from '../entities/vehicle.entity';
+import { GeneralVehicleValidator } from '../validators/vehicle.validator';
+import { HttpStatus } from '@nestjs/common';
 
 export class VehicleShortNameTooShortException extends CustomException<Vehicle> {
     constructor(vehicle?: Vehicle) {

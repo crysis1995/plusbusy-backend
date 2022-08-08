@@ -1,4 +1,4 @@
-import { BuilderTemplate } from "../../../shared/shared.types";
+import { BuilderTemplate } from '../../../shared/shared.types';
 
 export class CreateVehiclePeriodicInspectionDto {
     VehicleId: number;
@@ -24,7 +24,9 @@ export class CreateVehiclePeriodicInspectionDtoBuilder extends BuilderTemplate<C
         this.value.ToDate = value;
         return this;
     }
-    setInspectionType(value: CreateVehiclePeriodicInspectionDto['InspectionType']) {
+    setInspectionType(
+        value: CreateVehiclePeriodicInspectionDto['InspectionType']
+    ) {
         this.value.InspectionType = value;
         return this;
     }

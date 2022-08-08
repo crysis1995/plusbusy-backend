@@ -1,7 +1,14 @@
-import { CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
-import { BuilderTemplate } from "../../../shared/shared.types";
-import { Vehicle } from "../../vehicle/entities/vehicle.entity";
-import { VehicleInspectionTypeEnum } from "../enums/vehicle-inspection-type.enum";
+import {
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryColumn,
+    UpdateDateColumn
+} from 'typeorm';
+import { BuilderTemplate } from '../../../shared/shared.types';
+import { Vehicle } from '../../vehicle/entities/vehicle.entity';
+import { VehicleInspectionTypeEnum } from '../enums/vehicle-inspection-type.enum';
 
 @Entity()
 export class VehiclePeriodicInspection {
@@ -18,7 +25,7 @@ export class VehiclePeriodicInspection {
     @PrimaryColumn()
     ToDate: Date;
 
-    @PrimaryColumn({type:"enum",enum:VehicleInspectionTypeEnum})
+    @PrimaryColumn({ type: 'simple-enum', enum: VehicleInspectionTypeEnum })
     InspectionType: VehicleInspectionTypeEnum;
 
     @CreateDateColumn()
@@ -33,7 +40,11 @@ export class VehiclePeriodicInspectionBuilder extends BuilderTemplate<VehiclePer
         super(new VehiclePeriodicInspection());
     }
 
-    setVehicle(value: VehiclePeriodicInspection['Vehicle'] | VehiclePeriodicInspection['VehicleId']) {
+    setVehicle(
+        value:
+            | VehiclePeriodicInspection['Vehicle']
+            | VehiclePeriodicInspection['VehicleId']
+    ) {
         if (value instanceof Vehicle) this.value.Vehicle = value;
         else this.value.VehicleId = value;
         return this;
@@ -49,7 +60,9 @@ export class VehiclePeriodicInspectionBuilder extends BuilderTemplate<VehiclePer
         return this;
     }
 
-    setInspectionType(inspectionType: VehiclePeriodicInspection['InspectionType']) {
+    setInspectionType(
+        inspectionType: VehiclePeriodicInspection['InspectionType']
+    ) {
         this.value.InspectionType = inspectionType;
         return this;
     }

@@ -1,14 +1,14 @@
-import { Driver } from "../entities/driver.entity";
-import * as EmailValidator from "email-validator";
-import { ThrowException } from "../../../shared/shared.exception";
-import { DriverEmailNotValidException } from "../exceptions/driver-email-not-valid.exception";
-import { DriverNameTooLongException } from "../exceptions/driver-name-too-long.exception";
-import { DriverNameTooShortException } from "../exceptions/driver-name-too-short.exception";
-import { DriverSurnameTooLongException } from "../exceptions/driver-surname-too-long.exception";
-import { DriverPhoneNumberTooShortException } from "../exceptions/driver-phone-number-too-short.exception";
-import { DriverPhoneNumberTooLongException } from "../exceptions/driver-phone-number-too-long.exception";
-import { DriverSurnameTooShortException } from "../exceptions/driver-surname-too-short.exception";
-import { z } from "nestjs-zod/z";
+import { Driver } from '../entities/driver.entity';
+import * as EmailValidator from 'email-validator';
+import { ThrowException } from '../../../shared/shared.exception';
+import { DriverEmailNotValidException } from '../exceptions/driver-email-not-valid.exception';
+import { DriverNameTooLongException } from '../exceptions/driver-name-too-long.exception';
+import { DriverNameTooShortException } from '../exceptions/driver-name-too-short.exception';
+import { DriverSurnameTooLongException } from '../exceptions/driver-surname-too-long.exception';
+import { DriverPhoneNumberTooShortException } from '../exceptions/driver-phone-number-too-short.exception';
+import { DriverPhoneNumberTooLongException } from '../exceptions/driver-phone-number-too-long.exception';
+import { DriverSurnameTooShortException } from '../exceptions/driver-surname-too-short.exception';
+import { z } from 'nestjs-zod/z';
 
 export class GeneralDriverValidator {
     static DRIVER_NAME_MAX_LENGTH = 50;
@@ -18,7 +18,10 @@ export class GeneralDriverValidator {
     static DRIVER_PHONE_NUMBER_MIN_LENGTH = 9;
     static DRIVER_PHONE_NUMBER_MAX_LENGTH = 12;
 
-    static Name = z.string().min(this.DRIVER_NAME_MIN_LENGTH).max(this.DRIVER_NAME_MAX_LENGTH)
+    static Name = z
+        .string()
+        .min(this.DRIVER_NAME_MIN_LENGTH)
+        .max(this.DRIVER_NAME_MAX_LENGTH);
 
     @ThrowException(DriverNameTooLongException)
     static validateNameMaxLength(name: Driver['Name']) {

@@ -1,4 +1,4 @@
-import { CustomException } from "./shared.exception";
+import { CustomException } from './shared.exception';
 
 export interface IValidator<T> {
     validate(): ValidationResume<T>;
@@ -13,7 +13,9 @@ export abstract class Validator<T> implements IValidator<T> {
 
     public validate(...validators): ValidationResume<T> {
         return new ValidationResume<T>(
-            validators.filter((x) => x instanceof CustomException<T>) as CustomException<T>[]
+            validators.filter(
+                (x) => x instanceof CustomException<T>
+            ) as CustomException<T>[]
         );
     }
 }

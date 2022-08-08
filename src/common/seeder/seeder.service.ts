@@ -1,20 +1,33 @@
 import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Vehicle, VehicleBuilder } from '../../modules/vehicle/entities/vehicle.entity';
+import {
+    Vehicle,
+    VehicleBuilder
+} from '../../modules/vehicle/entities/vehicle.entity';
 import { Repository } from 'typeorm';
-import { VehicleMileage, VehicleMileageBuilder } from '../../modules/vehicle-mileage/entities/vehicle-mileage.entity';
+import {
+    VehicleMileage,
+    VehicleMileageBuilder
+} from '../../modules/vehicle-mileage/entities/vehicle-mileage.entity';
 import {
     VehiclePeriodicInspection,
     VehiclePeriodicInspectionBuilder
 } from '../../modules/vehicle-periodic-inspection/entities/vehicle-periodic-inspection.entity';
-import { Driver, DriverBuilder } from '../../modules/driver/entities/driver.entity';
+import {
+    Driver,
+    DriverBuilder
+} from '../../modules/driver/entities/driver.entity';
 import {
     DriverPeriodicInspection,
     DriverPeriodicInspectionBuilder
 } from '../../modules/driver-periodic-inspection/entities/driver-periodic-inspection.entity';
 import { DriverPeriodicInspectionDocumentTypeEnum } from '../../modules/driver-periodic-inspection/enums/driver-periodic-inspection-document-type.enum';
-import { Company, CompanyBuilder } from '../../modules/company/entities/company.entity';
+import {
+    Company,
+    CompanyBuilder
+} from '../../modules/company/entities/company.entity';
 import { Users, UsersBuilder } from '../../modules/users/entities/users.entity';
+import { VehicleInspectionTypeEnum } from '../../modules/vehicle-periodic-inspection/enums/vehicle-inspection-type.enum';
 
 @Injectable()
 export class SeederService implements OnApplicationBootstrap {
@@ -86,7 +99,11 @@ export class SeederService implements OnApplicationBootstrap {
         let mileage = 441233;
 
         const entities = [
-            new VehicleMileageBuilder().setVehicle(1).setDate(new Date('2020-01-01')).setMileageKm(mileage).build(),
+            new VehicleMileageBuilder()
+                .setVehicle(1)
+                .setDate(new Date('2020-01-01'))
+                .setMileageKm(mileage)
+                .build(),
             new VehicleMileageBuilder()
                 .setVehicle(1)
                 .setDate(new Date('2020-01-02'))
@@ -102,7 +119,11 @@ export class SeederService implements OnApplicationBootstrap {
                 .setDate(new Date('2020-01-04'))
                 .setMileageKm(mileage + 651)
                 .build(),
-            new VehicleMileageBuilder().setVehicle(2).setDate(new Date('2020-01-04')).setMileageKm(651234).build()
+            new VehicleMileageBuilder()
+                .setVehicle(2)
+                .setDate(new Date('2020-01-04'))
+                .setMileageKm(651234)
+                .build()
         ];
         await this.vehicleMileageRepository.save(entities);
         this.logger.log('Initialized VehicleMileage:\t\t' + entities.length);
@@ -111,32 +132,34 @@ export class SeederService implements OnApplicationBootstrap {
         const entities = [
             new VehiclePeriodicInspectionBuilder()
                 .setVehicle(1)
-                .setInspectionType('Jakiśtam')
+                .setInspectionType(VehicleInspectionTypeEnum.GENERAL_INSPECTION)
                 .setFromDate(new Date('2020-01-01'))
                 .setToDate(new Date('2021-01-01'))
                 .build(),
             new VehiclePeriodicInspectionBuilder()
                 .setVehicle(1)
-                .setInspectionType('Jakiśtam')
+                .setInspectionType(VehicleInspectionTypeEnum.GENERAL_INSPECTION)
                 .setFromDate(new Date('2020-11-28'))
                 .setToDate(new Date('2021-11-28'))
                 .build(),
             new VehiclePeriodicInspectionBuilder()
                 .setVehicle(2)
-                .setInspectionType('Jakiśtam')
+                .setInspectionType(VehicleInspectionTypeEnum.GENERAL_INSPECTION)
                 .setFromDate(new Date('2021-01-01'))
                 .setToDate(new Date('2022-01-01'))
                 .build(),
             new VehiclePeriodicInspectionBuilder()
                 .setVehicle(2)
-                .setInspectionType('Jakiśtam')
+                .setInspectionType(VehicleInspectionTypeEnum.GENERAL_INSPECTION)
                 .setFromDate(new Date('2022-11-28'))
                 .setToDate(new Date('2023-11-28'))
                 .build()
         ];
 
         await this.vehiclePeriodicInspectionRepository.save(entities);
-        this.logger.log('Initialized VehiclePeriodicInspection:\t' + entities.length);
+        this.logger.log(
+            'Initialized VehiclePeriodicInspection:\t' + entities.length
+        );
     }
 
     async InitializeUsers() {
@@ -185,39 +208,51 @@ export class SeederService implements OnApplicationBootstrap {
                 .setDriver(1)
                 .setFromDate(new Date('2020-01-01'))
                 .setToDate(new Date('2025-01-01'))
-                .setDocumentType(DriverPeriodicInspectionDocumentTypeEnum.DRIVING_LICENSE)
+                .setDocumentType(
+                    DriverPeriodicInspectionDocumentTypeEnum.DRIVING_LICENSE
+                )
                 .build(),
             new DriverPeriodicInspectionBuilder()
                 .setDriver(1)
                 .setFromDate(new Date('2022-01-01'))
                 .setToDate(new Date('2026-01-01'))
-                .setDocumentType(DriverPeriodicInspectionDocumentTypeEnum.PERIODIC_INSPECTION)
+                .setDocumentType(
+                    DriverPeriodicInspectionDocumentTypeEnum.PERIODIC_INSPECTION
+                )
                 .build()
         ];
 
-        await this.driverPeriodicInspectionRepository.save(driver1PeriodicInspections);
-        this.logger.log('Initialized Driver Periodic Inspections:\t' + driver1PeriodicInspections.length);
+        await this.driverPeriodicInspectionRepository.save(
+            driver1PeriodicInspections
+        );
+        this.logger.log(
+            'Initialized Driver Periodic Inspections:\t' +
+                driver1PeriodicInspections.length
+        );
     }
 
     private async InitializeDrivers() {
-        const entities = [new DriverBuilder()
-            .setId(1)
-            .setEmail('krzysztofkaczor92@gmail.com')
-            .setIsEmailConfirmed(true)
-            .setPhone('787652532')
-            .setIsPhoneConfirmed(true)
-            .setName('Krzysztof')
-            .setSurname('Kaczor')
-            .build(), new DriverBuilder()
-            .setId(2)
-            .setEmail('madzia_galach@gmail.com')
-            .setIsEmailConfirmed(false)
-            .setPhone('45431234512')
-            .setIsPhoneConfirmed(false)
-            .setName('Magdalena')
-            .setSurname('Gałach')
-            .build()];
+        const entities = [
+            new DriverBuilder()
+                .setId(1)
+                .setEmail('krzysztofkaczor92@gmail.com')
+                .setIsEmailConfirmed(true)
+                .setPhone('787652532')
+                .setIsPhoneConfirmed(true)
+                .setName('Krzysztof')
+                .setSurname('Kaczor')
+                .build(),
+            new DriverBuilder()
+                .setId(2)
+                .setEmail('madzia_galach@gmail.com')
+                .setIsEmailConfirmed(false)
+                .setPhone('45431234512')
+                .setIsPhoneConfirmed(false)
+                .setName('Magdalena')
+                .setSurname('Gałach')
+                .build()
+        ];
         await this.driverRepository.save(entities);
-        this.logger.log('Initialized Drivers:\t' + entities.length)
+        this.logger.log('Initialized Drivers:\t' + entities.length);
     }
 }

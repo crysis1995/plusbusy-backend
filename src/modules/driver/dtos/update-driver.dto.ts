@@ -1,4 +1,4 @@
-import { BuilderTemplate } from "../../../shared/shared.types";
+import { BuilderTemplate } from '../../../shared/shared.types';
 
 export class UpdateDriverDto {
     Name?: string;

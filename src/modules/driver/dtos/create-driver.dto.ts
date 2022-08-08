@@ -16,7 +16,9 @@ const CreateDriverDtoWithPhone = z.object({
     Phone: z.string()
 });
 
-const CreateDriverDtoScheme = CreateDriverDtoWithPhone.merge(CreateDriverDtoWithEmail);
+const CreateDriverDtoScheme = CreateDriverDtoWithPhone.merge(
+    CreateDriverDtoWithEmail
+);
 
 export class CreateDriverDto extends createZodDto(CreateDriverDtoScheme) {}
 

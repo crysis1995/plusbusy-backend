@@ -1,6 +1,6 @@
-import { VehicleMileage } from "../entities/vehicle-mileage.entity";
-import { CustomException } from "../../../shared/shared.exception";
-import { HttpStatus } from "@nestjs/common";
+import { VehicleMileage } from '../entities/vehicle-mileage.entity';
+import { CustomException } from '../../../shared/shared.exception';
+import { HttpStatus } from '@nestjs/common';
 
 export class MileageTooHighException extends CustomException<VehicleMileage> {
     constructor(VehicleMileage: VehicleMileage) {

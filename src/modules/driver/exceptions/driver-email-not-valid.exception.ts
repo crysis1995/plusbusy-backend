@@ -1,6 +1,6 @@
-import { CustomException } from "../../../shared/shared.exception";
-import { Driver } from "../entities/driver.entity";
-import { HttpStatus } from "@nestjs/common";
+import { CustomException } from '../../../shared/shared.exception';
+import { Driver } from '../entities/driver.entity';
+import { HttpStatus } from '@nestjs/common';
 
 export class DriverEmailNotValidException extends CustomException<Driver> {
     constructor(driver: Driver) {
