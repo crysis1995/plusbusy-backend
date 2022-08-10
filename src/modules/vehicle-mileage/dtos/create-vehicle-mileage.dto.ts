@@ -7,6 +7,4 @@ export const CreateVehicleMileageDtoSchema = z.object({
     Date: z.date()
 });
 
-export class CreateVehicleMileageDto extends createZodDto(
-    CreateVehicleMileageDtoSchema
-) {}
+export class CreateVehicleMileageDto extends createZodDto(CreateVehicleMileageDtoSchema) {}

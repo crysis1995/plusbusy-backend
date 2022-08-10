@@ -10,9 +10,7 @@ export const UserByNickOrEmailSchema = z.object({
     UserName: EmailSchema.or(NickSchema)
 });
 
-export class UserByNickOrEmailDto extends createZodDto(
-    UserByNickOrEmailSchema
-) {}
+export class UserByNickOrEmailDto extends createZodDto(UserByNickOrEmailSchema) {}
 
 export class UserByNickOrEmailDtoBuilder extends BuilderTemplate<UserByNickOrEmailDto> {
     constructor() {

@@ -1,27 +1,17 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Inject,
-    Post,
-    Put,
-    Query,
-    Request,
-    UseGuards
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Post, Put, Query, Request, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CompanyGuard } from '../company/guards/company.guard';
 import { DriverPeriodicInspectionService } from './driver-periodic-inspection.service';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateDriverPeriodicInspectionDto } from './dtos/create-driver-periodic-inspection.dto';
 import {
-    RequestData,
-    RequestWithUserAndCompany
-} from '../../shared/shared.types';
+    CreateDriverPeriodicInspectionDto,
+    CreateDriverPeriodicInspectionDtoScheme
+} from './dtos/create-driver-periodic-inspection.dto';
+import { RequestData, RequestWithUserAndCompany } from '../../shared/shared.types';
 import { UpdateDriverPeriodicInspectionDto } from './dtos/update-driver-periodic-inspection.dto';
 import { DriverPeriodicInspectionDocumentTypeEnum } from './enums/driver-periodic-inspection-document-type.enum';
 import { DriverPeriodicInspectionId } from './values/driver-periodic-inspection-id.value';
+import { ValidationPipe } from '../../shared/pipes/validation.pipe';
 
 @ApiTags('Driver periodic inspection')
 @UseGuards(JwtAuthGuard, CompanyGuard)
@@ -40,22 +30,11 @@ export class DriverPeriodicInspectionController {
         @Request() req: RequestWithUserAndCompany
     ) {
         const data = new RequestData(req);
-        const id = new DriverPeriodicInspectionId(
-            DriverId,
-            FromDate,
-            ToDate,
-            DocumentType
-        );
+        const id = new DriverPeriodicInspectionId(DriverId, FromDate, ToDate, DocumentType);
         if (DriverId && FromDate && ToDate && DocumentType)
-            return await this.driverPeriodicInspectionService.getInspectionById(
-                id,
-                data
-            );
+            return await this.driverPeriodicInspectionService.getInspectionById(id, data);
         else {
-            return await this.driverPeriodicInspectionService.getAllBy(
-                id,
-                data
-            );
+            return await this.driverPeriodicInspectionService.getAllBy(id, data);
         }
     }
 
@@ -64,10 +43,7 @@ export class DriverPeriodicInspectionController {
         @Body() dto: CreateDriverPeriodicInspectionDto,
         @Request() req: RequestWithUserAndCompany
     ) {
-        return await this.driverPeriodicInspectionService.createInspection(
-            dto,
-            new RequestData(req)
-        );
+        return await this.driverPeriodicInspectionService.createInspection(dto, new RequestData(req));
     }
 
     @Put()
@@ -80,18 +56,8 @@ export class DriverPeriodicInspectionController {
         @Body() dto: UpdateDriverPeriodicInspectionDto,
         @Request() req: RequestWithUserAndCompany
     ) {
-        const id = new DriverPeriodicInspectionId(
-            DriverId,
-            FromDate,
-            ToDate,
-            DocumentType
-        );
-
-        return await this.driverPeriodicInspectionService.updateInspection(
-            id,
-            dto,
-            new RequestData(req)
-        );
+        const id = new DriverPeriodicInspectionId(DriverId, FromDate, ToDate, DocumentType);
+        return await this.driverPeriodicInspectionService.updateInspection(id, dto, new RequestData(req));
     }
 
     @Delete()
@@ -103,15 +69,7 @@ export class DriverPeriodicInspectionController {
         DocumentType: DriverPeriodicInspectionDocumentTypeEnum,
         @Request() req: RequestWithUserAndCompany
     ) {
-        const id = new DriverPeriodicInspectionId(
-            DriverId,
-            FromDate,
-            ToDate,
-            DocumentType
-        );
-        return await this.driverPeriodicInspectionService.deleteInspection(
-            id,
-            new RequestData(req)
-        );
+        const id = new DriverPeriodicInspectionId(DriverId, FromDate, ToDate, DocumentType);
+        return await this.driverPeriodicInspectionService.deleteInspection(id, new RequestData(req));
     }
 }

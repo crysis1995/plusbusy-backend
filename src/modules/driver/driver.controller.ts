@@ -13,15 +13,13 @@ import {
 } from '@nestjs/common';
 import { DriverService } from './driver.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import {
-    RequestData,
-    RequestWithUserAndCompany
-} from '../../shared/shared.types';
+import { RequestData, RequestWithUserAndCompany } from '../../shared/shared.types';
 import { CompanyGuard } from '../company/guards/company.guard';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateDriverDto } from './dtos/create-driver.dto';
-import { UpdateDriverDto } from './dtos/update-driver.dto';
+import { CreateDriverDto, CreateDriverDtoScheme } from './dtos/create-driver.dto';
+import { UpdateDriverDto, UpdateDriverDtoSchema } from './dtos/update-driver.dto';
 import { DriverId } from './values/driver-id.value';
+import { ValidationPipe } from '../../shared/pipes/validation.pipe';
 
 @ApiTags('Driver')
 @UseGuards(JwtAuthGuard, CompanyGuard)
@@ -36,14 +34,8 @@ export class DriverController {
     }
 
     @Get(':id')
-    async getDriverById(
-        @Param('id', ParseIntPipe) id,
-        @Request() req: RequestWithUserAndCompany
-    ) {
-        return this.driverService.getById(
-            new DriverId(id),
-            new RequestData(req)
-        );
+    async getDriverById(@Param('id', ParseIntPipe) id, @Request() req: RequestWithUserAndCompany) {
+        return this.driverService.getById(new DriverId(id), new RequestData(req));
     }
 
     @Post()
@@ -60,21 +52,11 @@ export class DriverController {
         @Body() dto: UpdateDriverDto,
         @Request() req: RequestWithUserAndCompany
     ) {
-        return this.driverService.updateDriver(
-            new DriverId(id),
-            dto,
-            new RequestData(req)
-        );
+        return this.driverService.updateDriver(new DriverId(id), dto, new RequestData(req));
     }
 
     @Delete(':id')
-    async deleteDriver(
-        @Param('id', ParseIntPipe) id: number,
-        @Request() req: RequestWithUserAndCompany
-    ) {
-        await this.driverService.deleteDriver(
-            new DriverId(id),
-            new RequestData(req)
-        );
+    async deleteDriver(@Param('id', ParseIntPipe) id: number, @Request() req: RequestWithUserAndCompany) {
+        await this.driverService.deleteDriver(new DriverId(id), new RequestData(req));
     }
 }

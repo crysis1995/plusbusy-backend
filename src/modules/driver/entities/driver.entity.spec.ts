@@ -18,11 +18,7 @@ describe('test company repository', () => {
             .setPhone('123123123')
             .setIsPhoneConfirmed(false)
             .build();
-        const driver2 = new DriverBuilder()
-            .setId(2)
-            .setName('Adam')
-            .setSurname('Nowak')
-            .build();
+        const driver2 = new DriverBuilder().setId(2).setName('Adam').setSurname('Nowak').build();
         await ds.manager.insert(Driver, [driver1, driver2]);
     }
 

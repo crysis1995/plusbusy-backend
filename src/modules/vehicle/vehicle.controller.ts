@@ -12,17 +12,14 @@ import {
     UseGuards
 } from '@nestjs/common';
 import { VehicleService } from './vehicle.service';
-import { CreateVehicleDto } from './dtos/create-vehicle.dto';
+import { CreateVehicleDto, CreateVehicleDtoSchema } from './dtos/create-vehicle.dto';
 import { CompanyGuard } from '../company/guards/company.guard';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
-import { VehicleIdDto } from '../vehicle-mileage/dtos/vehicle-id.dto';
+import { UpdateVehicleDto, UpdateVehicleDtoSchema } from './dtos/update-vehicle.dto';
 import { ApiTags } from '@nestjs/swagger';
-import {
-    RequestData,
-    RequestWithUserAndCompany
-} from '../../shared/shared.types';
+import { RequestData, RequestWithUserAndCompany } from '../../shared/shared.types';
 import { VehicleId } from './values/vehicle-id.value';
+import { ValidationPipe } from '../../shared/pipes/validation.pipe';
 
 @ApiTags('Vehicle')
 @UseGuards(JwtAuthGuard, CompanyGuard)
@@ -42,59 +39,34 @@ export class VehicleController {
     }
 
     @Get('/:id')
-    async findById(
-        @Param('id', ParseIntPipe) id: number,
-        @Request() req: RequestWithUserAndCompany
-    ) {
-        return await this.vehicleService.getVehicleByVehicleId(
-            new VehicleId(id),
-            new RequestData(req)
-        );
+    async findById(@Param('id', ParseIntPipe) id: number, @Request() req: RequestWithUserAndCompany) {
+        return await this.vehicleService.getVehicleByVehicleId(new VehicleId(id), new RequestData(req));
     }
 
     @Get(':id/exist')
-    async isExist(
-        @Param('id', ParseIntPipe) id: number,
-        @Request() req: RequestWithUserAndCompany
-    ) {
-        return await this.vehicleService.exist(
-            new VehicleId(id),
-            new RequestData(req)
-        );
+    async isExist(@Param('id', ParseIntPipe) id: number, @Request() req: RequestWithUserAndCompany) {
+        return await this.vehicleService.exist(new VehicleId(id), new RequestData(req));
     }
 
     @Post()
     async create(
-        @Body() dto: CreateVehicleDto,
+        @Body(new ValidationPipe(CreateVehicleDtoSchema)) dto: CreateVehicleDto,
         @Request() req: RequestWithUserAndCompany
     ) {
-        return await this.vehicleService.createVehicle(
-            dto,
-            new RequestData(req)
-        );
+        return await this.vehicleService.createVehicle(dto, new RequestData(req));
     }
 
     @Put(':id')
     async updateVehicle(
         @Param('id', ParseIntPipe) id: number,
-        @Body() dto: UpdateVehicleDto,
+        @Body(new ValidationPipe(UpdateVehicleDtoSchema)) dto: UpdateVehicleDto,
         @Request() req: RequestWithUserAndCompany
     ) {
-        return await this.vehicleService.updateVehicle(
-            new VehicleId(id),
-            dto,
-            new RequestData(req)
-        );
+        return await this.vehicleService.updateVehicle(new VehicleId(id), dto, new RequestData(req));
     }
 
     @Delete(':id')
-    async deleteVehicle(
-        @Param('id', ParseIntPipe) id: number,
-        @Request() req: RequestWithUserAndCompany
-    ) {
-        await this.vehicleService.deleteVehicle(
-            new VehicleId(id),
-            new RequestData(req)
-        );
+    async deleteVehicle(@Param('id', ParseIntPipe) id: number, @Request() req: RequestWithUserAndCompany) {
+        await this.vehicleService.deleteVehicle(new VehicleId(id), new RequestData(req));
     }
 }

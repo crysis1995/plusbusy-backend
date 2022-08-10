@@ -6,12 +6,11 @@ import { DriverPeriodicInspection } from './entities/driver-periodic-inspection.
 import { Driver } from '../driver/entities/driver.entity';
 import { Company } from '../company/entities/company.entity';
 import { CompanyService } from '../company/company.service';
+import { DriverService } from '../driver/driver.service';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([DriverPeriodicInspection, Driver, Company])
-    ],
-    providers: [DriverPeriodicInspectionService, CompanyService],
+    imports: [TypeOrmModule.forFeature([DriverPeriodicInspection, Driver, Company])],
+    providers: [DriverPeriodicInspectionService, DriverService, CompanyService],
     controllers: [DriverPeriodicInspectionController],
     exports: [TypeOrmModule]
 })

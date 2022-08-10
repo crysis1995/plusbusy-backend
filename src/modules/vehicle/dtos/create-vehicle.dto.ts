@@ -3,12 +3,16 @@ import { Validator } from '../../../shared/shared.validator';
 import { Vehicle } from '../entities/vehicle.entity';
 import { z } from 'nestjs-zod/z';
 import { createZodDto } from 'nestjs-zod';
+import { ShortNameSchema } from '../schemas/short-name.schema';
+import { PlatesSchema } from '../schemas/plates.schema';
+import { SeatsCountSchema } from '../schemas/seats-count.schema';
+import { CompanyIdSchema } from '../schemas/company-id.schema';
 
 export const CreateVehicleDtoSchema = z.object({
-    ShortName: z.string(),
-    Plates: z.string(),
-    SeatsCount: z.number().int(),
-    CompanyId: z.string().uuid()
+    ShortName: ShortNameSchema,
+    Plates: PlatesSchema,
+    SeatsCount: SeatsCountSchema,
+    CompanyId: CompanyIdSchema
 });
 
 export class CreateVehicleDto extends createZodDto(CreateVehicleDtoSchema) {}

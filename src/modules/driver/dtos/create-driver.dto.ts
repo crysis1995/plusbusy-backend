@@ -1,24 +1,19 @@
 import { BuilderTemplate } from '../../../shared/shared.types';
 import { z } from 'nestjs-zod/z';
 import { createZodDto } from 'nestjs-zod';
+import { NameSchema } from '../schemas/name.schema';
+import { SurnameSchema } from '../schemas/surname.schema';
+import { EmailSchema } from '../schemas/email.schema';
+import { PhoneSchema } from '../schemas/phone.schema';
 
-const CreateDriverDtoWithEmail = z.object({
-    Name: z.string(),
-    Surname: z.string(),
-    Email: z.string(),
-    Phone: z.string().optional()
-});
-
-const CreateDriverDtoWithPhone = z.object({
-    Name: z.string(),
-    Surname: z.string(),
-    Email: z.string().optional(),
-    Phone: z.string()
-});
-
-const CreateDriverDtoScheme = CreateDriverDtoWithPhone.merge(
-    CreateDriverDtoWithEmail
-);
+export const CreateDriverDtoScheme = z
+    .object({
+        Name: NameSchema,
+        Surname: SurnameSchema,
+        Email: EmailSchema.optional(),
+        Phone: PhoneSchema.optional()
+    })
+    .refine((a) => !(!a.Email && !a.Phone), { message: 'At least Email or Phone are required' });
 
 export class CreateDriverDto extends createZodDto(CreateDriverDtoScheme) {}
 

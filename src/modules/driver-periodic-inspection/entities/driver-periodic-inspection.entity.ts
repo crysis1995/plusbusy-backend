@@ -1,13 +1,5 @@
 import { DriverPeriodicInspectionDocumentTypeEnum } from '../enums/driver-periodic-inspection-document-type.enum';
-import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    PrimaryColumn,
-    UpdateDateColumn
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import { Driver } from '../../driver/entities/driver.entity';
 import { BuilderTemplate } from '../../../shared/shared.types';
 
@@ -21,10 +13,10 @@ export class DriverPeriodicInspection {
     DriverId: number;
 
     @PrimaryColumn('date')
-    FromDate: Date;
+    FromDate: Date|string;
 
     @PrimaryColumn('date')
-    ToDate: Date;
+    ToDate: Date|string;
 
     @PrimaryColumn({
         type: 'simple-enum',
@@ -46,11 +38,7 @@ export class DriverPeriodicInspectionBuilder extends BuilderTemplate<DriverPerio
     constructor() {
         super(new DriverPeriodicInspection());
     }
-    setDriver(
-        value:
-            | DriverPeriodicInspection['Driver']
-            | DriverPeriodicInspection['DriverId']
-    ) {
+    setDriver(value: DriverPeriodicInspection['Driver'] | DriverPeriodicInspection['DriverId']) {
         if (value instanceof Driver) this.value.Driver = value;
         else this.value.DriverId = value;
         return this;

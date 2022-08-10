@@ -1,10 +1,4 @@
-import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { BuilderTemplate } from '../../../shared/shared.types';
 
 @Entity()
@@ -18,16 +12,16 @@ export class Driver {
     @Column()
     Surname: string;
 
-    @Column({nullable:true})
+    @Column({ nullable: true })
     Phone: string;
 
-    @Column({nullable:true})
+    @Column({ nullable: true })
     Email: string;
 
-    @Column({default:false})
+    @Column({ default: false })
     IsPhoneConfirmed: boolean;
 
-    @Column({default:false})
+    @Column({ default: false })
     IsEmailConfirmed: boolean;
 
     @CreateDateColumn()

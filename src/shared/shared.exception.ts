@@ -29,14 +29,8 @@ export class CustomException<T> extends HttpException {
  *       Decorator
  *      Throw passed error if result is falsy
  * */
-export const ThrowException = <T extends typeof CustomException<any>>(
-    exception: T
-) => {
-    return (
-        target: Object,
-        propertyKey: string,
-        descriptor: PropertyDescriptor
-    ) => {
+export const ThrowException = <T extends typeof CustomException<any>>(exception: T) => {
+    return (target: Object, propertyKey: string, descriptor: PropertyDescriptor) => {
         const originalMethod = descriptor.value;
 
         descriptor.value = function (...args) {

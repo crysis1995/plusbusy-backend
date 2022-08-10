@@ -1,11 +1,21 @@
 import { BuilderTemplate } from '../../../shared/shared.types';
+import { z } from 'nestjs-zod/z';
+import { VehicleIdSchema } from '../schemas/vehicle-id.schema';
+import { FromDateSchema } from '../schemas/from-date.schema';
+import { ToDateSchema } from '../schemas/to-date.schema';
+import { InspectionTypeSchema } from '../schemas/inspection-type.schema';
+import { createZodDto } from 'nestjs-zod';
+import { NoteSchema } from '../schemas/note.schema';
 
-export class CreateVehiclePeriodicInspectionDto {
-    VehicleId: number;
-    FromDate: Date;
-    ToDate: Date;
-    InspectionType: string;
-}
+export const CreateVehiclePeriodicInspectionDtoSchema = z.object({
+    VehicleId: VehicleIdSchema,
+    FromDate: FromDateSchema,
+    ToDate: ToDateSchema,
+    InspectionType: InspectionTypeSchema,
+    Note: NoteSchema.optional()
+});
+
+export class CreateVehiclePeriodicInspectionDto extends createZodDto(CreateVehiclePeriodicInspectionDtoSchema) {}
 
 export class CreateVehiclePeriodicInspectionDtoBuilder extends BuilderTemplate<CreateVehiclePeriodicInspectionDto> {
     constructor() {
@@ -24,9 +34,7 @@ export class CreateVehiclePeriodicInspectionDtoBuilder extends BuilderTemplate<C
         this.value.ToDate = value;
         return this;
     }
-    setInspectionType(
-        value: CreateVehiclePeriodicInspectionDto['InspectionType']
-    ) {
+    setInspectionType(value: CreateVehiclePeriodicInspectionDto['InspectionType']) {
         this.value.InspectionType = value;
         return this;
     }

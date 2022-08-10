@@ -18,10 +18,7 @@ export class GeneralDriverValidator {
     static DRIVER_PHONE_NUMBER_MIN_LENGTH = 9;
     static DRIVER_PHONE_NUMBER_MAX_LENGTH = 12;
 
-    static Name = z
-        .string()
-        .min(this.DRIVER_NAME_MIN_LENGTH)
-        .max(this.DRIVER_NAME_MAX_LENGTH);
+    static Name = z.string().min(this.DRIVER_NAME_MIN_LENGTH).max(this.DRIVER_NAME_MAX_LENGTH);
 
     @ThrowException(DriverNameTooLongException)
     static validateNameMaxLength(name: Driver['Name']) {

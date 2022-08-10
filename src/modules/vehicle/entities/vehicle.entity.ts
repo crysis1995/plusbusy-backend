@@ -9,7 +9,6 @@ import {
 } from 'typeorm';
 import { BuilderTemplate } from '../../../shared/shared.types';
 import { Company } from '../../company/entities/company.entity';
-import { CompanyType } from '../../company/validators/company.validator';
 
 @Entity()
 export class Vehicle {

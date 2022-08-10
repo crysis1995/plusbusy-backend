@@ -14,6 +14,7 @@ import { ConfigModule } from '@nestjs/config';
 import { getEnvPath } from './common/helper/env.helper';
 import { TypeOrmService } from './shared/type-orm.service';
 import { CompanyModule } from './modules/company/company.module';
+import { DriverPreferredVehiclesModule } from './modules/driver-preferred-vehicles/driver-preferred-vehicles.module';
 
 const envFilePath = getEnvPath(`${__dirname}/common/envs`);
 
@@ -29,7 +30,8 @@ const envFilePath = getEnvPath(`${__dirname}/common/envs`);
         UsersModule,
         VehicleMileageModule,
         VehicleModule,
-        VehiclePeriodicInspectionModule
+        VehiclePeriodicInspectionModule,
+        DriverPreferredVehiclesModule
     ],
     controllers: [AppController],
     providers: [AppService]

@@ -10,12 +10,8 @@ export class DriverStrategyValidator extends Validator<Driver> {
             GeneralDriverValidator.validateNameMinLength(this.value.Name),
             GeneralDriverValidator.validateSurnameMaxLength(this.value.Surname),
             GeneralDriverValidator.validateSurnameMinLength(this.value.Surname),
-            GeneralDriverValidator.validatePhoneNumberMaxLength(
-                this.value.Phone
-            ),
-            GeneralDriverValidator.validatePhoneNumberMinLength(
-                this.value.Phone
-            )
+            GeneralDriverValidator.validatePhoneNumberMaxLength(this.value.Phone),
+            GeneralDriverValidator.validatePhoneNumberMinLength(this.value.Phone)
         );
     }
 }

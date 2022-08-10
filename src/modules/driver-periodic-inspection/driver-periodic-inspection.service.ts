@@ -8,7 +8,10 @@ import { FindManyOptions, Repository } from 'typeorm';
 import { DriverPeriodicInspectionId } from './values/driver-periodic-inspection-id.value';
 import { RequestData } from '../../shared/shared.types';
 import dayjs from 'dayjs';
-import { CreateDriverPeriodicInspectionDto } from './dtos/create-driver-periodic-inspection.dto';
+import {
+    CreateDriverPeriodicInspectionDto,
+    CreateDriverPeriodicInspectionDtoScheme
+} from './dtos/create-driver-periodic-inspection.dto';
 import { DriverService } from '../driver/driver.service';
 import { DriverId } from '../driver/values/driver-id.value';
 import { DriverNotFoundException } from '../driver/exceptions/driver-not-found.exception';
@@ -18,6 +21,7 @@ import {
     UpdateDriverPeriodicInspectionDtoScheme
 } from './dtos/update-driver-periodic-inspection.dto';
 import { DriverPeriodicInspectionNotFoundException } from './exceptions/driver-periodic-inspection-not-found.exception';
+import { ValidationPipe } from '../../shared/pipes/validation.pipe';
 
 @Injectable()
 export class DriverPeriodicInspectionService {
@@ -27,7 +31,11 @@ export class DriverPeriodicInspectionService {
     @Inject(DriverService)
     private driverService: DriverService;
 
-    async getInspectionById(id: DriverPeriodicInspectionId, data: RequestData) {
+    async isInspectionExist(id: DriverPeriodicInspectionId) {
+        return (await this.getInspectionById(id)) !== null;
+    }
+
+    async getInspectionById(id: DriverPeriodicInspectionId, data?: RequestData) {
         return await this.driverPeriodicInspectionRepository.findOneBy({
             DriverId: id.DriverId,
             ToDate: id.ToDate,
@@ -64,20 +72,20 @@ export class DriverPeriodicInspectionService {
             }
             options.where = {
                 ...options.where,
-                ToDate: toDate.toDate(),
-                FromDate: fromDate.toDate()
+                ToDate: toDate.toDate().toDateString(),
+                FromDate: fromDate.toDate().toDateString()
             };
         } else {
             if (id.ToDate) {
                 options.where = {
                     ...options.where,
-                    ToDate: toDate.toDate()
+                    ToDate: toDate.toDate().toDateString()
                 };
             }
             if (id.FromDate) {
                 options.where = {
                     ...options.where,
-                    FromDate: fromDate.toDate()
+                    FromDate: fromDate.toDate().toDateString()
                 };
             }
         }
@@ -85,20 +93,13 @@ export class DriverPeriodicInspectionService {
         return await this.driverPeriodicInspectionRepository.find(options);
     }
 
-    async createInspection(
-        dto: CreateDriverPeriodicInspectionDto,
-        data: RequestData
-    ) {
-        if (
-            !(await this.driverService.ifDriverExist(
-                new DriverId(dto.DriverId),
-                data
-            ))
-        )
+    async createInspection(dto: CreateDriverPeriodicInspectionDto, data: RequestData) {
+        new ValidationPipe(CreateDriverPeriodicInspectionDtoScheme).transform(dto, null);
+
+        if (!(await this.driverService.ifDriverExist(new DriverId(dto.DriverId), data)))
             throw new DriverNotFoundException(dto.DriverId);
 
-        if (dayjs(dto.FromDate).isAfter(dayjs(dto.ToDate)))
-            throw new DateRangeIsInvalidException();
+        if (dayjs(dto.FromDate).isAfter(dayjs(dto.ToDate))) throw new DateRangeIsInvalidException();
 
         const driverInspection = new DriverPeriodicInspectionBuilder()
             .setDriver(dto.DriverId)
@@ -113,20 +114,27 @@ export class DriverPeriodicInspectionService {
         return driverInspection;
     }
 
-    async updateInspection(
-        id: DriverPeriodicInspectionId,
-        dto: UpdateDriverPeriodicInspectionDto,
-        data: RequestData
-    ) {
-        const validatedDto = UpdateDriverPeriodicInspectionDtoScheme.parse(dto);
+    async updateInspection(id: DriverPeriodicInspectionId, dto: UpdateDriverPeriodicInspectionDto, data?: RequestData) {
+        new ValidationPipe(UpdateDriverPeriodicInspectionDtoScheme).transform(dto, null);
 
-        const inspection = await this.getInspectionById(id, data);
-        if (!inspection) throw new DriverPeriodicInspectionNotFoundException();
+        const isExist = await this.isInspectionExist(id);
+        if (!isExist) throw new DriverPeriodicInspectionNotFoundException();
 
-        inspection.Note = validatedDto.Note;
+        const driverInspection = new DriverPeriodicInspectionBuilder()
+            .setDriver(id.DriverId)
+            .setDocumentType(id.DocumentType)
+            .setFromDate(id.FromDate)
+            .setToDate(id.ToDate)
+            .setNote(dto.Note)
+            .build();
 
-        await this.driverPeriodicInspectionRepository.
+        await this.driverPeriodicInspectionRepository.update(id, driverInspection);
     }
 
-    async deleteInspection(id: DriverPeriodicInspectionId, data: RequestData) {}
+    async deleteInspection(id: DriverPeriodicInspectionId, data?: RequestData) {
+        const isExist = await this.isInspectionExist(id);
+        if (!isExist) throw new DriverPeriodicInspectionNotFoundException();
+
+        await this.driverPeriodicInspectionRepository.delete(id);
+    }
 }

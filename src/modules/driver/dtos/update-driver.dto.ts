@@ -1,11 +1,19 @@
 import { BuilderTemplate } from '../../../shared/shared.types';
+import { z } from 'nestjs-zod/z';
+import { NameSchema } from '../schemas/name.schema';
+import { SurnameSchema } from '../schemas/surname.schema';
+import { EmailSchema } from '../schemas/email.schema';
+import { PhoneSchema } from '../schemas/phone.schema';
+import { createZodDto } from 'nestjs-zod';
 
-export class UpdateDriverDto {
-    Name?: string;
-    Surname?: string;
-    Phone?: string;
-    Email?: string;
-}
+export const UpdateDriverDtoSchema = z.object({
+    Name: NameSchema.optional(),
+    Surname: SurnameSchema.optional(),
+    Email: EmailSchema.optional(),
+    Phone: PhoneSchema.optional()
+});
+
+export class UpdateDriverDto extends createZodDto(UpdateDriverDtoSchema) {}
 
 export class UpdateDriverDtoBuilder extends BuilderTemplate<UpdateDriverDto> {
     constructor() {

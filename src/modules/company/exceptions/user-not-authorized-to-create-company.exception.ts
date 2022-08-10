@@ -1,4 +1,3 @@
-import { CustomException } from '../../../shared/shared.exception';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class UserNotAuthorizedToCreateCompanyException extends HttpException {

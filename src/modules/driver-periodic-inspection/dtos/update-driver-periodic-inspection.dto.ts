@@ -1,11 +1,9 @@
 import { z } from 'nestjs-zod/z';
-import { NoteScheme } from '../schemas/note.scheme';
+import { NoteSchema } from '../schemas/note.schema';
 import { createZodDto } from 'nestjs-zod';
 
 export const UpdateDriverPeriodicInspectionDtoScheme = z.object({
-    Note: NoteScheme
+    Note: NoteSchema
 });
 
-export class UpdateDriverPeriodicInspectionDto extends createZodDto(
-    UpdateDriverPeriodicInspectionDtoScheme
-) {}
+export class UpdateDriverPeriodicInspectionDto extends createZodDto(UpdateDriverPeriodicInspectionDtoScheme) {}

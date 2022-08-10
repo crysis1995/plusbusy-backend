@@ -99,10 +99,7 @@ describe('test company repository', () => {
     });
 
     test('should create company properly', async () => {
-        const company = new CompanyBuilder()
-            .setName('Plusbusy')
-            .setAdmin(2)
-            .build();
+        const company = new CompanyBuilder().setName('Plusbusy').setAdmin(2).build();
 
         const storedCompany = await repository.save(company);
 
@@ -124,10 +121,7 @@ describe('test company repository', () => {
             where: { Id }
         });
 
-        const companyToUpdate = new CompanyBuilder()
-            .setId(Id)
-            .setName('Plusbusy z dopiskiem')
-            .build();
+        const companyToUpdate = new CompanyBuilder().setId(Id).setName('Plusbusy z dopiskiem').build();
 
         await repository.update(Id, companyToUpdate);
 

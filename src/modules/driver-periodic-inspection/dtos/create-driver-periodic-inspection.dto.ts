@@ -1,19 +1,17 @@
 import { z } from 'nestjs-zod/z';
 import { createZodDto } from 'nestjs-zod';
-import { DriverIdScheme } from '../schemas/driver-id.scheme';
-import { FromDateScheme } from '../schemas/from-date.scheme';
-import { NoteScheme } from '../schemas/note.scheme';
-import { DocumentTypeScheme } from '../schemas/document-type.scheme';
-import { ToDateScheme } from '../schemas/to-date.scheme';
+import { DriverIdSchema } from '../schemas/driver-id.schema';
+import { FromDateSchema } from '../schemas/from-date.schema';
+import { NoteSchema } from '../schemas/note.schema';
+import { DocumentTypeSchema } from '../schemas/document-type.schema';
+import { ToDateSchema } from '../schemas/to-date.schema';
 
 export const CreateDriverPeriodicInspectionDtoScheme = z.object({
-    DriverId: DriverIdScheme,
-    FromDate: FromDateScheme,
-    ToDate: ToDateScheme,
-    DocumentType: DocumentTypeScheme,
-    Note: NoteScheme.optional()
+    DriverId: DriverIdSchema,
+    FromDate: FromDateSchema,
+    ToDate: ToDateSchema,
+    DocumentType: DocumentTypeSchema,
+    Note: NoteSchema.optional()
 });
 
-export class CreateDriverPeriodicInspectionDto extends createZodDto(
-    CreateDriverPeriodicInspectionDtoScheme
-) {}
+export class CreateDriverPeriodicInspectionDto extends createZodDto(CreateDriverPeriodicInspectionDtoScheme) {}

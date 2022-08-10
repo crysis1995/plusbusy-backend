@@ -17,10 +17,7 @@ export class AuthService {
     @Inject(ConfigService)
     private configService: ConfigService;
 
-    async validateUser(
-        UserName: UserType['Email'] | UserType['Nick'],
-        password: UserType['Password']
-    ) {
+    async validateUser(UserName: UserType['Email'] | UserType['Nick'], password: UserType['Password']) {
         const user = await this.usersService.findByEmailOrNick({ UserName });
         if (user && user.Password === password) {
             return new BasicUserDto(user.Id, user.Email);
@@ -43,11 +40,7 @@ export class AuthService {
     getExpirationTimeMS() {
         return (
             Number(Math.round(Date.now().valueOf() / 1000)) +
-            Number(
-                this.configService.get<number>(
-                    'AUTH_EXPIRATION_TIME_IN_SECONDS'
-                )
-            )
+            Number(this.configService.get<number>('AUTH_EXPIRATION_TIME_IN_SECONDS'))
         );
     }
 }

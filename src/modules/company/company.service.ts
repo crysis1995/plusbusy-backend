@@ -14,10 +14,7 @@ export class CompanyService {
     @InjectRepository(Company)
     private companyRepository: Repository<Company>;
 
-    async ifUserHasAccess(
-        arg1: CompanyId | RequestData,
-        arg2: RequestData = undefined
-    ) {
+    async ifUserHasAccess(arg1: CompanyId | RequestData, arg2: RequestData = undefined) {
         if (arg1 instanceof CompanyId)
             return !!(await this.companyRepository.findOneBy({
                 Id: arg1.value,
@@ -50,29 +47,16 @@ export class CompanyService {
     }
 
     async createCompany(companyDto: CreateCompanyDto, data: RequestData) {
-        // user cannot create company for other user
-        if (companyDto.AdminId !== data.user.UserId)
-            throw new UserHasNoAccessException();
-
-        const company = new CompanyBuilder()
-            .setAdmin(companyDto.AdminId)
-            .setName(companyDto.Name);
-        await this.companyRepository.save(companyDto);
+        const company = new CompanyBuilder().setAdmin(data.user.UserId).setName(companyDto.Name).build();
+        await this.companyRepository.save(company);
         return company;
     }
 
-    async updateCompany(
-        companyId: CompanyId,
-        updateDto: UpdateCompanyDto,
-        data: RequestData
-    ) {
+    async updateCompany(companyId: CompanyId, updateDto: UpdateCompanyDto, data: RequestData) {
         const hasAccess = await this.ifUserHasAccess(companyId, data);
         if (!hasAccess) throw new UserHasNoAccessException();
 
-        await this.companyRepository.update(
-            { Id: companyId.value },
-            { Name: updateDto.Name }
-        );
+        await this.companyRepository.update({ Id: companyId.value }, { Name: updateDto.Name });
     }
 
     async deleteCompany(companyId: CompanyId, data: RequestData) {

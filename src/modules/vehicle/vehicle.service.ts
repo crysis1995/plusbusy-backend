@@ -20,23 +20,19 @@ export class VehicleService {
     @InjectRepository(Vehicle)
     private vehicleRepository: Repository<Vehicle>;
 
-    async exist(vehicleIdDto: VehicleId, data: RequestData) {
-        return (await this.getVehicleByVehicleId(vehicleIdDto, data)) !== null;
+    async exist(vehicleId: VehicleId, data?: RequestData) {
+        return (await this.getVehicleByVehicleId(vehicleId, data)) !== null;
     }
 
-    async getVehicleByVehicleId(vehicleId: VehicleId, data: RequestData) {
+    async getVehicleByVehicleId(vehicleId: VehicleId, data?: RequestData) {
         const vehicle = await this.vehicleRepository.findOneBy({
             Id: vehicleId.value
         });
-        if (!data.company) {
-            const companiesID = (
-                await this.companyService.getMyCompanies(data)
-            ).map((x) => x.Id);
-            if (!(vehicle.CompanyId in companiesID))
-                throw new UserHasNoAccessException();
+        if (!data?.company) {
+            const companiesID = (await this.companyService.getMyCompanies(data)).map((x) => x.Id);
+            if (!(vehicle.CompanyId in companiesID)) throw new UserHasNoAccessException();
         } else {
-            if (vehicle.CompanyId !== data.company.CompanyId)
-                throw new UserHasNoAccessException();
+            if (vehicle.CompanyId !== data.company.CompanyId) throw new UserHasNoAccessException();
         }
         return vehicle;
     }
@@ -44,11 +40,7 @@ export class VehicleService {
     async getAllVehicles(data: RequestData) {
         let CompanyId;
         if (!data.company) {
-            CompanyId = In(
-                (await this.companyService.getMyCompanies(data)).map(
-                    (x) => x.Id
-                )
-            );
+            CompanyId = In((await this.companyService.getMyCompanies(data)).map((x) => x.Id));
         } else CompanyId = data.company.CompanyId;
 
         return await this.vehicleRepository.findBy({ CompanyId });
@@ -72,13 +64,8 @@ export class VehicleService {
         return vehicle;
     }
 
-    async updateVehicle(
-        vehicleId: VehicleId,
-        updateVehicleDto: UpdateVehicleDto,
-        data: RequestData
-    ) {
-        if (!(await this.companyService.ifUserHasAccess(data)))
-            throw new UserHasNoAccessException();
+    async updateVehicle(vehicleId: VehicleId, updateVehicleDto: UpdateVehicleDto, data: RequestData) {
+        if (!(await this.companyService.ifUserHasAccess(data))) throw new UserHasNoAccessException();
 
         const validator = new VehicleValidator(updateVehicleDto).validate();
         if (!validator.IsValid) return validator.errors;
@@ -89,15 +76,11 @@ export class VehicleService {
             .setSeatsCount(updateVehicleDto.SeatsCount)
             .setCompany(data.company.CompanyId);
 
-        await this.vehicleRepository.update(
-            { Id: vehicleId.value },
-            vehicleBuilder.build()
-        );
+        await this.vehicleRepository.update({ Id: vehicleId.value }, vehicleBuilder.build());
     }
 
     async deleteVehicle(vehicleId: VehicleId, data: RequestData) {
-        if (!(await this.companyService.ifUserHasAccess(data)))
-            throw new UserHasNoAccessException();
+        if (!(await this.companyService.ifUserHasAccess(data))) throw new UserHasNoAccessException();
         await this.vehicleRepository.delete({ Id: vehicleId.value });
     }
 }

@@ -11,9 +11,7 @@ export class CustomJwtService implements JwtOptionsFactory {
         return {
             secret: this.config.get<string>('AUTH_SECRET_KEY'),
             signOptions: {
-                expiresIn: `${this.config.get<number>(
-                    'AUTH_EXPIRATION_TIME_IN_SECONDS'
-                )}s`
+                expiresIn: `${this.config.get<number>('AUTH_EXPIRATION_TIME_IN_SECONDS')}s`
             }
         };
     }

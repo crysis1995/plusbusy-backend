@@ -7,8 +7,6 @@ export class DriverNotFoundException extends CustomException<Driver | number> {
         super(driver);
     }
 
-    custom_message = `Not found driver with ID: ${
-        typeof this.Object === 'object' ? this.Object.Id : this.Object
-    }`;
+    custom_message = `Not found driver with ID: ${typeof this.Object === 'object' ? this.Object.Id : this.Object}`;
     custom_status = HttpStatus.NOT_FOUND;
 }

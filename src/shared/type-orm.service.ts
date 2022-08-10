@@ -8,7 +8,7 @@ export class TypeOrmService implements TypeOrmOptionsFactory {
     private readonly config: ConfigService;
 
     createTypeOrmOptions(connectionName?: string): TypeOrmModuleOptions {
-        return this.getSQLite();
+        return this.getPostgres();
     }
 
     getPostgres(): TypeOrmModuleOptions {
@@ -19,6 +19,7 @@ export class TypeOrmService implements TypeOrmOptionsFactory {
             database: this.config.get<string>('DATABASE_NAME'),
             username: this.config.get<string>('DATABASE_USER'),
             password: this.config.get<string>('DATABASE_PASSWORD'),
+            dropSchema: true,
             entities: ['dist/**/*.entity.{ts,js}'],
             migrations: ['dist/migrations/*.{ts,js}'],
             migrationsTableName: 'typeorm_migrations',
