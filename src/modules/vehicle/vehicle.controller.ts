@@ -12,14 +12,13 @@ import {
     UseGuards
 } from '@nestjs/common';
 import { VehicleService } from './vehicle.service';
-import { CreateVehicleDto, CreateVehicleDtoSchema } from './dtos/create-vehicle.dto';
+import { CreateVehicleDto } from './dtos/create-vehicle.dto';
 import { CompanyGuard } from '../company/guards/company.guard';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { UpdateVehicleDto, UpdateVehicleDtoSchema } from './dtos/update-vehicle.dto';
+import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { RequestData, RequestWithUserAndCompany } from '../../shared/shared.types';
 import { VehicleId } from './values/vehicle-id.value';
-import { ValidationPipe } from '../../shared/pipes/validation.pipe';
 
 @ApiTags('Vehicle')
 @UseGuards(JwtAuthGuard, CompanyGuard)
@@ -35,7 +34,7 @@ export class VehicleController {
 
     @Get('/')
     async findAll(@Request() req: RequestWithUserAndCompany) {
-        return await this.vehicleService.getAllVehicles(new RequestData(req));
+        return await this.vehicleService.getAllMyVehicles(new RequestData(req));
     }
 
     @Get('/:id')
@@ -49,17 +48,14 @@ export class VehicleController {
     }
 
     @Post()
-    async create(
-        @Body(new ValidationPipe(CreateVehicleDtoSchema)) dto: CreateVehicleDto,
-        @Request() req: RequestWithUserAndCompany
-    ) {
+    async create(@Body() dto: CreateVehicleDto, @Request() req: RequestWithUserAndCompany) {
         return await this.vehicleService.createVehicle(dto, new RequestData(req));
     }
 
     @Put(':id')
     async updateVehicle(
         @Param('id', ParseIntPipe) id: number,
-        @Body(new ValidationPipe(UpdateVehicleDtoSchema)) dto: UpdateVehicleDto,
+        @Body() dto: UpdateVehicleDto,
         @Request() req: RequestWithUserAndCompany
     ) {
         return await this.vehicleService.updateVehicle(new VehicleId(id), dto, new RequestData(req));

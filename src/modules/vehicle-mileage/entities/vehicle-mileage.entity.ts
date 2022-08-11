@@ -9,7 +9,7 @@ export class VehicleMileage {
     Vehicle: Vehicle;
 
     @PrimaryColumn()
-    VehicleId: number;
+    VehicleId: Vehicle["Id"];
 
     @Column()
     MileageKm: number;

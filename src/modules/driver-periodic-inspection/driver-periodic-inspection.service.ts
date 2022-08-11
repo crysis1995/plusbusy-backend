@@ -21,7 +21,7 @@ import {
     UpdateDriverPeriodicInspectionDtoScheme
 } from './dtos/update-driver-periodic-inspection.dto';
 import { DriverPeriodicInspectionNotFoundException } from './exceptions/driver-periodic-inspection-not-found.exception';
-import { ValidationPipe } from '../../shared/pipes/validation.pipe';
+import { SchemaValidator } from '../../shared/shared.validator';
 
 @Injectable()
 export class DriverPeriodicInspectionService {
@@ -94,7 +94,7 @@ export class DriverPeriodicInspectionService {
     }
 
     async createInspection(dto: CreateDriverPeriodicInspectionDto, data: RequestData) {
-        new ValidationPipe(CreateDriverPeriodicInspectionDtoScheme).transform(dto, null);
+        new SchemaValidator(CreateDriverPeriodicInspectionDtoScheme).validate(dto);
 
         if (!(await this.driverService.ifDriverExist(new DriverId(dto.DriverId), data)))
             throw new DriverNotFoundException(dto.DriverId);
@@ -115,7 +115,7 @@ export class DriverPeriodicInspectionService {
     }
 
     async updateInspection(id: DriverPeriodicInspectionId, dto: UpdateDriverPeriodicInspectionDto, data?: RequestData) {
-        new ValidationPipe(UpdateDriverPeriodicInspectionDtoScheme).transform(dto, null);
+        new SchemaValidator(UpdateDriverPeriodicInspectionDtoScheme).validate(dto);
 
         const isExist = await this.isInspectionExist(id);
         if (!isExist) throw new DriverPeriodicInspectionNotFoundException();

@@ -1,7 +1,21 @@
 import { CustomException } from './shared.exception';
+import { z } from 'nestjs-zod/z';
+import { BadRequestException } from '@nestjs/common';
 
 export interface IValidator<T> {
     validate(): ValidationResume<T>;
+}
+
+export class SchemaValidator {
+    constructor(private schema: z.Schema) {}
+
+    validate(value: any) {
+        const validation = this.schema.safeParse(value);
+        if (validation.success === true) return validation.data;
+        else {
+            throw new BadRequestException(validation.error.errors);
+        }
+    }
 }
 
 export abstract class Validator<T> implements IValidator<T> {

@@ -7,7 +7,7 @@ import { UpdateDriverDto, UpdateDriverDtoSchema } from './dtos/update-driver.dto
 import { DriverNotFoundException } from './exceptions/driver-not-found.exception';
 import { RequestData } from '../../shared/shared.types';
 import { DriverId } from './values/driver-id.value';
-import { ValidationPipe } from '../../shared/pipes/validation.pipe';
+import { SchemaValidator } from '../../shared/shared.validator';
 
 @Injectable()
 export class DriverService {
@@ -27,7 +27,7 @@ export class DriverService {
     }
 
     async createDriver(dto: CreateDriverDto, data: RequestData) {
-        new ValidationPipe(CreateDriverDtoScheme).transform(dto, null);
+        new SchemaValidator(CreateDriverDtoScheme).validate(dto);
 
         const driver = new DriverBuilder()
             .setEmail(dto.Email)
@@ -41,7 +41,7 @@ export class DriverService {
     }
 
     async updateDriver(driverId: DriverId, dto: UpdateDriverDto, data: RequestData) {
-        new ValidationPipe(UpdateDriverDtoSchema).transform(dto, null);
+        new SchemaValidator(UpdateDriverDtoSchema).validate(dto);
         const driver = await this.getById(driverId, data);
         if (!driver) throw new DriverNotFoundException(driverId.value);
 

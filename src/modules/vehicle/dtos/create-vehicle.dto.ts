@@ -1,6 +1,4 @@
 import { BuilderTemplate } from '../../../shared/shared.types';
-import { Validator } from '../../../shared/shared.validator';
-import { Vehicle } from '../entities/vehicle.entity';
 import { z } from 'nestjs-zod/z';
 import { createZodDto } from 'nestjs-zod';
 import { ShortNameSchema } from '../schemas/short-name.schema';
@@ -41,5 +39,3 @@ export class CreateVehicleDtoBuilder extends BuilderTemplate<CreateVehicleDto> {
         this.value.CompanyId = value;
     }
 }
-
-export class CreateVehicleDtoValidator extends Validator<Vehicle> {}

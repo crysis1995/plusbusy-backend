@@ -17,9 +17,7 @@ export class DriverPreferredVehiclesController {
     async getById(
         @Param('driverId', ParseIntPipe) driverId: number,
         @Param('vehicleId', ParseIntPipe) vehicleId: number
-    ) {
-
-    }
+    ) {}
 
     @Post()
     async create() {}

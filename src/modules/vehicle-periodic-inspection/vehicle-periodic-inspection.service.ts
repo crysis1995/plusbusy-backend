@@ -8,10 +8,10 @@ import {
 } from './dtos/create-vehicle-periodic-inspection.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VehiclePeriodicInspectionKey } from './dtos/vehicle-periodic-inspection.key';
-import { ValidationPipe } from '../../shared/pipes/validation.pipe';
 import { VehicleId } from '../vehicle/values/vehicle-id.value';
 import { RequestData } from '../../shared/shared.types';
 import { VehicleNotFoundException } from '../vehicle/exceptions/vehicle-not-found.exception';
+import { SchemaValidator } from '../../shared/shared.validator';
 
 @Injectable()
 export class VehiclePeriodicInspectionService {
@@ -67,7 +67,7 @@ export class VehiclePeriodicInspectionService {
     }
 
     async create(dto: CreateVehiclePeriodicInspectionDto, data: RequestData) {
-        new ValidationPipe(CreateVehiclePeriodicInspectionDtoSchema).transform(dto, null);
+        new SchemaValidator(CreateVehiclePeriodicInspectionDtoSchema).validate(dto);
         const vehicleId = new VehicleId(dto.VehicleId);
         const isExist = await this.vehicleService.exist(vehicleId, data);
         if (!isExist) throw new VehicleNotFoundException(vehicleId);

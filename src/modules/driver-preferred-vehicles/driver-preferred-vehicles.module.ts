@@ -3,7 +3,7 @@ import { DriverPreferredVehiclesService } from './driver-preferred-vehicles.serv
 import { DriverPreferredVehiclesController } from './driver-preferred-vehicles.controller';
 
 @Module({
-  providers: [DriverPreferredVehiclesService],
-  controllers: [DriverPreferredVehiclesController]
+    providers: [DriverPreferredVehiclesService],
+    controllers: [DriverPreferredVehiclesController]
 })
 export class DriverPreferredVehiclesModule {}

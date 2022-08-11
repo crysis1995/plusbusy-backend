@@ -15,10 +15,9 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RequestData, RequestWithUser } from '../../shared/shared.types';
 import { CompanyService } from './company.service';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateCompanyDto, CreateCompanySchema } from './dtos/create-company.dto';
-import { UpdateCompanyDto, UpdateCompanyDtoSchema } from './dtos/update-company.dto';
+import { CreateCompanyDto } from './dtos/create-company.dto';
+import { UpdateCompanyDto } from './dtos/update-company.dto';
 import { CompanyId } from './values/company-id.value';
-import { ValidationPipe } from '../../shared/pipes/validation.pipe';
 
 @ApiTags('Company')
 @UseGuards(JwtAuthGuard)
@@ -43,17 +42,14 @@ export class CompanyController {
     }
 
     @Post()
-    async createCompany(
-        @Body(new ValidationPipe(CreateCompanySchema)) dto: CreateCompanyDto,
-        @Request() req: RequestWithUser
-    ) {
+    async createCompany(@Body() dto: CreateCompanyDto, @Request() req: RequestWithUser) {
         return await this.companyService.createCompany(dto, new RequestData(req));
     }
 
     @Put(':id')
     async updateCompany(
         @Param('id', ParseUUIDPipe) id,
-        @Body(new ValidationPipe(UpdateCompanyDtoSchema)) dto: UpdateCompanyDto,
+        @Body() dto: UpdateCompanyDto,
         @Request() req: RequestWithUser
     ) {
         return await this.companyService.updateCompany(new CompanyId(id), dto, new RequestData(req));

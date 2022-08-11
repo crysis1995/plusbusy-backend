@@ -16,10 +16,9 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RequestData, RequestWithUserAndCompany } from '../../shared/shared.types';
 import { CompanyGuard } from '../company/guards/company.guard';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateDriverDto, CreateDriverDtoScheme } from './dtos/create-driver.dto';
-import { UpdateDriverDto, UpdateDriverDtoSchema } from './dtos/update-driver.dto';
+import { CreateDriverDto } from './dtos/create-driver.dto';
+import { UpdateDriverDto } from './dtos/update-driver.dto';
 import { DriverId } from './values/driver-id.value';
-import { ValidationPipe } from '../../shared/pipes/validation.pipe';
 
 @ApiTags('Driver')
 @UseGuards(JwtAuthGuard, CompanyGuard)
@@ -39,10 +38,7 @@ export class DriverController {
     }
 
     @Post()
-    async createDriver(
-        @Body() dto: CreateDriverDto,
-        @Request() req: RequestWithUserAndCompany
-    ) {
+    async createDriver(@Body() dto: CreateDriverDto, @Request() req: RequestWithUserAndCompany) {
         return this.driverService.createDriver(dto, new RequestData(req));
     }
 

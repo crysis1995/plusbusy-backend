@@ -119,7 +119,6 @@ describe('test company repository', () => {
 
     test('should delete existing company', async () => {
         const Id = 2;
-
         await repository.delete(Id);
         const driver = await repository.findOne({
             where: { Id }

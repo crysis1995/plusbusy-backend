@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { VehicleMileage, VehicleMileageBuilder } from './entities/vehicle-mileage.entity';
-import { VehicleNotFoundException } from '../vehicle/exceptions/vehicle-not-found.exception';
 import { VehicleService } from '../vehicle/vehicle.service';
 import { VehicleMileageValidator } from './validators/vehicle-mileage.validator';
 import { Repository } from 'typeorm';
@@ -8,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateVehicleMileageDto } from './dtos/create-vehicle-mileage.dto';
 import { VehicleId } from '../vehicle/values/vehicle-id.value';
 import { RequestData } from '../../shared/shared.types';
+import { UserHasNoAccessException } from '../users/exceptions/user-has-no-access.exception';
+import { VehicleMileageId } from './values/vehicle-mileage.id';
 
 @Injectable()
 export class VehicleMileageService {
@@ -16,43 +17,53 @@ export class VehicleMileageService {
     @Inject(VehicleService)
     private vehicleService: VehicleService;
 
-    public async getAllVehicleMileages(VehicleId: number) {
+    public async getById(id: VehicleMileageId, data: RequestData) {
+        if (await this.vehicleService.isUserHasAccessToVehicle(new VehicleId(id.VehicleId), data))
+            return this.vehicleMileageRepository.findOneBy({
+                VehicleId: id.VehicleId,
+                Date: id.Date,
+                MileageKm: id.MileageKm
+            });
+
+        throw new UserHasNoAccessException();
+    }
+
+    public async getAllVehicleMileages(vehicleId: VehicleId) {
         return await this.vehicleMileageRepository.find({
-            where: { VehicleId },
+            where: { VehicleId: vehicleId.value },
             order: { Date: 'ASC' }
         });
     }
-    public async getNewestVehicleMileage(VehicleId: number) {
+    public async getNewestVehicleMileage(vehicleId: VehicleId) {
         return await this.vehicleMileageRepository.findOne({
-            where: { VehicleId },
+            where: { VehicleId: vehicleId.value },
             order: { Date: 'ASC' }
         });
     }
 
     public async setVehicleMileage(dto: CreateVehicleMileageDto, data: RequestData) {
-        const isVehicleExist = await this.vehicleService.exist(new VehicleId(dto.VehicleId), data);
-        if (!isVehicleExist) throw new VehicleNotFoundException({ Id: dto.VehicleId });
+        const isUserHasAccess = await this.vehicleService.isUserHasAccessToVehicle(new VehicleId(dto.VehicleId), data);
+        if (!isUserHasAccess) throw new UserHasNoAccessException();
 
-        const vehicleMileage = await this.getNewestVehicleMileage(dto.VehicleId);
-        if (vehicleMileage != null) {
-            new VehicleMileageValidator(vehicleMileage).validateMileage(dto.MileageKm);
-        }
+        const vehicleMileage = await this.getNewestVehicleMileage(new VehicleId(dto.VehicleId));
+        if (vehicleMileage) new VehicleMileageValidator(vehicleMileage).validateMileage(dto.MileageKm);
 
         const newMileage = new VehicleMileageBuilder()
             .setMileageKm(dto.MileageKm)
             .setVehicle(dto.VehicleId)
             .setDate(dto.Date)
             .build();
-        await this.vehicleMileageRepository.insert(newMileage);
-
-        return newMileage;
+        return await this.vehicleMileageRepository.save(newMileage);
     }
 
-    public async deleteVehicleMileage(VehicleId: number, MileageKm: number, Date: Date) {
+    public async deleteVehicleMileage(id: VehicleMileageId, data: RequestData) {
+        const isUserHasAccess = await this.vehicleService.isUserHasAccessToVehicle(new VehicleId(id.VehicleId), data);
+        if (!isUserHasAccess) throw new UserHasNoAccessException();
+
         await this.vehicleMileageRepository.delete({
-            VehicleId,
-            MileageKm,
-            Date
+            VehicleId: id.VehicleId,
+            MileageKm: id.MileageKm,
+            Date: id.Date
         });
     }
 }

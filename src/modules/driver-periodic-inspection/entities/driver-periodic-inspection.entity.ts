@@ -13,10 +13,10 @@ export class DriverPeriodicInspection {
     DriverId: number;
 
     @PrimaryColumn('date')
-    FromDate: Date|string;
+    FromDate: Date | string;
 
     @PrimaryColumn('date')
-    ToDate: Date|string;
+    ToDate: Date | string;
 
     @PrimaryColumn({
         type: 'simple-enum',
