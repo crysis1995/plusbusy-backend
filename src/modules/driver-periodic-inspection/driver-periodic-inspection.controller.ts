@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, Inject, Post, Put, Query, Request, UseGuards } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Inject,
+    ParseIntPipe,
+    Post,
+    Put,
+    Query,
+    Request,
+    UseGuards
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CompanyGuard } from '../company/guards/company.guard';
 import { DriverPeriodicInspectionService } from './driver-periodic-inspection.service';
@@ -8,6 +20,8 @@ import { RequestData, RequestWithUserAndCompany } from '../../shared/shared.type
 import { UpdateDriverPeriodicInspectionDto } from './dtos/update-driver-periodic-inspection.dto';
 import { DriverPeriodicInspectionDocumentTypeEnum } from './enums/driver-periodic-inspection-document-type.enum';
 import { DriverPeriodicInspectionId } from './values/driver-periodic-inspection-id.value';
+import { ParseDatePipe } from '../../shared/pipes/parse-date.pipe';
+import { DriverPeriodicInspectionDocumentTypeEnumValuePipe } from './pipes/driver-periodic-inspection-document-type-enum-value.pipe';
 
 @ApiTags('Driver periodic inspection')
 @UseGuards(JwtAuthGuard, CompanyGuard)
@@ -18,10 +32,10 @@ export class DriverPeriodicInspectionController {
 
     @Get()
     async getInspectionById(
-        @Query('DriverId') DriverId: number,
-        @Query('FromDate') FromDate: Date,
-        @Query('ToDate') ToDate: Date,
-        @Query('DocumentType')
+        @Query('DriverId', ParseIntPipe) DriverId: number,
+        @Query('FromDate', ParseDatePipe) FromDate: Date,
+        @Query('ToDate', ParseDatePipe) ToDate: Date,
+        @Query('DocumentType', DriverPeriodicInspectionDocumentTypeEnumValuePipe)
         DocumentType: DriverPeriodicInspectionDocumentTypeEnum,
         @Request() req: RequestWithUserAndCompany
     ) {
@@ -41,10 +55,10 @@ export class DriverPeriodicInspectionController {
 
     @Put()
     async updateInspection(
-        @Query('DriverId') DriverId: number,
-        @Query('FromDate') FromDate: Date,
-        @Query('ToDate') ToDate: Date,
-        @Query('DocumentType')
+        @Query('DriverId', ParseIntPipe) DriverId: number,
+        @Query('FromDate', ParseDatePipe) FromDate: Date,
+        @Query('ToDate', ParseDatePipe) ToDate: Date,
+        @Query('DocumentType', DriverPeriodicInspectionDocumentTypeEnumValuePipe)
         DocumentType: DriverPeriodicInspectionDocumentTypeEnum,
         @Body() dto: UpdateDriverPeriodicInspectionDto,
         @Request() req: RequestWithUserAndCompany
@@ -55,10 +69,10 @@ export class DriverPeriodicInspectionController {
 
     @Delete()
     async deleteInspection(
-        @Query('DriverId') DriverId: number,
-        @Query('FromDate') FromDate: Date,
-        @Query('ToDate') ToDate: Date,
-        @Query('DocumentType')
+        @Query('DriverId', ParseIntPipe) DriverId: number,
+        @Query('FromDate', ParseDatePipe) FromDate: Date,
+        @Query('ToDate', ParseDatePipe) ToDate: Date,
+        @Query('DocumentType', DriverPeriodicInspectionDocumentTypeEnumValuePipe)
         DocumentType: DriverPeriodicInspectionDocumentTypeEnum,
         @Request() req: RequestWithUserAndCompany
     ) {
