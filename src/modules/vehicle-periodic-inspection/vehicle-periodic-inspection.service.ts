@@ -67,7 +67,7 @@ export class VehiclePeriodicInspectionService {
             }
         });
     }
-    async getAllOfVehicle(VehicleId: VehicleId, data?: RequestData) {
+    async getAllByVehicle(VehicleId: VehicleId, data?: RequestData) {
         return await this.vehiclePeriodicInspectionRepository.find({
             where: { VehicleId: VehicleId.value },
             order: { FromDate: 'DESC' }

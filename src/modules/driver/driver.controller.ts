@@ -27,8 +27,10 @@ export class DriverController {
     @Inject(DriverService)
     private driverService: DriverService;
 
+
     @Get()
     async getAll(@Request() req: RequestWithUserAndCompany) {
+        // TODO add query params to filter/sort drivers
         return this.driverService.getAll(new RequestData(req));
     }
 
@@ -39,7 +41,7 @@ export class DriverController {
 
     @Post()
     async createDriver(@Body() dto: CreateDriverDto, @Request() req: RequestWithUserAndCompany) {
-        return this.driverService.createDriver(dto, new RequestData(req));
+        return this.driverService.create(dto, new RequestData(req));
     }
 
     @Put(':id')
@@ -48,14 +50,11 @@ export class DriverController {
         @Body() dto: UpdateDriverDto,
         @Request() req: RequestWithUserAndCompany
     ) {
-        return this.driverService.updateDriver(new DriverId(id), dto, new RequestData(req));
+        return this.driverService.update(new DriverId(id), dto, new RequestData(req));
     }
 
     @Delete(':id')
-    async deleteDriver(
-        @Param('id', ParseIntPipe) id: number,
-        @Request() req: RequestWithUserAndCompany
-    ) {
-        await this.driverService.deleteDriver(new DriverId(id), new RequestData(req));
+    async deleteDriver(@Param('id', ParseIntPipe) id: number, @Request() req: RequestWithUserAndCompany) {
+        await this.driverService.delete(new DriverId(id), new RequestData(req));
     }
 }

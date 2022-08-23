@@ -29,10 +29,10 @@ export class DriverPeriodicInspectionService {
     private driverService: DriverService;
 
     async isInspectionExist(id: DriverPeriodicInspectionId) {
-        return (await this.getInspectionById(id)) !== null;
+        return (await this.getById(id)) !== null;
     }
 
-    async getInspectionById(id: DriverPeriodicInspectionId, data?: RequestData) {
+    async getById(id: DriverPeriodicInspectionId, data?: RequestData) {
         return await this.driverPeriodicInspectionRepository.findOneBy({
             DriverId: id.DriverId,
             ToDate: id.ToDate,
@@ -51,9 +51,9 @@ export class DriverPeriodicInspectionService {
         return await this.driverPeriodicInspectionRepository.find({ where: options });
     }
 
-    async createInspection(dto: CreateDriverPeriodicInspectionDto, data: RequestData) {
-        const driverId = new DriverId(dto.DriverId);
+    async create(dto: CreateDriverPeriodicInspectionDto, data: RequestData) {
         new SchemaValidator(CreateDriverPeriodicInspectionDto.schema).validate(dto);
+        const driverId = new DriverId(dto.DriverId)
 
         if (!(await this.driverService.ifDriverExist(driverId, data)))
             throw new DriverNotFoundException(driverId.value);
@@ -73,11 +73,7 @@ export class DriverPeriodicInspectionService {
         return driverInspection;
     }
 
-    async updateInspection(
-        id: DriverPeriodicInspectionId,
-        dto: UpdateDriverPeriodicInspectionDto,
-        data?: RequestData
-    ) {
+    async update(id: DriverPeriodicInspectionId, dto: UpdateDriverPeriodicInspectionDto, data?: RequestData) {
         new SchemaValidator(UpdateDriverPeriodicInspectionDto.schema).validate(dto);
 
         const isExist = await this.isInspectionExist(id);
@@ -94,7 +90,7 @@ export class DriverPeriodicInspectionService {
         await this.driverPeriodicInspectionRepository.update(id, driverInspection);
     }
 
-    async deleteInspection(id: DriverPeriodicInspectionId, data?: RequestData) {
+    async delete(id: DriverPeriodicInspectionId, data?: RequestData) {
         const isExist = await this.isInspectionExist(id);
         if (!isExist) throw new DriverPeriodicInspectionNotFoundException();
 

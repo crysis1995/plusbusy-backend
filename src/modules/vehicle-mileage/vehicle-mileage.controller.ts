@@ -31,11 +31,11 @@ export class VehicleMileageController {
 
     @Get('newest/:vehicleId')
     async getNewest(@Param('vehicleId', ParseIntPipe) vehicleId: number) {
-        return await this.vehicleMileageService.getNewestVehicleMileage(new VehicleId(vehicleId));
+        return await this.vehicleMileageService.getNewest(new VehicleId(vehicleId));
     }
     @Get('byVehicle/:vehicleId')
     async getAllByVehicle(@Param('vehicleId', ParseIntPipe) vehicleId: number) {
-        return await this.vehicleMileageService.getAllVehicleMileages(new VehicleId(vehicleId));
+        return await this.vehicleMileageService.getAll(new VehicleId(vehicleId));
     }
 
     @Get(':vehicleId/:mileageKm/:date')
@@ -52,11 +52,8 @@ export class VehicleMileageController {
     }
 
     @Post()
-    async setMileage(
-        @Body() dto: CreateVehicleMileageDto,
-        @Request() req: RequestWithUserAndCompany
-    ) {
-        return await this.vehicleMileageService.setVehicleMileage(dto, new RequestData(req));
+    async setMileage(@Body() dto: CreateVehicleMileageDto, @Request() req: RequestWithUserAndCompany) {
+        return await this.vehicleMileageService.save(dto, new RequestData(req));
     }
 
     @Delete(':vehicleId/:mileageKm/:date')
@@ -66,9 +63,7 @@ export class VehicleMileageController {
         @Param('date', ParseDatePipe) date: Date,
         @Request() req: RequestWithUserAndCompany
     ) {
-        return await this.vehicleMileageService.deleteVehicleMileage(
-            new VehicleMileageId(vehicleId, mileageKm, date),
-            new RequestData(req)
-        );
+        return await this.vehicleMileageService.delete( new VehicleMileageId(vehicleId, mileageKm, date),
+            new RequestData(req))
     }
 }

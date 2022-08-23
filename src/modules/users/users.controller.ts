@@ -22,7 +22,7 @@ export class UsersController {
 
     @Get('me')
     async getMe(@Request() req: RequestWithUser) {
-        return await this.usersService.findById(new RequestData(req));
+        return await this.usersService.getById(new RequestData(req));
     }
 
     // @Get(':id')

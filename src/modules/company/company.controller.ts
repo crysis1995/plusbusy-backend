@@ -33,17 +33,17 @@ export class CompanyController {
 
     @Get()
     async getMyCompanies(@Request() req: RequestWithUser) {
-        return await this.companyService.getMyCompanies(new RequestData(req));
+        return await this.companyService.getAll(new RequestData(req));
     }
 
     @Get(':id')
     async getById(@Param('id', ParseUUIDPipe) id: string, @Request() req: RequestWithUser) {
-        return await this.companyService.getCompanyById(new CompanyId(id), new RequestData(req));
+        return await this.companyService.getById(new CompanyId(id), new RequestData(req));
     }
 
     @Post()
     async createCompany(@Body() dto: CreateCompanyDto, @Request() req: RequestWithUser) {
-        return await this.companyService.createCompany(dto, new RequestData(req));
+        return await this.companyService.create(dto, new RequestData(req));
     }
 
     @Put(':id')
@@ -52,15 +52,11 @@ export class CompanyController {
         @Body() dto: UpdateCompanyDto,
         @Request() req: RequestWithUser
     ) {
-        return await this.companyService.updateCompany(
-            new CompanyId(id),
-            dto,
-            new RequestData(req)
-        );
+        return await this.companyService.update(new CompanyId(id), dto, new RequestData(req));
     }
 
     @Delete(':id')
     async deleteCompany(@Param('id', ParseUUIDPipe) id: string, @Request() req: RequestWithUser) {
-        return await this.companyService.deleteCompany(new CompanyId(id), new RequestData(req));
+        return await this.companyService.delete(new CompanyId(id), new RequestData(req));
     }
 }
