@@ -42,7 +42,7 @@ export class DriverPeriodicInspectionController {
         const data = new RequestData(req);
         const id = new DriverPeriodicInspectionId(DriverId, FromDate, ToDate, DocumentType);
         if (DriverId && FromDate && ToDate && DocumentType)
-            return await this.driverPeriodicInspectionService.getInspectionById(id, data);
+            return await this.driverPeriodicInspectionService.getById(id, data);
         else {
             return await this.driverPeriodicInspectionService.getAllBy(id, data);
         }
@@ -50,7 +50,7 @@ export class DriverPeriodicInspectionController {
 
     @Post()
     async createInspection(@Body() dto: CreateDriverPeriodicInspectionDto, @Request() req: RequestWithUserAndCompany) {
-        return await this.driverPeriodicInspectionService.createInspection(dto, new RequestData(req));
+        return await this.driverPeriodicInspectionService.create(dto, new RequestData(req));
     }
 
     @Put()
@@ -64,7 +64,7 @@ export class DriverPeriodicInspectionController {
         @Request() req: RequestWithUserAndCompany
     ) {
         const id = new DriverPeriodicInspectionId(DriverId, FromDate, ToDate, DocumentType);
-        return await this.driverPeriodicInspectionService.updateInspection(id, dto, new RequestData(req));
+        return await this.driverPeriodicInspectionService.update(id, dto, new RequestData(req));
     }
 
     @Delete()
@@ -77,6 +77,6 @@ export class DriverPeriodicInspectionController {
         @Request() req: RequestWithUserAndCompany
     ) {
         const id = new DriverPeriodicInspectionId(DriverId, FromDate, ToDate, DocumentType);
-        return await this.driverPeriodicInspectionService.deleteInspection(id, new RequestData(req));
+        return await this.driverPeriodicInspectionService.delete(id, new RequestData(req));
     }
 }

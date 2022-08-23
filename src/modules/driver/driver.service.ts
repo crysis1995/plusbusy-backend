@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Driver, DriverBuilder } from './entities/driver.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateDriverDto, CreateDriverDtoScheme } from './dtos/create-driver.dto';
-import { UpdateDriverDto, UpdateDriverDtoSchema } from './dtos/update-driver.dto';
+import { CreateDriverDto } from './dtos/create-driver.dto';
+import { UpdateDriverDto } from './dtos/update-driver.dto';
 import { DriverNotFoundException } from './exceptions/driver-not-found.exception';
 import { RequestData } from '../../shared/shared.types';
 import { DriverId } from './values/driver-id.value';
@@ -26,8 +26,8 @@ export class DriverService {
         return this.driverRepository.find();
     }
 
-    async createDriver(dto: CreateDriverDto, data: RequestData) {
-        new SchemaValidator(CreateDriverDtoScheme).validate(dto);
+    async create(dto: CreateDriverDto, data: RequestData) {
+        new SchemaValidator(CreateDriverDto.schema).validate(dto);
 
         const driver = new DriverBuilder()
             .setEmail(dto.Email)
@@ -40,8 +40,8 @@ export class DriverService {
         return driver;
     }
 
-    async updateDriver(driverId: DriverId, dto: UpdateDriverDto, data: RequestData) {
-        new SchemaValidator(UpdateDriverDtoSchema).validate(dto);
+    async update(driverId: DriverId, dto: UpdateDriverDto, data: RequestData) {
+        new SchemaValidator(UpdateDriverDto.schema).validate(dto);
         const driver = await this.getById(driverId, data);
         if (!driver) throw new DriverNotFoundException(driverId.value);
 
@@ -60,7 +60,7 @@ export class DriverService {
         await this.driverRepository.update({ Id: driverId.value }, driverToUpdate);
     }
 
-    async deleteDriver(driverId: DriverId, data: RequestData) {
+    async delete(driverId: DriverId, data: RequestData) {
         const driver = await this.getById(driverId, data);
         if (driver === null) throw new DriverNotFoundException(driverId.value);
         await this.driverRepository.delete({ Id: driverId.value });

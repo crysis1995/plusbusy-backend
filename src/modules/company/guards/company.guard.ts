@@ -20,7 +20,7 @@ export class CompanyGuard implements CanActivate {
         req.company = null;
         const companyIdHeaderKey = 'company-id';
         if (!req.user) throw new UserHasNoAccessException();
-        req.myCompanies = (await this.companyService.getMyCompanies(new RequestData(req))).map(
+        req.myCompanies = (await this.companyService.getAll(new RequestData(req))).map(
             (company) => new BasicCompanyDto(company.Id)
         );
 

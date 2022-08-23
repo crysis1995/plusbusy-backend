@@ -22,19 +22,19 @@ export class CompanyService {
         });
     }
 
-    async getCompanyById(companyId: CompanyId, data: RequestData) {
+    async getById(companyId: CompanyId, data: RequestData) {
         const company = this.getCompanyOrNull(companyId, data.user);
         if (!company) throw new UserHasNoAccessException();
         return company;
     }
 
-    async getMyCompanies(data: RequestData) {
+    async getAll(data: RequestData) {
         return this.companyRepository.find({
             where: { AdminId: data.user.UserId }
         });
     }
 
-    async createCompany(companyDto: CreateCompanyDto, data: RequestData) {
+    async create(companyDto: CreateCompanyDto, data: RequestData) {
         new SchemaValidator(CreateCompanySchema).validate(companyDto);
 
         const company = new CompanyBuilder().setAdmin(data.user.UserId).setName(companyDto.Name).build();
@@ -42,7 +42,7 @@ export class CompanyService {
         return company;
     }
 
-    async updateCompany(companyId: CompanyId, updateDto: UpdateCompanyDto, data: RequestData) {
+    async update(companyId: CompanyId, updateDto: UpdateCompanyDto, data: RequestData) {
         const hasAccess = data.myCompanies.isContainCompany(companyId.value);
         if (!hasAccess) throw new UserHasNoAccessException();
 
@@ -51,7 +51,7 @@ export class CompanyService {
         await this.companyRepository.update({ Id: companyId.value }, { Name: updateDto.Name });
     }
 
-    async deleteCompany(companyId: CompanyId, data: RequestData) {
+    async delete(companyId: CompanyId, data: RequestData) {
         const hasAccess = data.myCompanies.isContainCompany(companyId.value);
         if (!hasAccess) throw new UserHasNoAccessException();
 

@@ -12,7 +12,7 @@ export class UsersService {
     @InjectRepository(Users)
     private usersRepository: Repository<Users>;
 
-    async findById(data: RequestData) {
+    async getById(data: RequestData) {
         return this.usersRepository.findBy({ Id: data.user.UserId });
     }
 
@@ -31,7 +31,7 @@ export class UsersService {
         return result;
     }
 
-    async createUser(dto: CreateUserDto) {
+    async create(dto: CreateUserDto) {
         const validatedData = CreateUserSchema.parse(dto);
     }
 }

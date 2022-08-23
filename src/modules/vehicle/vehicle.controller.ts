@@ -34,12 +34,12 @@ export class VehicleController {
 
     @Get('/')
     async findAll(@Request() req: RequestWithUserAndCompany) {
-        return await this.vehicleService.getAllMyVehicles(new RequestData(req));
+        return await this.vehicleService.getAll(new RequestData(req));
     }
 
     @Get('/:id')
     async findById(@Param('id', ParseIntPipe) id: number, @Request() req: RequestWithUserAndCompany) {
-        return await this.vehicleService.getVehicleByVehicleId(new VehicleId(id), new RequestData(req));
+        return await this.vehicleService.getByVehicle(new VehicleId(id), new RequestData(req));
     }
 
     @Get(':id/exist')
@@ -49,7 +49,7 @@ export class VehicleController {
 
     @Post()
     async create(@Body() dto: CreateVehicleDto, @Request() req: RequestWithUserAndCompany) {
-        return await this.vehicleService.createVehicle(dto, new RequestData(req));
+        return await this.vehicleService.create(dto, new RequestData(req));
     }
 
     @Put(':id')
@@ -58,11 +58,11 @@ export class VehicleController {
         @Body() dto: UpdateVehicleDto,
         @Request() req: RequestWithUserAndCompany
     ) {
-        return await this.vehicleService.updateVehicle(new VehicleId(id), dto, new RequestData(req));
+        return await this.vehicleService.update(new VehicleId(id), dto, new RequestData(req));
     }
 
     @Delete(':id')
     async deleteVehicle(@Param('id', ParseIntPipe) id: number, @Request() req: RequestWithUserAndCompany) {
-        await this.vehicleService.deleteVehicle(new VehicleId(id), new RequestData(req));
+        await this.vehicleService.delete(new VehicleId(id), new RequestData(req));
     }
 }

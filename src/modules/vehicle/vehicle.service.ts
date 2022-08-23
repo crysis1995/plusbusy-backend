@@ -36,7 +36,7 @@ export class VehicleService {
         return data.myCompanies.isContainCompany(vehicle.CompanyId);
     }
 
-    async getVehicleByVehicleId(vehicleId: VehicleId, data: RequestData) {
+    async getByVehicle(vehicleId: VehicleId, data: RequestData) {
         const vehicle = await this.vehicleRepository.findOneBy({
             Id: vehicleId.value
         });
@@ -48,12 +48,12 @@ export class VehicleService {
         return vehicle;
     }
 
-    async getAllMyVehicles(data: RequestData) {
+    async getAll(data: RequestData) {
         let CompanyId = !data.company ? In(data.myCompanies.getIds()) : data.company.CompanyId;
         return await this.vehicleRepository.findBy({ CompanyId });
     }
 
-    async createVehicle(createVehicleDto: CreateVehicleDto, data: RequestData) {
+    async create(createVehicleDto: CreateVehicleDto, data: RequestData) {
         if (!data.myCompanies.isContainCompany(createVehicleDto.CompanyId)) throw new UserHasNoAccessException();
 
         new SchemaValidator(CreateVehicleDtoSchema).validate(createVehicleDto);
@@ -68,7 +68,7 @@ export class VehicleService {
         return await this.vehicleRepository.save(vehicleToCreate);
     }
 
-    async updateVehicle(vehicleId: VehicleId, updateVehicleDto: UpdateVehicleDto, data: RequestData) {
+    async update(vehicleId: VehicleId, updateVehicleDto: UpdateVehicleDto, data: RequestData) {
         const vehicle = await this.vehicleRepository.findOneBy({ Id: vehicleId.value });
         if (!data.myCompanies.isContainCompany(vehicle.CompanyId)) throw new UserHasNoAccessException();
 
@@ -83,7 +83,7 @@ export class VehicleService {
         await this.vehicleRepository.update({ Id: vehicleId.value }, vehicleBuilder);
     }
 
-    async deleteVehicle(vehicleId: VehicleId, data: RequestData) {
+    async delete(vehicleId: VehicleId, data: RequestData) {
         const vehicle = await this.vehicleRepository.findOneBy({ Id: vehicleId.value });
         if (!data.myCompanies.isContainCompany(vehicle.CompanyId)) throw new UserHasNoAccessException();
         await this.vehicleRepository.delete({ Id: vehicleId.value });
