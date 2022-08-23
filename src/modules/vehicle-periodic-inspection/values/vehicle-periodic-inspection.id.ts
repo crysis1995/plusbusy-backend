@@ -1,6 +1,6 @@
 import { VehicleInspectionTypeEnum } from '../enums/vehicle-inspection-type.enum';
 
-export class VehiclePeriodicInspectionKey {
+export class VehiclePeriodicInspectionId {
     VehicleId: number;
     FromDate: Date;
     ToDate: Date;

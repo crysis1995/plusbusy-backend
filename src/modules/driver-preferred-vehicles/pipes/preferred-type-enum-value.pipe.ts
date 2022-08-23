@@ -6,7 +6,9 @@ export class PreferredTypeEnumValuePipe implements PipeTransform<string, Preferr
     transform(value: string, metadata: ArgumentMetadata): PreferredTypeEnum {
         const parsedValue = PreferredTypeEnum[value];
         if (!parsedValue)
-            throw new BadRequestException(`Expected one of value: [${Object.keys(PreferredTypeEnum).join(', ')}]`);
+            throw new BadRequestException(
+                `Expected one of value: [${Object.keys(PreferredTypeEnum).join(', ')}]`
+            );
         return parsedValue;
     }
 }

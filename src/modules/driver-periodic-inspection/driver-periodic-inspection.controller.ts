@@ -49,8 +49,14 @@ export class DriverPeriodicInspectionController {
     }
 
     @Post()
-    async createInspection(@Body() dto: CreateDriverPeriodicInspectionDto, @Request() req: RequestWithUserAndCompany) {
-        return await this.driverPeriodicInspectionService.createInspection(dto, new RequestData(req));
+    async createInspection(
+        @Body() dto: CreateDriverPeriodicInspectionDto,
+        @Request() req: RequestWithUserAndCompany
+    ) {
+        return await this.driverPeriodicInspectionService.createInspection(
+            dto,
+            new RequestData(req)
+        );
     }
 
     @Put()
@@ -64,7 +70,11 @@ export class DriverPeriodicInspectionController {
         @Request() req: RequestWithUserAndCompany
     ) {
         const id = new DriverPeriodicInspectionId(DriverId, FromDate, ToDate, DocumentType);
-        return await this.driverPeriodicInspectionService.updateInspection(id, dto, new RequestData(req));
+        return await this.driverPeriodicInspectionService.updateInspection(
+            id,
+            dto,
+            new RequestData(req)
+        );
     }
 
     @Delete()
@@ -77,6 +87,9 @@ export class DriverPeriodicInspectionController {
         @Request() req: RequestWithUserAndCompany
     ) {
         const id = new DriverPeriodicInspectionId(DriverId, FromDate, ToDate, DocumentType);
-        return await this.driverPeriodicInspectionService.deleteInspection(id, new RequestData(req));
+        return await this.driverPeriodicInspectionService.deleteInspection(
+            id,
+            new RequestData(req)
+        );
     }
 }

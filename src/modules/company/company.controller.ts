@@ -52,7 +52,11 @@ export class CompanyController {
         @Body() dto: UpdateCompanyDto,
         @Request() req: RequestWithUser
     ) {
-        return await this.companyService.updateCompany(new CompanyId(id), dto, new RequestData(req));
+        return await this.companyService.updateCompany(
+            new CompanyId(id),
+            dto,
+            new RequestData(req)
+        );
     }
 
     @Delete(':id')

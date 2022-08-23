@@ -2,7 +2,10 @@ import { TestingModule } from '@nestjs/testing';
 import { DataSource, Repository } from 'typeorm';
 import { Driver, DriverBuilder } from '../../driver/entities/driver.entity';
 import { CreateTestingModuleUtil } from '../../../common/test-util/create-testing-module.util';
-import { DriverPeriodicInspection, DriverPeriodicInspectionBuilder } from './driver-periodic-inspection.entity';
+import {
+    DriverPeriodicInspection,
+    DriverPeriodicInspectionBuilder
+} from './driver-periodic-inspection.entity';
 import { DriverPeriodicInspectionDocumentTypeEnum } from '../enums/driver-periodic-inspection-document-type.enum';
 
 describe('test company repository', () => {
@@ -71,7 +74,9 @@ describe('test company repository', () => {
             const inspection = inspections[0];
 
             expect(inspection.DriverId).toEqual(1);
-            expect(inspection.DocumentType).toEqual(DriverPeriodicInspectionDocumentTypeEnum.DRIVING_LICENSE);
+            expect(inspection.DocumentType).toEqual(
+                DriverPeriodicInspectionDocumentTypeEnum.DRIVING_LICENSE
+            );
             expect(inspection.FromDate).toEqual('2020-01-01');
             expect(inspection.ToDate).toEqual('2020-10-01');
             expect(inspection.Note).toEqual('notatka');
@@ -93,7 +98,9 @@ describe('test company repository', () => {
             const inspection = inspections[0];
 
             expect(inspection.DriverId).toEqual(2);
-            expect(inspection.DocumentType).toEqual(DriverPeriodicInspectionDocumentTypeEnum.PERIODIC_INSPECTION);
+            expect(inspection.DocumentType).toEqual(
+                DriverPeriodicInspectionDocumentTypeEnum.PERIODIC_INSPECTION
+            );
             expect(inspection.FromDate).toEqual('2020-01-01');
             expect(inspection.ToDate).toEqual('2020-10-01');
             expect(inspection.Note).toEqual('notatka2');

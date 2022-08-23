@@ -1,5 +1,13 @@
 import { DriverPeriodicInspectionDocumentTypeEnum } from '../enums/driver-periodic-inspection-document-type.enum';
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryColumn,
+    UpdateDateColumn
+} from 'typeorm';
 import { Driver } from '../../driver/entities/driver.entity';
 import { BuilderTemplate } from '../../../shared/shared.types';
 

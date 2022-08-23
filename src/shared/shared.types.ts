@@ -15,7 +15,10 @@ export class BuilderTemplate<T> {
 }
 
 export declare type RequestWithCompany = Request & { company: BasicCompanyDto };
-export declare type RequestWithUser = Request & { user: BasicUserDto; myCompanies: BasicCompanyDto[] };
+export declare type RequestWithUser = Request & {
+    user: BasicUserDto;
+    myCompanies: BasicCompanyDto[];
+};
 export declare type RequestWithUserAndCompany = RequestWithUser & RequestWithCompany;
 
 export class RequestData {
@@ -35,4 +38,8 @@ export class RequestData {
         this.company = company;
         this.myCompanies = new MyCompaniesValue(myCompanies);
     }
+}
+
+export declare interface UserHasAccess<T> {
+    ifUserHasAccess(entity: T, data: RequestData): Promise<boolean>;
 }

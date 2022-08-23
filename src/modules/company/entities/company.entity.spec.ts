@@ -121,7 +121,10 @@ describe('test company repository', () => {
             where: { Id }
         });
 
-        const companyToUpdate = new CompanyBuilder().setId(Id).setName('Plusbusy z dopiskiem').build();
+        const companyToUpdate = new CompanyBuilder()
+            .setId(Id)
+            .setName('Plusbusy z dopiskiem')
+            .build();
 
         await repository.update(Id, companyToUpdate);
 

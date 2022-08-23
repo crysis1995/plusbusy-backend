@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { UserType } from '../users/entities/users.entity';
 import { JwtService } from '@nestjs/jwt';
@@ -8,6 +8,8 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
+    private readonly logger = new Logger(AuthService.name);
+
     @Inject(UsersService)
     private usersService: UsersService;
 
@@ -17,7 +19,10 @@ export class AuthService {
     @Inject(ConfigService)
     private configService: ConfigService;
 
-    async validateUser(UserName: UserType['Email'] | UserType['Nick'], password: UserType['Password']) {
+    async validateUser(
+        UserName: UserType['Email'] | UserType['Nick'],
+        password: UserType['Password']
+    ) {
         const user = await this.usersService.findByEmailOrNick({ UserName });
         if (user && user.Password === password) {
             return new BasicUserDto(user.Id, user.Email);

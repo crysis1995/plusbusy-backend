@@ -6,16 +6,23 @@ import { ToDateSchema } from '../schemas/to-date.schema';
 import { InspectionTypeSchema } from '../schemas/inspection-type.schema';
 import { createZodDto } from 'nestjs-zod';
 import { NoteSchema } from '../schemas/note.schema';
+import dayjs from 'dayjs';
 
-export const CreateVehiclePeriodicInspectionDtoSchema = z.object({
-    VehicleId: VehicleIdSchema,
-    FromDate: FromDateSchema,
-    ToDate: ToDateSchema,
-    InspectionType: InspectionTypeSchema,
-    Note: NoteSchema.optional()
-});
+export const CreateVehiclePeriodicInspectionDtoSchema = z
+    .object({
+        VehicleId: VehicleIdSchema,
+        FromDate: FromDateSchema,
+        ToDate: ToDateSchema,
+        InspectionType: InspectionTypeSchema,
+        Note: NoteSchema.optional()
+    })
+    .refine((x) => dayjs(x.FromDate).isBefore(dayjs(x.ToDate)), {
+        message: 'ToDate must be after FromDate'
+    });
 
-export class CreateVehiclePeriodicInspectionDto extends createZodDto(CreateVehiclePeriodicInspectionDtoSchema) {}
+export class CreateVehiclePeriodicInspectionDto extends createZodDto(
+    CreateVehiclePeriodicInspectionDtoSchema
+) {}
 
 export class CreateVehiclePeriodicInspectionDtoBuilder extends BuilderTemplate<CreateVehiclePeriodicInspectionDto> {
     constructor() {

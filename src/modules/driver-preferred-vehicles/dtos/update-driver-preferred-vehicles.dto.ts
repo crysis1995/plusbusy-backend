@@ -6,4 +6,6 @@ export const UpdateDriverPreferredVehiclesDtoSchema = z.object({
     Note: NoteSchema
 });
 
-export class UpdateDriverPreferredVehiclesDto extends createZodDto(UpdateDriverPreferredVehiclesDtoSchema){}
+export class UpdateDriverPreferredVehiclesDto extends createZodDto(
+    UpdateDriverPreferredVehiclesDtoSchema
+) {}

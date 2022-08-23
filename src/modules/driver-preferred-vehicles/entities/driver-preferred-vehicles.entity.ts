@@ -1,6 +1,15 @@
 import { Driver } from 'src/modules/driver/entities/driver.entity';
 import { Vehicle } from 'src/modules/vehicle/entities/vehicle.entity';
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryColumn,
+    UpdateDateColumn
+} from 'typeorm';
+import { BuilderTemplate } from '../../../shared/shared.types';
 
 @Entity()
 export class DriverPreferredVehicles {
@@ -26,4 +35,22 @@ export class DriverPreferredVehicles {
 
     @UpdateDateColumn()
     UpdatedAt: Date;
+}
+
+export class DriverPreferredVehiclesBuilder extends BuilderTemplate<DriverPreferredVehicles> {
+    constructor() {
+        super(new DriverPreferredVehicles());
+    }
+    setDriverId(value: DriverPreferredVehicles['DriverId']) {
+        this.value.DriverId = value;
+        return this;
+    }
+    setVehicleId(value: DriverPreferredVehicles['VehicleId']) {
+        this.value.VehicleId = value;
+        return this;
+    }
+    setNote(value: DriverPreferredVehicles['Note']) {
+        this.value.Note = value;
+        return this;
+    }
 }

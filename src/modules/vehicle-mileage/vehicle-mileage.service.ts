@@ -42,11 +42,15 @@ export class VehicleMileageService {
     }
 
     public async setVehicleMileage(dto: CreateVehicleMileageDto, data: RequestData) {
-        const isUserHasAccess = await this.vehicleService.isUserHasAccessToVehicle(new VehicleId(dto.VehicleId), data);
+        const isUserHasAccess = await this.vehicleService.isUserHasAccessToVehicle(
+            new VehicleId(dto.VehicleId),
+            data
+        );
         if (!isUserHasAccess) throw new UserHasNoAccessException();
 
         const vehicleMileage = await this.getNewestVehicleMileage(new VehicleId(dto.VehicleId));
-        if (vehicleMileage) new VehicleMileageValidator(vehicleMileage).validateMileage(dto.MileageKm);
+        if (vehicleMileage)
+            new VehicleMileageValidator(vehicleMileage).validateMileage(dto.MileageKm);
 
         const newMileage = new VehicleMileageBuilder()
             .setMileageKm(dto.MileageKm)
@@ -57,7 +61,10 @@ export class VehicleMileageService {
     }
 
     public async deleteVehicleMileage(id: VehicleMileageId, data: RequestData) {
-        const isUserHasAccess = await this.vehicleService.isUserHasAccessToVehicle(new VehicleId(id.VehicleId), data);
+        const isUserHasAccess = await this.vehicleService.isUserHasAccessToVehicle(
+            new VehicleId(id.VehicleId),
+            data
+        );
         if (!isUserHasAccess) throw new UserHasNoAccessException();
 
         await this.vehicleMileageRepository.delete({

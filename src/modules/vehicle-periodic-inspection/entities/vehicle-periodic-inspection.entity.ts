@@ -1,4 +1,12 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryColumn,
+    UpdateDateColumn
+} from 'typeorm';
 import { BuilderTemplate } from '../../../shared/shared.types';
 import { Vehicle } from '../../vehicle/entities/vehicle.entity';
 import { VehicleInspectionTypeEnum } from '../enums/vehicle-inspection-type.enum';
@@ -36,7 +44,9 @@ export class VehiclePeriodicInspectionBuilder extends BuilderTemplate<VehiclePer
         super(new VehiclePeriodicInspection());
     }
 
-    setVehicle(value: VehiclePeriodicInspection['Vehicle'] | VehiclePeriodicInspection['VehicleId']) {
+    setVehicle(
+        value: VehiclePeriodicInspection['Vehicle'] | VehiclePeriodicInspection['VehicleId']
+    ) {
         if (value instanceof Vehicle) this.value.Vehicle = value;
         else this.value.VehicleId = value;
         return this;

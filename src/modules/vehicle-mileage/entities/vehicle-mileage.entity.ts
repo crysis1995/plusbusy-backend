@@ -1,4 +1,12 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryColumn,
+    UpdateDateColumn
+} from 'typeorm';
 import { Vehicle } from '../../vehicle/entities/vehicle.entity';
 import { BuilderTemplate } from '../../../shared/shared.types';
 
@@ -9,7 +17,7 @@ export class VehicleMileage {
     Vehicle: Vehicle;
 
     @PrimaryColumn()
-    VehicleId: Vehicle["Id"];
+    VehicleId: Vehicle['Id'];
 
     @Column()
     MileageKm: number;

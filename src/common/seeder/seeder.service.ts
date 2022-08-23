@@ -1,7 +1,10 @@
 import { Inject, Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { Vehicle, VehicleBuilder } from '../../modules/vehicle/entities/vehicle.entity';
 import { DataSource } from 'typeorm';
-import { VehicleMileage, VehicleMileageBuilder } from '../../modules/vehicle-mileage/entities/vehicle-mileage.entity';
+import {
+    VehicleMileage,
+    VehicleMileageBuilder
+} from '../../modules/vehicle-mileage/entities/vehicle-mileage.entity';
 import {
     VehiclePeriodicInspection,
     VehiclePeriodicInspectionBuilder
@@ -63,7 +66,11 @@ export class SeederService implements OnApplicationBootstrap {
                 .setName('Plus Busy')
                 .setAdmin(438)
                 .build(),
-            new CompanyBuilder().setId('f8d760be-9351-4b61-bfa9-3cafa23cb44d').setName('Flixbus').setAdmin(620).build()
+            new CompanyBuilder()
+                .setId('f8d760be-9351-4b61-bfa9-3cafa23cb44d')
+                .setName('Flixbus')
+                .setAdmin(620)
+                .build()
         ];
 
         await this.dataSource.manager.save(Company, companies);
@@ -107,7 +114,11 @@ export class SeederService implements OnApplicationBootstrap {
         let mileage = 441233;
 
         const entities = [
-            new VehicleMileageBuilder().setVehicle(1).setDate(new Date('2020-01-01')).setMileageKm(mileage).build(),
+            new VehicleMileageBuilder()
+                .setVehicle(1)
+                .setDate(new Date('2020-01-01'))
+                .setMileageKm(mileage)
+                .build(),
             new VehicleMileageBuilder()
                 .setVehicle(1)
                 .setDate(new Date('2020-01-02'))
@@ -123,7 +134,11 @@ export class SeederService implements OnApplicationBootstrap {
                 .setDate(new Date('2020-01-04'))
                 .setMileageKm(mileage + 651)
                 .build(),
-            new VehicleMileageBuilder().setVehicle(2).setDate(new Date('2020-01-04')).setMileageKm(651234).build()
+            new VehicleMileageBuilder()
+                .setVehicle(2)
+                .setDate(new Date('2020-01-04'))
+                .setMileageKm(651234)
+                .build()
         ];
         await this.dataSource.manager.save(VehicleMileage, entities);
         this.logger.log('Initialized VehicleMileage:\t\t' + entities.length);
@@ -200,6 +215,8 @@ export class SeederService implements OnApplicationBootstrap {
         ];
 
         await this.dataSource.manager.save(DriverPeriodicInspection, driver1PeriodicInspections);
-        this.logger.log('Initialized Driver Periodic Inspections:\t' + driver1PeriodicInspections.length);
+        this.logger.log(
+            'Initialized Driver Periodic Inspections:\t' + driver1PeriodicInspections.length
+        );
     }
 }

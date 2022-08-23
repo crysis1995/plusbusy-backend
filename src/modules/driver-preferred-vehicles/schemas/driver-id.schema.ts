@@ -1,3 +1,3 @@
 import { z } from 'nestjs-zod/z';
 
-export const DriverIdSchema = z.number().positive()
+export const DriverIdSchema = z.number().positive();

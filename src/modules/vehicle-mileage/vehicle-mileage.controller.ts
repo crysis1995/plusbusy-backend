@@ -52,7 +52,10 @@ export class VehicleMileageController {
     }
 
     @Post()
-    async setMileage(@Body() dto: CreateVehicleMileageDto, @Request() req: RequestWithUserAndCompany) {
+    async setMileage(
+        @Body() dto: CreateVehicleMileageDto,
+        @Request() req: RequestWithUserAndCompany
+    ) {
         return await this.vehicleMileageService.setVehicleMileage(dto, new RequestData(req));
     }
 
@@ -63,7 +66,9 @@ export class VehicleMileageController {
         @Param('date', ParseDatePipe) date: Date,
         @Request() req: RequestWithUserAndCompany
     ) {
-        return await this.vehicleMileageService.deleteVehicleMileage( new VehicleMileageId(vehicleId, mileageKm, date),
-            new RequestData(req))
+        return await this.vehicleMileageService.deleteVehicleMileage(
+            new VehicleMileageId(vehicleId, mileageKm, date),
+            new RequestData(req)
+        );
     }
 }

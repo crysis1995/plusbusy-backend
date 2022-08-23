@@ -52,7 +52,10 @@ export class DriverController {
     }
 
     @Delete(':id')
-    async deleteDriver(@Param('id', ParseIntPipe) id: number, @Request() req: RequestWithUserAndCompany) {
+    async deleteDriver(
+        @Param('id', ParseIntPipe) id: number,
+        @Request() req: RequestWithUserAndCompany
+    ) {
         await this.driverService.deleteDriver(new DriverId(id), new RequestData(req));
     }
 }

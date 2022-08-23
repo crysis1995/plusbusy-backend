@@ -1,4 +1,10 @@
-import { ArgumentMetadata, HttpException, HttpStatus, Injectable, PipeTransform } from '@nestjs/common';
+import {
+    ArgumentMetadata,
+    HttpException,
+    HttpStatus,
+    Injectable,
+    PipeTransform
+} from '@nestjs/common';
 import { CredentialsPayload } from '../entities/auth.entity';
 
 @Injectable()

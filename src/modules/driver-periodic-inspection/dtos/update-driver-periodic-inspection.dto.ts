@@ -6,4 +6,6 @@ export const UpdateDriverPeriodicInspectionDtoScheme = z.object({
     Note: NoteSchema
 });
 
-export class UpdateDriverPeriodicInspectionDto extends createZodDto(UpdateDriverPeriodicInspectionDtoScheme) {}
+export class UpdateDriverPeriodicInspectionDto extends createZodDto(
+    UpdateDriverPeriodicInspectionDtoScheme
+) {}

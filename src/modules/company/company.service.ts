@@ -6,12 +6,13 @@ import { BasicUserDto } from '../users/dtos/basic-user.dto';
 import { CreateCompanyDto, CreateCompanySchema } from './dtos/create-company.dto';
 import { UpdateCompanyDto, UpdateCompanyDtoSchema } from './dtos/update-company.dto';
 import { UserHasNoAccessException } from '../users/exceptions/user-has-no-access.exception';
-import { RequestData } from '../../shared/shared.types';
+import { RequestData, UserHasAccess } from '../../shared/shared.types';
 import { CompanyId } from './values/company-id.value';
 import { SchemaValidator } from '../../shared/shared.validator';
+import { BasicCompanyDto } from './dtos/basic-company.dto';
 
 @Injectable()
-export class CompanyService {
+export class CompanyService implements UserHasAccess<BasicCompanyDto> {
     @InjectRepository(Company)
     private companyRepository: Repository<Company>;
 
@@ -37,7 +38,10 @@ export class CompanyService {
     async createCompany(companyDto: CreateCompanyDto, data: RequestData) {
         new SchemaValidator(CreateCompanySchema).validate(companyDto);
 
-        const company = new CompanyBuilder().setAdmin(data.user.UserId).setName(companyDto.Name).build();
+        const company = new CompanyBuilder()
+            .setAdmin(data.user.UserId)
+            .setName(companyDto.Name)
+            .build();
         await this.companyRepository.save(company);
         return company;
     }
@@ -56,5 +60,9 @@ export class CompanyService {
         if (!hasAccess) throw new UserHasNoAccessException();
 
         await this.companyRepository.delete(companyId.value);
+    }
+
+    async ifUserHasAccess(entity: BasicCompanyDto, data: RequestData) {
+        return data.myCompanies.isContainCompany(entity.CompanyId);
     }
 }

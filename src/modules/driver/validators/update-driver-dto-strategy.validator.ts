@@ -13,12 +13,20 @@ export class UpdateDriverDtoStrategyValidator extends Validator<UpdateDriverDto>
                 validators.push(GeneralDriverValidator.validateNameMinLength(this.value.Name));
 
             case this.value.Surname !== undefined:
-                validators.push(GeneralDriverValidator.validateSurnameMaxLength(this.value.Surname));
-                validators.push(GeneralDriverValidator.validateSurnameMinLength(this.value.Surname));
+                validators.push(
+                    GeneralDriverValidator.validateSurnameMaxLength(this.value.Surname)
+                );
+                validators.push(
+                    GeneralDriverValidator.validateSurnameMinLength(this.value.Surname)
+                );
 
             case this.value.Phone !== undefined:
-                validators.push(GeneralDriverValidator.validatePhoneNumberMaxLength(this.value.Phone));
-                validators.push(GeneralDriverValidator.validatePhoneNumberMinLength(this.value.Phone));
+                validators.push(
+                    GeneralDriverValidator.validatePhoneNumberMaxLength(this.value.Phone)
+                );
+                validators.push(
+                    GeneralDriverValidator.validatePhoneNumberMinLength(this.value.Phone)
+                );
         }
         return super.validate(validators);
     }

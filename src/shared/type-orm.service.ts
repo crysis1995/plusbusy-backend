@@ -1,14 +1,19 @@
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { exec } from 'child_process';
 
 @Injectable()
 export class TypeOrmService implements TypeOrmOptionsFactory {
     @Inject(ConfigService)
     private readonly config: ConfigService;
 
-    createTypeOrmOptions(connectionName?: string): TypeOrmModuleOptions {
-        return this.getPostgres();
+    async createTypeOrmOptions(connectionName?: string): Promise<TypeOrmModuleOptions> {
+        return new Promise((resolve) =>
+            exec('docker --version', (error) =>
+                resolve(error ? this.getSQLite() : this.getPostgres())
+            )
+        );
     }
 
     getPostgres(): TypeOrmModuleOptions {
@@ -34,6 +39,7 @@ export class TypeOrmService implements TypeOrmOptionsFactory {
             entities: ['dist/**/*.entity.{ts,js}'],
             migrations: ['dist/migrations/*.{ts,js}'],
             migrationsTableName: 'typeorm_migrations',
+            dropSchema: true,
             logger: 'file',
             synchronize: true
         };

@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Post, Put, Request } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Inject,
+    Param,
+    ParseIntPipe,
+    Post,
+    Put,
+    Request
+} from '@nestjs/common';
 import { PreferredTypeEnum } from './enums/preferred-type.enum';
 import { PreferredTypeEnumValuePipe } from './pipes/preferred-type-enum-value.pipe';
 import { DriverPreferredVehiclesService } from './driver-preferred-vehicles.service';
@@ -20,7 +31,11 @@ export class DriverPreferredVehiclesController {
         @Param('id', ParseIntPipe) id: number,
         @Request() req: RequestWithUserAndCompany
     ) {
-        return await this.driverPreferredVehiclesService.getAllByType(id, type, new RequestData(req));
+        return await this.driverPreferredVehiclesService.getAllByType(
+            id,
+            type,
+            new RequestData(req)
+        );
     }
 
     @Get(':driverId/:vehicleId')
@@ -37,7 +52,10 @@ export class DriverPreferredVehiclesController {
     }
 
     @Post()
-    async create(@Body() dto: CreateDriverPreferredVehiclesDto, @Request() req: RequestWithUserAndCompany) {}
+    async create(
+        @Body() dto: CreateDriverPreferredVehiclesDto,
+        @Request() req: RequestWithUserAndCompany
+    ) {}
 
     @Put(':driverId/:vehicleId')
     async update(

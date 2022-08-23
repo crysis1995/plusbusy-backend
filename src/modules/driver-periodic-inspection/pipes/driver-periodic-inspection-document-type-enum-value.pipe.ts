@@ -8,7 +8,9 @@ export class DriverPeriodicInspectionDocumentTypeEnumValuePipe
         const parsedValue = DriverPeriodicInspectionDocumentTypeEnum[value];
         if (!parsedValue)
             throw new BadRequestException(
-                `Expected one of value: [${Object.keys(DriverPeriodicInspectionDocumentTypeEnum).join(', ')}]`
+                `Expected one of value: [${Object.keys(
+                    DriverPeriodicInspectionDocumentTypeEnum
+                ).join(', ')}]`
             );
         return parsedValue;
     }
