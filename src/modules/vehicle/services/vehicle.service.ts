@@ -1,15 +1,15 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { Vehicle, VehicleBuilder } from './entities/vehicle.entity';
+import { Vehicle, VehicleBuilder } from '../entities/vehicle.entity';
 import { In, Repository } from 'typeorm';
-import { CreateVehicleDto } from './dtos/create-vehicle.dto';
-import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
+import { CreateVehicleDto } from '../dtos/create-vehicle.dto';
+import { UpdateVehicleDto } from '../dtos/update-vehicle.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CompanyService } from '../company/company.service';
-import { UserHasNoAccessException } from '../users/exceptions/user-has-no-access.exception';
-import { RequestData, UserHasAccess } from '../../shared/shared.types';
-import { VehicleId } from './values/vehicle-id.value';
-import { SchemaValidator } from '../../shared/shared.validator';
-import { BasicCompanyDto } from '../company/dtos/basic-company.dto';
+import { CompanyService } from '../../company/services/company.service';
+import { UserHasNoAccessException } from '../../users/exceptions/user-has-no-access.exception';
+import { RequestData, UserHasAccess } from '../../../shared/shared.types';
+import { VehicleId } from '../values/vehicle-id.value';
+import { SchemaValidator } from '../../../shared/shared.validator';
+import { BasicCompanyDto } from '../../company/dtos/basic-company.dto';
 
 @Injectable()
 export class VehicleService implements UserHasAccess<VehicleId | Vehicle['Id']> {
@@ -28,8 +28,6 @@ export class VehicleService implements UserHasAccess<VehicleId | Vehicle['Id']> 
             })) > 0
         );
     }
-
-    async isUserHasAccessToVehicle(vehicleId: VehicleId, data: RequestData) {}
 
     async getByVehicle(vehicleId: VehicleId, data: RequestData) {
         const vehicle = await this.vehicleRepository.findOneBy({
@@ -50,7 +48,8 @@ export class VehicleService implements UserHasAccess<VehicleId | Vehicle['Id']> 
     }
 
     async create(createVehicleDto: CreateVehicleDto, data: RequestData) {
-        if (!data.myCompanies.isContainCompany(createVehicleDto.CompanyId)) throw new UserHasNoAccessException();
+        if (!data.myCompanies.isContainCompany(createVehicleDto.CompanyId))
+            throw new UserHasNoAccessException();
 
         new SchemaValidator(CreateVehicleDto.schema).validate(createVehicleDto);
 

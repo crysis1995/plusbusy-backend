@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { VehicleService } from './vehicle.service';
-import { VehicleController } from './vehicle.controller';
+import { VehicleService } from './services/vehicle.service';
+import { VehicleController } from './controllers/vehicle.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Vehicle } from './entities/vehicle.entity';
-import { CompanyService } from '../company/company.service';
+import { CompanyService } from '../company/services/company.service';
 import { Company } from '../company/entities/company.entity';
 
 @Module({

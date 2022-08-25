@@ -1,9 +1,9 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
-import { UserType } from '../users/entities/users.entity';
+import { UsersService } from '../../users/services/users.service';
+import { UserType } from '../../users/entities/users.entity';
 import { JwtService } from '@nestjs/jwt';
-import { CredentialsPayloadType } from './entities/auth.entity';
-import { BasicUserDto } from '../users/dtos/basic-user.dto';
+import { CredentialsPayloadType } from '../entities/auth.entity';
+import { BasicUserDto } from '../../users/dtos/basic-user.dto';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()

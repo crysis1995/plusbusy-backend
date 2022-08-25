@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, Inject, Injectable } from '@nestjs/common';
-import { CompanyService } from '../company.service';
+import { CompanyService } from '../services/company.service';
 import { z } from 'nestjs-zod/z';
 import { BasicCompanyDto } from '../dtos/basic-company.dto';
 import { UserHasNoAccessException } from '../../users/exceptions/user-has-no-access.exception';

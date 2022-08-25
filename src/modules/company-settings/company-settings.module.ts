@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { CompanySettingsService } from './company-settings.service';
-import { CompanySettingsController } from './company-settings.controller';
+import { CompanySettingsService } from './services/company-settings.service';
+import { CompanySettingsController } from './controllers/company-settings.controller';
 
 @Module({
     providers: [CompanySettingsService],

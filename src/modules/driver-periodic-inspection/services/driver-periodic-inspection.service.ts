@@ -3,20 +3,20 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {
     DriverPeriodicInspection,
     DriverPeriodicInspectionBuilder
-} from './entities/driver-periodic-inspection.entity';
+} from '../entities/driver-periodic-inspection.entity';
 import { Repository } from 'typeorm';
-import { DriverPeriodicInspectionId } from './values/driver-periodic-inspection-id.value';
-import { RequestData } from '../../shared/shared.types';
+import { DriverPeriodicInspectionId } from '../values/driver-periodic-inspection-id.value';
+import { RequestData } from '../../../shared/shared.types';
 import dayjs from 'dayjs';
-import { CreateDriverPeriodicInspectionDto } from './dtos/create-driver-periodic-inspection.dto';
-import { DriverService } from '../driver/driver.service';
-import { DriverId } from '../driver/values/driver-id.value';
-import { DriverNotFoundException } from '../driver/exceptions/driver-not-found.exception';
-import { DateRangeIsInvalidException } from './exceptions/date-range-is-invalid.exception';
-import { UpdateDriverPeriodicInspectionDto } from './dtos/update-driver-periodic-inspection.dto';
-import { DriverPeriodicInspectionNotFoundException } from './exceptions/driver-periodic-inspection-not-found.exception';
-import { SchemaValidator } from '../../shared/shared.validator';
-import { FindDriverPeriodicInspectionOptionsBuilder } from './builders/find-driver-periodic-inspection-options.builder';
+import { CreateDriverPeriodicInspectionDto } from '../dtos/create-driver-periodic-inspection.dto';
+import { DriverService } from '../../driver/services/driver.service';
+import { DriverId } from '../../driver/values/driver-id.value';
+import { DriverNotFoundException } from '../../driver/exceptions/driver-not-found.exception';
+import { DateRangeIsInvalidException } from '../exceptions/date-range-is-invalid.exception';
+import { UpdateDriverPeriodicInspectionDto } from '../dtos/update-driver-periodic-inspection.dto';
+import { DriverPeriodicInspectionNotFoundException } from '../exceptions/driver-periodic-inspection-not-found.exception';
+import { SchemaValidator } from '../../../shared/shared.validator';
+import { FindDriverPeriodicInspectionOptionsBuilder } from '../builders/find-driver-periodic-inspection-options.builder';
 
 @Injectable()
 export class DriverPeriodicInspectionService {
@@ -28,7 +28,7 @@ export class DriverPeriodicInspectionService {
     @Inject(DriverService)
     private driverService: DriverService;
 
-    async isInspectionExist(id: DriverPeriodicInspectionId) {
+    async ifExist(id: DriverPeriodicInspectionId) {
         return (await this.getById(id)) !== null;
     }
 
@@ -53,9 +53,9 @@ export class DriverPeriodicInspectionService {
 
     async create(dto: CreateDriverPeriodicInspectionDto, data: RequestData) {
         new SchemaValidator(CreateDriverPeriodicInspectionDto.schema).validate(dto);
-        const driverId = new DriverId(dto.DriverId)
+        const driverId = new DriverId(dto.DriverId);
 
-        if (!(await this.driverService.ifDriverExist(driverId, data)))
+        if (!(await this.driverService.ifExist(driverId, data)))
             throw new DriverNotFoundException(driverId.value);
 
         if (dayjs(dto.FromDate).isAfter(dayjs(dto.ToDate))) throw new DateRangeIsInvalidException();
@@ -73,10 +73,14 @@ export class DriverPeriodicInspectionService {
         return driverInspection;
     }
 
-    async update(id: DriverPeriodicInspectionId, dto: UpdateDriverPeriodicInspectionDto, data?: RequestData) {
+    async update(
+        id: DriverPeriodicInspectionId,
+        dto: UpdateDriverPeriodicInspectionDto,
+        data?: RequestData
+    ) {
         new SchemaValidator(UpdateDriverPeriodicInspectionDto.schema).validate(dto);
 
-        const isExist = await this.isInspectionExist(id);
+        const isExist = await this.ifExist(id);
         if (!isExist) throw new DriverPeriodicInspectionNotFoundException();
 
         const driverInspection = new DriverPeriodicInspectionBuilder()
@@ -91,7 +95,7 @@ export class DriverPeriodicInspectionService {
     }
 
     async delete(id: DriverPeriodicInspectionId, data?: RequestData) {
-        const isExist = await this.isInspectionExist(id);
+        const isExist = await this.ifExist(id);
         if (!isExist) throw new DriverPeriodicInspectionNotFoundException();
 
         await this.driverPeriodicInspectionRepository.delete(id);

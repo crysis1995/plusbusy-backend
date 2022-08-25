@@ -11,13 +11,13 @@ import {
     Request,
     UseGuards
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RequestData, RequestWithUser } from '../../shared/shared.types';
-import { CompanyService } from './company.service';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { RequestData, RequestWithUser } from '../../../shared/shared.types';
+import { CompanyService } from '../services/company.service';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateCompanyDto } from './dtos/create-company.dto';
-import { UpdateCompanyDto } from './dtos/update-company.dto';
-import { CompanyId } from './values/company-id.value';
+import { CreateCompanyDto } from '../dtos/create-company.dto';
+import { UpdateCompanyDto } from '../dtos/update-company.dto';
+import { CompanyId } from '../values/company-id.value';
 
 @ApiTags('Company')
 @UseGuards(JwtAuthGuard)

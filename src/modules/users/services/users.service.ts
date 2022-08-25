@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Users, UserType } from './entities/users.entity';
-import { CreateUserDto, CreateUserSchema } from './dtos/create-user.dto';
-import { EmailSchema, NickSchema, UserByNickOrEmailDto } from './dtos/user-by-nick-or-email.dto';
+import { Users, UserType } from '../entities/users.entity';
+import { CreateUserDto, CreateUserSchema } from '../dtos/create-user.dto';
+import { EmailSchema, NickSchema, UserByNickOrEmailDto } from '../dtos/user-by-nick-or-email.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserBadDataException } from './exceptions/user-bad-data.exception';
-import { RequestData } from '../../shared/shared.types';
+import { UserBadDataException } from '../exceptions/user-bad-data.exception';
+import { RequestData } from '../../../shared/shared.types';
 
 @Injectable()
 export class UsersService {

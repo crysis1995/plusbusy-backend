@@ -20,10 +20,10 @@ export class VehiclePeriodicInspection {
     @PrimaryColumn()
     VehicleId: number;
 
-    @PrimaryColumn()
+    @PrimaryColumn("timestamp with time zone")
     FromDate: Date;
 
-    @PrimaryColumn()
+    @PrimaryColumn("timestamp with time zone")
     ToDate: Date;
 
     @PrimaryColumn({ type: 'simple-enum', enum: VehicleInspectionTypeEnum })

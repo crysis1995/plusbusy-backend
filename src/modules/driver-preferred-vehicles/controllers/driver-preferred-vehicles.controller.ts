@@ -10,15 +10,18 @@ import {
     Put,
     Request
 } from '@nestjs/common';
-import { PreferredTypeEnum } from './enums/preferred-type.enum';
-import { PreferredTypeEnumValuePipe } from './pipes/preferred-type-enum-value.pipe';
-import { DriverPreferredVehiclesService } from './driver-preferred-vehicles.service';
-import { RequestData, RequestWithUserAndCompany } from '../../shared/shared.types';
-import { VehicleId } from '../vehicle/values/vehicle-id.value';
-import { DriverId } from '../driver/values/driver-id.value';
-import { CreateDriverPreferredVehiclesDto } from './dtos/create-driver-preferred-vehicles.dto';
-import { UpdateDriverPreferredVehiclesDto } from './dtos/update-driver-preferred-vehicles.dto';
+import { PreferredTypeEnum } from '../enums/preferred-type.enum';
+import { PreferredTypeEnumValuePipe } from '../pipes/preferred-type-enum-value.pipe';
+import { DriverPreferredVehiclesService } from '../services/driver-preferred-vehicles.service';
+import { RequestData, RequestWithUserAndCompany } from '../../../shared/shared.types';
+import { VehicleId } from '../../vehicle/values/vehicle-id.value';
+import { DriverId } from '../../driver/values/driver-id.value';
+import { CreateDriverPreferredVehiclesDto } from '../dtos/create-driver-preferred-vehicles.dto';
+import { UpdateDriverPreferredVehiclesDto } from '../dtos/update-driver-preferred-vehicles.dto';
+import { DriverPreferredVehiclesId } from '../values/driver-preferred-vehicles.id';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags("Driver Preferred Vehicles")
 @Controller('driver-preferred-vehicles')
 export class DriverPreferredVehiclesController {
     @Inject(DriverPreferredVehiclesService)
@@ -45,8 +48,7 @@ export class DriverPreferredVehiclesController {
         @Request() req: RequestWithUserAndCompany
     ) {
         return await this.driverPreferredVehiclesService.getById(
-            new DriverId(driverId),
-            new VehicleId(vehicleId),
+            new DriverPreferredVehiclesId(driverId, vehicleId),
             new RequestData(req)
         );
     }
@@ -55,7 +57,9 @@ export class DriverPreferredVehiclesController {
     async create(
         @Body() dto: CreateDriverPreferredVehiclesDto,
         @Request() req: RequestWithUserAndCompany
-    ) {}
+    ) {
+        return await this.driverPreferredVehiclesService.create(dto, new RequestData(req));
+    }
 
     @Put(':driverId/:vehicleId')
     async update(
@@ -63,12 +67,23 @@ export class DriverPreferredVehiclesController {
         @Param('vehicleId', ParseIntPipe) vehicleId: number,
         @Body() dto: UpdateDriverPreferredVehiclesDto,
         @Request() req: RequestWithUserAndCompany
-    ) {}
+    ) {
+        return await this.driverPreferredVehiclesService.update(
+            new DriverPreferredVehiclesId(driverId, vehicleId),
+            dto,
+            new RequestData(req)
+        );
+    }
 
     @Delete(':driverId/:vehicleId')
     async delete(
         @Param('driverId', ParseIntPipe) driverId: number,
         @Param('vehicleId', ParseIntPipe) vehicleId: number,
         @Request() req: RequestWithUserAndCompany
-    ) {}
+    ) {
+        return await this.driverPreferredVehiclesService.delete(
+            new DriverPreferredVehiclesId(driverId, vehicleId),
+            new RequestData(req)
+        );
+    }
 }

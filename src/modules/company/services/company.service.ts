@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Company, CompanyBuilder } from './entities/company.entity';
+import { Company, CompanyBuilder } from '../entities/company.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BasicUserDto } from '../users/dtos/basic-user.dto';
-import { CreateCompanyDto, CreateCompanySchema } from './dtos/create-company.dto';
-import { UpdateCompanyDto, UpdateCompanyDtoSchema } from './dtos/update-company.dto';
-import { UserHasNoAccessException } from '../users/exceptions/user-has-no-access.exception';
-import { RequestData, UserHasAccess } from '../../shared/shared.types';
-import { CompanyId } from './values/company-id.value';
-import { SchemaValidator } from '../../shared/shared.validator';
-import { BasicCompanyDto } from './dtos/basic-company.dto';
+import { BasicUserDto } from '../../users/dtos/basic-user.dto';
+import { CreateCompanyDto, CreateCompanySchema } from '../dtos/create-company.dto';
+import { UpdateCompanyDto, UpdateCompanyDtoSchema } from '../dtos/update-company.dto';
+import { UserHasNoAccessException } from '../../users/exceptions/user-has-no-access.exception';
+import { RequestData, UserHasAccess } from '../../../shared/shared.types';
+import { CompanyId } from '../values/company-id.value';
+import { SchemaValidator } from '../../../shared/shared.validator';
+import { BasicCompanyDto } from '../dtos/basic-company.dto';
 
 @Injectable()
 export class CompanyService implements UserHasAccess<BasicCompanyDto> {

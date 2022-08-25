@@ -7,10 +7,10 @@ import {
     UseGuards,
     UseInterceptors
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { UsersService } from '../services/users.service';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
-import { RequestData, RequestWithUser } from '../../shared/shared.types';
+import { RequestData, RequestWithUser } from '../../../shared/shared.types';
 
 @ApiTags('Users')
 @UseInterceptors(ClassSerializerInterceptor)

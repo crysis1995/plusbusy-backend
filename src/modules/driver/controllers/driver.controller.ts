@@ -11,14 +11,14 @@ import {
     Request,
     UseGuards
 } from '@nestjs/common';
-import { DriverService } from './driver.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RequestData, RequestWithUserAndCompany } from '../../shared/shared.types';
-import { CompanyGuard } from '../company/guards/company.guard';
+import { DriverService } from '../services/driver.service';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { RequestData, RequestWithUserAndCompany } from '../../../shared/shared.types';
+import { CompanyGuard } from '../../company/guards/company.guard';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateDriverDto } from './dtos/create-driver.dto';
-import { UpdateDriverDto } from './dtos/update-driver.dto';
-import { DriverId } from './values/driver-id.value';
+import { CreateDriverDto } from '../dtos/create-driver.dto';
+import { UpdateDriverDto } from '../dtos/update-driver.dto';
+import { DriverId } from '../values/driver-id.value';
 
 @ApiTags('Driver')
 @UseGuards(JwtAuthGuard, CompanyGuard)
@@ -26,7 +26,6 @@ import { DriverId } from './values/driver-id.value';
 export class DriverController {
     @Inject(DriverService)
     private driverService: DriverService;
-
 
     @Get()
     async getAll(@Request() req: RequestWithUserAndCompany) {
@@ -54,7 +53,10 @@ export class DriverController {
     }
 
     @Delete(':id')
-    async deleteDriver(@Param('id', ParseIntPipe) id: number, @Request() req: RequestWithUserAndCompany) {
+    async deleteDriver(
+        @Param('id', ParseIntPipe) id: number,
+        @Request() req: RequestWithUserAndCompany
+    ) {
         await this.driverService.delete(new DriverId(id), new RequestData(req));
     }
 }

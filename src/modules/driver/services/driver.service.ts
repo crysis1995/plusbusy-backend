@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Driver, DriverBuilder } from './entities/driver.entity';
+import { Driver, DriverBuilder } from '../entities/driver.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateDriverDto } from './dtos/create-driver.dto';
-import { UpdateDriverDto } from './dtos/update-driver.dto';
-import { DriverNotFoundException } from './exceptions/driver-not-found.exception';
-import { RequestData } from '../../shared/shared.types';
-import { DriverId } from './values/driver-id.value';
-import { SchemaValidator } from '../../shared/shared.validator';
+import { CreateDriverDto } from '../dtos/create-driver.dto';
+import { UpdateDriverDto } from '../dtos/update-driver.dto';
+import { DriverNotFoundException } from '../exceptions/driver-not-found.exception';
+import { RequestData, UserHasAccess } from '../../../shared/shared.types';
+import { DriverId } from '../values/driver-id.value';
+import { SchemaValidator } from '../../../shared/shared.validator';
 
 @Injectable()
-export class DriverService {
+export class DriverService implements UserHasAccess<DriverId | Driver['Id']> {
     @InjectRepository(Driver)
     private driverRepository: Repository<Driver>;
 
-    async ifDriverExist(driverId: DriverId, data: RequestData) {
+    async ifExist(driverId: DriverId, data: RequestData) {
         return (await this.getById(driverId, data)) !== null;
     }
 
@@ -64,5 +64,11 @@ export class DriverService {
         const driver = await this.getById(driverId, data);
         if (driver === null) throw new DriverNotFoundException(driverId.value);
         await this.driverRepository.delete({ Id: driverId.value });
+    }
+
+    async ifUserHasAccess(entity: DriverId | Driver['Id'], data: RequestData): Promise<boolean> {
+        let id = entity instanceof DriverId ? entity : new DriverId(entity);
+        const driver = await this.getById(id, data);
+        return !!driver;
     }
 }

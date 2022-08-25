@@ -1,8 +1,11 @@
 import { VehicleInspectionTypeEnum } from '../enums/vehicle-inspection-type.enum';
+import dayjs from 'dayjs';
 
 export class VehiclePeriodicInspectionId {
-    VehicleId: number;
-    FromDate: Date;
-    ToDate: Date;
-    InspectionType: VehicleInspectionTypeEnum;
+    constructor(
+        public VehicleId: number,
+        public FromDate: dayjs.Dayjs,
+        public ToDate: dayjs.Dayjs,
+        public InspectionType: VehicleInspectionTypeEnum
+    ) {}
 }

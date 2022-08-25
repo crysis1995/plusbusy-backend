@@ -11,17 +11,17 @@ import {
     Request,
     UseGuards
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CompanyGuard } from '../company/guards/company.guard';
-import { DriverPeriodicInspectionService } from './driver-periodic-inspection.service';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { CompanyGuard } from '../../company/guards/company.guard';
+import { DriverPeriodicInspectionService } from '../services/driver-periodic-inspection.service';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateDriverPeriodicInspectionDto } from './dtos/create-driver-periodic-inspection.dto';
-import { RequestData, RequestWithUserAndCompany } from '../../shared/shared.types';
-import { UpdateDriverPeriodicInspectionDto } from './dtos/update-driver-periodic-inspection.dto';
-import { DriverPeriodicInspectionDocumentTypeEnum } from './enums/driver-periodic-inspection-document-type.enum';
-import { DriverPeriodicInspectionId } from './values/driver-periodic-inspection-id.value';
-import { ParseDatePipe } from '../../shared/pipes/parse-date.pipe';
-import { DriverPeriodicInspectionDocumentTypeEnumValuePipe } from './pipes/driver-periodic-inspection-document-type-enum-value.pipe';
+import { CreateDriverPeriodicInspectionDto } from '../dtos/create-driver-periodic-inspection.dto';
+import { RequestData, RequestWithUserAndCompany } from '../../../shared/shared.types';
+import { UpdateDriverPeriodicInspectionDto } from '../dtos/update-driver-periodic-inspection.dto';
+import { DriverPeriodicInspectionDocumentTypeEnum } from '../enums/driver-periodic-inspection-document-type.enum';
+import { DriverPeriodicInspectionId } from '../values/driver-periodic-inspection-id.value';
+import { ParseDatePipe } from '../../../shared/pipes/parse-date.pipe';
+import { DriverPeriodicInspectionDocumentTypeEnumValuePipe } from '../pipes/driver-periodic-inspection-document-type-enum-value.pipe';
 
 @ApiTags('Driver periodic inspection')
 @UseGuards(JwtAuthGuard, CompanyGuard)
@@ -49,7 +49,10 @@ export class DriverPeriodicInspectionController {
     }
 
     @Post()
-    async createInspection(@Body() dto: CreateDriverPeriodicInspectionDto, @Request() req: RequestWithUserAndCompany) {
+    async createInspection(
+        @Body() dto: CreateDriverPeriodicInspectionDto,
+        @Request() req: RequestWithUserAndCompany
+    ) {
         return await this.driverPeriodicInspectionService.create(dto, new RequestData(req));
     }
 

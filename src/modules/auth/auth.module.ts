@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { UsersService } from '../users/users.service';
-import { AuthController } from './auth.controller';
+import { AuthService } from './services/auth.service';
+import { UsersService } from '../users/services/users.service';
+import { AuthController } from './controllers/auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { CustomJwtService } from '../../shared/custom-jwt.service';

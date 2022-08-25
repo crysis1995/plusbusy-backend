@@ -11,14 +11,14 @@ import {
     Request,
     UseGuards
 } from '@nestjs/common';
-import { VehicleService } from './vehicle.service';
-import { CreateVehicleDto } from './dtos/create-vehicle.dto';
-import { CompanyGuard } from '../company/guards/company.guard';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
+import { VehicleService } from '../services/vehicle.service';
+import { CreateVehicleDto } from '../dtos/create-vehicle.dto';
+import { CompanyGuard } from '../../company/guards/company.guard';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { UpdateVehicleDto } from '../dtos/update-vehicle.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { RequestData, RequestWithUserAndCompany } from '../../shared/shared.types';
-import { VehicleId } from './values/vehicle-id.value';
+import { RequestData, RequestWithUserAndCompany } from '../../../shared/shared.types';
+import { VehicleId } from '../values/vehicle-id.value';
 
 @ApiTags('Vehicle')
 @UseGuards(JwtAuthGuard, CompanyGuard)
@@ -38,7 +38,10 @@ export class VehicleController {
     }
 
     @Get('/:id')
-    async findById(@Param('id', ParseIntPipe) id: number, @Request() req: RequestWithUserAndCompany) {
+    async findById(
+        @Param('id', ParseIntPipe) id: number,
+        @Request() req: RequestWithUserAndCompany
+    ) {
         return await this.vehicleService.getByVehicle(new VehicleId(id), new RequestData(req));
     }
 
@@ -65,7 +68,10 @@ export class VehicleController {
     }
 
     @Delete(':id')
-    async deleteVehicle(@Param('id', ParseIntPipe) id: number, @Request() req: RequestWithUserAndCompany) {
+    async deleteVehicle(
+        @Param('id', ParseIntPipe) id: number,
+        @Request() req: RequestWithUserAndCompany
+    ) {
         await this.vehicleService.delete(new VehicleId(id), new RequestData(req));
     }
 }
