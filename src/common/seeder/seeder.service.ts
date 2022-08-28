@@ -18,6 +18,12 @@ import { DriverPeriodicInspectionDocumentTypeEnum } from '../../modules/driver-p
 import { Company, CompanyBuilder } from '../../modules/company/entities/company.entity';
 import { Users, UsersBuilder } from '../../modules/users/entities/users.entity';
 import { VehicleInspectionTypeEnum } from '../../modules/vehicle-periodic-inspection/enums/vehicle-inspection-type.enum';
+import { Course, CourseBuilder } from '../../modules/course/entities/course.entity';
+import { CourseTypeEnum } from '../../modules/course/enums/course-type.enum';
+import {
+    CourseResources,
+    CourseResourcesBuilder
+} from '../../modules/course-resources/entities/course-resources.entity';
 
 @Injectable()
 export class SeederService implements OnApplicationBootstrap {
@@ -37,9 +43,11 @@ export class SeederService implements OnApplicationBootstrap {
         await this.InitializeVehiclePeriodicInspection();
         await this.InitializeDrivers();
         await this.InitializeDriverPeriodicInspections();
+        await this.InitializeCourses();
+        await this.InitializeCourseResources();
     }
     async InitializeUsers() {
-        const users = [
+        const entities = [
             new UsersBuilder()
                 .setId(438)
                 .setEmail('krzysztofkaczor95@gmail.com')
@@ -55,12 +63,10 @@ export class SeederService implements OnApplicationBootstrap {
                 .setPassword('1274DZ')
                 .build()
         ];
-
-        await this.dataSource.manager.save(Users, users);
-        this.logger.log('Initialized Users:\t\t' + users.length);
+        await this.saveToDatabase(Users, entities);
     }
     async InitializeCompanies() {
-        const companies = [
+        const entities = [
             new CompanyBuilder()
                 .setId('07380314-da25-4720-853b-a93ad39bcecd')
                 .setName('Plus Busy')
@@ -73,11 +79,10 @@ export class SeederService implements OnApplicationBootstrap {
                 .build()
         ];
 
-        await this.dataSource.manager.save(Company, companies);
-        this.logger.log('Initialized Companies:\t' + companies.length);
+        await this.saveToDatabase(Company, entities);
     }
     async InitializeVehicles() {
-        const vehicles = [
+        const entities = [
             new VehicleBuilder()
                 .setId(1)
                 .setPlates('TKI30KU')
@@ -107,8 +112,7 @@ export class SeederService implements OnApplicationBootstrap {
                 .setCompany('07380314-da25-4720-853b-a93ad39bcecd')
                 .build()
         ];
-        await this.dataSource.manager.save(Vehicle, vehicles);
-        this.logger.log('Initialized vehicles:\t' + vehicles.length);
+        await this.saveToDatabase(Vehicle, entities);
     }
     async InitializeVehicleMileage() {
         let mileage = 441233;
@@ -140,8 +144,7 @@ export class SeederService implements OnApplicationBootstrap {
                 .setMileageKm(651234)
                 .build()
         ];
-        await this.dataSource.manager.save(VehicleMileage, entities);
-        this.logger.log('Initialized VehicleMileage:\t\t' + entities.length);
+        await this.saveToDatabase(VehicleMileage, entities);
     }
     async InitializeVehiclePeriodicInspection() {
         const entities = [
@@ -170,9 +173,7 @@ export class SeederService implements OnApplicationBootstrap {
                 .setToDate(new Date('2023-11-28'))
                 .build()
         ];
-
-        await this.dataSource.manager.save(VehiclePeriodicInspection, entities);
-        this.logger.log('Initialized VehiclePeriodicInspection:\t' + entities.length);
+        await this.saveToDatabase(VehiclePeriodicInspection, entities);
     }
     async InitializeDrivers() {
         const entities = [
@@ -195,11 +196,10 @@ export class SeederService implements OnApplicationBootstrap {
                 .setSurname('Gałach')
                 .build()
         ];
-        await this.dataSource.manager.save(Driver, entities);
-        this.logger.log('Initialized Drivers:\t' + entities.length);
+        await this.saveToDatabase(Driver, entities);
     }
     async InitializeDriverPeriodicInspections() {
-        const driver1PeriodicInspections = [
+        const entities = [
             new DriverPeriodicInspectionBuilder()
                 .setDriver(1)
                 .setFromDate(new Date('2020-01-01'))
@@ -213,10 +213,62 @@ export class SeederService implements OnApplicationBootstrap {
                 .setDocumentType(DriverPeriodicInspectionDocumentTypeEnum.PERIODIC_INSPECTION)
                 .build()
         ];
+        await this.saveToDatabase(DriverPeriodicInspection, entities);
+    }
 
-        await this.dataSource.manager.save(DriverPeriodicInspection, driver1PeriodicInspections);
-        this.logger.log(
-            'Initialized Driver Periodic Inspections:\t' + driver1PeriodicInspections.length
-        );
+    async InitializeCourses() {
+        const entities = [
+            new CourseBuilder()
+                .setId(1)
+                .setNote('test note')
+                .setStartDate(new Date('2020-01-01'))
+                .setEndDate(new Date('2020-01-02'))
+                .setCourseType(CourseTypeEnum.ON_DEMAND)
+                .build(),
+            new CourseBuilder()
+                .setId(2)
+                .setNote('another note')
+                .setStartDate(new Date('2020-02-01'))
+                .setEndDate(new Date('2020-02-05'))
+                .setCourseType(CourseTypeEnum.ON_DEMAND)
+                .build()
+        ];
+
+        await this.saveToDatabase(Course, entities);
+    }
+
+    async InitializeCourseResources() {
+        const entities = [
+            new CourseResourcesBuilder()
+                .setId(1)
+                .setCourseId(1)
+                .setDriverId(1)
+                .setVehicleId(1)
+                .build(),
+            new CourseResourcesBuilder()
+                .setId(2)
+                .setCourseId(1)
+                .setDriverId(2)
+                .setVehicleId(1)
+                .build(),
+            new CourseResourcesBuilder()
+                .setId(3)
+                .setCourseId(2)
+                .setDriverId(1)
+                .setVehicleId(2)
+                .build(),
+            new CourseResourcesBuilder()
+                .setId(4)
+                .setCourseId(2)
+                .setDriverId(2)
+                .setVehicleId(1)
+                .build()
+        ];
+        await this.saveToDatabase(CourseResources, entities);
+    }
+
+    async saveToDatabase(type: any, entities: any[]) {
+        await this.dataSource.manager.save(type, entities);
+        this.logger.log(`Initialized ${type.name}:\t${entities.length}`);
     }
 }

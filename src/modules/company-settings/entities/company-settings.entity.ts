@@ -8,6 +8,7 @@ export class CompanySettings {
     @PrimaryColumn('varchar')
     Version: string;
 
-    @Column('timestamp with time zone')
+    // @Column('timestamp with time zone')
+    @Column('datetime')
     DefaultTimeOffsetBeforeNotification;
 }
