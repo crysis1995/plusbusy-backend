@@ -11,10 +11,12 @@ export class Course {
     @Column('text')
     Note: string;
 
-    @Column('datetime')
+    @Column('timestamp with time zone')
+    // @Column('datetime')
     StartDate: Date;
 
-    @Column('datetime')
+    @Column('timestamp with time zone')
+    // @Column('datetime')
     EndDate: Date;
 
     @Column({ type: 'simple-enum', enum: CourseTypeEnum })
@@ -30,23 +32,33 @@ export class CourseBuilder extends BuilderTemplate<Course> {
     }
 
     setId(value: Course['Id']) {
-        this.value.Id = value;
+        if (value) {
+            this.value.Id = value;
+        }
         return this;
     }
     setNote(value: Course['Note']) {
-        this.value.Note = value;
+        if (value) {
+            this.value.Note = value;
+        }
         return this;
     }
     setStartDate(value: Course['StartDate']) {
-        this.value.StartDate = value;
+        if (value) {
+            this.value.StartDate = value;
+        }
         return this;
     }
     setEndDate(value: Course['EndDate']) {
-        this.value.EndDate = value;
+        if (value) {
+            this.value.EndDate = value;
+        }
         return this;
     }
     setCourseType(value: Course['CourseType']) {
-        this.value.CourseType = value;
+        if (value) {
+            this.value.CourseType = value;
+        }
         return this;
     }
 }

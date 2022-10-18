@@ -2,7 +2,7 @@ import { FindManyOptions } from 'typeorm';
 import { CourseResources } from '../entities/course-resources.entity';
 
 export class FindManyCourseResourcesBuilder {
-    options: FindManyOptions<CourseResources>;
+    private readonly options: FindManyOptions<CourseResources>;
     constructor() {
         this.options = {};
     }
