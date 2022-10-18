@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn} from 'typeorm';
 import { CourseTypeEnum } from '../enums/course-type.enum';
 import { CourseResources } from '../../course-resources/entities/course-resources.entity';
 import { BuilderTemplate } from '../../../shared/shared.types';
@@ -11,10 +11,12 @@ export class Course {
     @Column('text')
     Note: string;
 
-    @Column('datetime')
+    @Column("timestamp with time zone")
+    // @Column('datetime')
     StartDate: Date;
 
-    @Column('datetime')
+    @Column("timestamp with time zone")
+    // @Column('datetime')
     EndDate: Date;
 
     @Column({ type: 'simple-enum', enum: CourseTypeEnum })
