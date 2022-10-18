@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn} from 'typeorm';
 import { CourseTypeEnum } from '../enums/course-type.enum';
 import { CourseResources } from '../../course-resources/entities/course-resources.entity';
 import { BuilderTemplate } from '../../../shared/shared.types';

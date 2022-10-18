@@ -7,7 +7,7 @@ async function bootstrap() {
     const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
     app.setGlobalPrefix('api');
     swaggerHelper(app);
-    await app.listen(3000, 'localhost');
+    await app.listen(5000, 'localhost');
 }
 
 bootstrap();
