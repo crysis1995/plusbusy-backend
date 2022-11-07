@@ -6,27 +6,35 @@ import {
     UpdateDateColumn
 } from 'typeorm';
 import { BuilderTemplate } from '../../../shared/shared.types';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class Driver {
+    @ApiProperty()
     @PrimaryGeneratedColumn()
     Id: number;
 
+    @ApiProperty()
     @Column()
     Name: string;
 
+    @ApiProperty()
     @Column()
     Surname: string;
 
+    @ApiProperty({ nullable: true })
     @Column({ nullable: true })
     Phone: string;
 
+    @ApiProperty({ nullable: true })
     @Column({ nullable: true })
     Email: string;
 
+    @ApiProperty({ default: false })
     @Column({ default: false })
     IsPhoneConfirmed: boolean;
 
+    @ApiProperty({ default: false })
     @Column({ default: false })
     IsEmailConfirmed: boolean;
 

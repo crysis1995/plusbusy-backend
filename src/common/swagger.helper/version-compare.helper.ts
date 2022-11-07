@@ -35,7 +35,7 @@ export class VersionCompareHelper {
         const builder = new DocumentBuilder()
             .setTitle('Bus Transport')
             .setDescription('The API of bus transport management app.')
-            .addTag('driver');
+            .addTag('driver').addBearerAuth();
         if (options?.withVersion) {
             builder.setVersion(this.currentVersion);
         } else {

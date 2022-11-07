@@ -2,7 +2,8 @@ import { Body, Controller, Inject, Post, Request, UseGuards } from '@nestjs/comm
 import { AuthService } from '../services/auth.service';
 import { LocalAuthGuard } from '../guards/local-auth-guard';
 import { BasicUserDto } from '../../users/dtos/basic-user.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { LoginPayload } from '../entities/login.entity';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -11,6 +12,7 @@ export class AuthController {
     private authService: AuthService;
 
     @UseGuards(LocalAuthGuard)
+    @ApiBody({ type: LoginPayload })
     @Post('login')
     async login(@Request() req) {
         return this.authService.loginWithCredentials(req.user);

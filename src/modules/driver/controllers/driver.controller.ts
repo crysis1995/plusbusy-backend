@@ -15,10 +15,11 @@ import { DriverService } from '../services/driver.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { RequestData, RequestWithUserAndCompany } from '../../../shared/shared.types';
 import { CompanyGuard } from '../../company/guards/company.guard';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CreateDriverDto } from '../dtos/create-driver.dto';
 import { UpdateDriverDto } from '../dtos/update-driver.dto';
 import { DriverId } from '../values/driver-id.value';
+import { Driver } from '../entities/driver.entity';
 
 @ApiTags('Driver')
 @UseGuards(JwtAuthGuard, CompanyGuard)
@@ -27,6 +28,7 @@ export class DriverController {
     @Inject(DriverService)
     private driverService: DriverService;
 
+    @ApiOkResponse({ type: Driver, isArray: true })
     @Get()
     async getAll(@Request() req: RequestWithUserAndCompany) {
         // TODO add query params to filter/sort drivers
