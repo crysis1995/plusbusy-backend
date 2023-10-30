@@ -27,7 +27,7 @@ export abstract class Validator<T> implements IValidator<T> {
 
     public validate(...validators): ValidationResume<T> {
         return new ValidationResume<T>(
-            validators.filter((x) => x instanceof CustomException<T>) as CustomException<T>[]
+            validators.filter((x) => x instanceof CustomException) as CustomException<T>[]
         );
     }
 }

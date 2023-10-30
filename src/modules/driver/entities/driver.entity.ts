@@ -1,12 +1,7 @@
-import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn
-} from 'typeorm';
-import { BuilderTemplate } from '../../../shared/shared.types';
-import { ApiProperty } from '@nestjs/swagger';
+import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
+import {BuilderTemplate} from '../../../shared/shared.types';
+import {ApiProperty} from '@nestjs/swagger';
+import {CreateDriverDto} from "../dtos/create-driver.dto";
 
 @Entity()
 export class Driver {
@@ -22,20 +17,20 @@ export class Driver {
     @Column()
     Surname: string;
 
-    @ApiProperty({ nullable: true })
-    @Column({ nullable: true })
+    @ApiProperty({nullable: true})
+    @Column({nullable: true})
     Phone: string;
 
-    @ApiProperty({ nullable: true })
-    @Column({ nullable: true })
+    @ApiProperty({nullable: true})
+    @Column({nullable: true})
     Email: string;
 
-    @ApiProperty({ default: false })
-    @Column({ default: false })
+    @ApiProperty({default: false})
+    @Column({default: false})
     IsPhoneConfirmed: boolean;
 
-    @ApiProperty({ default: false })
-    @Column({ default: false })
+    @ApiProperty({default: false})
+    @Column({default: false})
     IsEmailConfirmed: boolean;
 
     @CreateDateColumn()
@@ -48,6 +43,10 @@ export class Driver {
 export class DriverBuilder extends BuilderTemplate<Driver> {
     constructor() {
         super(new Driver());
+    }
+
+    static fromDto(dto: CreateDriverDto) {
+        return new DriverBuilder().setName(dto.Name).setSurname(dto.Surname).setPhone(dto.Phone).setEmail(dto.Email).build()
     }
 
     setId(value: Driver['Id']) {

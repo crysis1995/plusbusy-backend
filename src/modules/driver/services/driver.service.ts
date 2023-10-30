@@ -29,14 +29,9 @@ export class DriverService implements UserHasAccess<DriverId | Driver['Id']> {
     async create(dto: CreateDriverDto, data: RequestData) {
         new SchemaValidator(CreateDriverDto.schema).validate(dto);
 
-        const driver = new DriverBuilder()
-            .setEmail(dto.Email)
-            .setName(dto.Name)
-            .setSurname(dto.Surname)
-            .setPhone(dto.Phone)
-            .build();
+        const driver = DriverBuilder.fromDto(dto);
 
-        await this.driverRepository.insert(driver);
+        const result = await this.driverRepository.insert(driver);
         return driver;
     }
 

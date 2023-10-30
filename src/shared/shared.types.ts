@@ -12,6 +12,8 @@ export class BuilderTemplate<T> {
     build(): T {
         return this.value;
     }
+
+
 }
 
 export declare type RequestWithCompany = Request & { company: BasicCompanyDto };

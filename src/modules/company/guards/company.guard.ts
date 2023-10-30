@@ -25,7 +25,7 @@ export class CompanyGuard implements CanActivate {
         );
 
         if (companyIdHeaderKey in req.headers) {
-            const companyIdValue = req.headers[companyIdHeaderKey];
+            const companyIdValue = req.headers.get(companyIdHeaderKey);
             const data = z.string().uuid().safeParse(companyIdValue);
             if (data.success) {
                 const companyDto = new CompanyId(companyIdValue);

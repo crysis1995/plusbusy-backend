@@ -22,7 +22,7 @@ import { DriverId } from '../values/driver-id.value';
 import { Driver } from '../entities/driver.entity';
 
 @ApiTags('Driver')
-@UseGuards(JwtAuthGuard, CompanyGuard)
+// @UseGuards(JwtAuthGuard, CompanyGuard)
 @Controller('driver')
 export class DriverController {
     @Inject(DriverService)
